@@ -2,6 +2,7 @@ require('./check-versions')()
 
 process.env.NODE_ENV = 'production'
 
+var fs = require('fs');
 var ora = require('ora')
 var rm = require('rimraf')
 var path = require('path')
@@ -33,3 +34,5 @@ rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
     ))
   })
 })
+
+fs.writeFile(config.build.assetsRoot + '/CNAME','melonade.us')
