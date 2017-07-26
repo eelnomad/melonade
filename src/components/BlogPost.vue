@@ -4,15 +4,33 @@
 <template>
   <div class="blogPost">
     <h1>{{ $route.params.blog_id }}</h1>
-    <h2> POST CONTENT </h2>
+    <h2>{{ post.title }}</h2>
+    <h4>{{ post.create_date }}</h4>
+    <h3>{{ post.body }}</h3>
   </div>
 </template>
 
 <script>
+// Replace with rest call that returns details of specific post id
+import blogdata from '@/../blogdata.json'
+
 export default {
   name: 'blogPost',
   data () {
     return {
+      post: {}
+    }
+  },
+  created () {
+    this.getPost()
+  },
+  methods: {
+    getPost: function () {
+      for (var i = 0; i < blogdata.length; i++) {
+        if (blogdata[i]._id.toString() === this.$route.params.post_id) {
+          this.post = blogdata[i]
+        }
+      }
     }
   }
 }

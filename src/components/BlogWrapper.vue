@@ -9,12 +9,7 @@
 
 <script>
 export default {
-  name: 'blogWrapper',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
-    }
-  }
+  name: 'blogWrapper'
 }
 </script>
 

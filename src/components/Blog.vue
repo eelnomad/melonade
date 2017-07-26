@@ -3,36 +3,43 @@
 
 <template>
   <div id="blog">
-    <template v-for="type in blogdata">
-      <div id="blog-type" v-bind:style="{ 'backgroundImage': 'url(' + type.background_image + ')' }">
-        <router-link :to="type.type">{{type.type}}</router-link>
+    <template v-for="post in top">
+      <div id="blog-type" :style="{ 'backgroundImage': 'url(' + post.background_image + ')' }">
+        <router-link :to="post.type">{{post.type}}</router-link>
       </div>
     </template>
   </div>
 </template>
 
 <script>
+// Replace with restCall that returns most recent post (title, bg_image, date?, type) for each type
 import blogdata from '@/../blogdata.json'
+
 export default {
   name: 'blog',
   data () {
     return {
-      types: [],
+      top: [],
       blogdata: blogdata
     }
   },
   created () {
-    this.getTypes()
+    this.getTop()
   },
   methods: {
-    getTypes: function () {
+    getTop: function () {
+      blogdata.sort(function (a, b) {
+        return (a._id > b._id) ? -1 : ((a._id < b._id) ? 1 : 0)
+      })
+      var top = []
       var types = []
       for (var i = 0; i < blogdata.length; i++) {
         if (!types.includes(blogdata[i].type)) {
           types.push(blogdata[i].type)
+          top.push(blogdata[i])
         }
       }
-      this.types = types
+      this.top = top
     }
   }
 }
