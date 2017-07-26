@@ -1,3 +1,6 @@
+<!-- BlogPost.vue
+     Contains the actual content of the post-->
+
 <template>
   <div class="blogPost">
     <h1>{{ $route.params.blog_id }}</h1>

@@ -1,3 +1,6 @@
+<!-- BlogHome.vue
+     Contains listof posts of specific type to select from.-->
+
 <template>
   <div class="blogHome">
     <h1>{{ $route.params.blog_id }}</h1>

@@ -1,25 +1,38 @@
+<!-- Blog.vue
+     This is the landing page of the website with four quadrants to select what category of posts to look at.-->
+
 <template>
   <div id="blog">
-    <template v-for="type in types">
-      <div id="blog-type">
-        <router-link :to="type.name">{{type.name}}</router-link>
+    <template v-for="type in blogdata">
+      <div id="blog-type" v-bind:style="{ 'backgroundImage': 'url(' + type.background_image + ')' }">
+        <router-link :to="type.type">{{type.type}}</router-link>
       </div>
     </template>
   </div>
 </template>
 
 <script>
+import blogdata from '@/../blogdata.json'
 export default {
   name: 'blog',
   data () {
     return {
-      types: [
-        {'name': 'Shower Thoughts'},
-        {'name': 'Programming'},
-        {'name': 'Life'},
-        {'name': 'Photos'},
-        {'name': 'Pizza'}
-      ]
+      types: [],
+      blogdata: blogdata
+    }
+  },
+  created () {
+    this.getTypes()
+  },
+  methods: {
+    getTypes: function () {
+      var types = []
+      for (var i = 0; i < blogdata.length; i++) {
+        if (!types.includes(blogdata[i].type)) {
+          types.push(blogdata[i].type)
+        }
+      }
+      this.types = types
     }
   }
 }
@@ -30,8 +43,8 @@ export default {
 #blog {
   width: 100%;
   height: 100%;
-  column-count:         2;
-  column-gap:           0px;
+  column-count: 2;
+  column-gap: 0px;
 }
 
 #blog-type {
