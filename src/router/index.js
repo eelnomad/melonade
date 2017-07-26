@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import About from '@/components/About'
 import Blog from '@/components/Blog'
 import BlogWrapper from '@/components/BlogWrapper'
 import BlogHome from '@/components/BlogHome'
@@ -13,6 +14,11 @@ export default new Router({
       path: '/',
       name: 'Blog',
       component: Blog
+    },
+    {
+      path: '/about',
+      name: 'About',
+      component: About
     },
     {
       path: '/:blog_id',

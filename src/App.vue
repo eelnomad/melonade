@@ -13,13 +13,18 @@ export default {
 </script>
 
 <style>
-html, body {
-  width: 100%;
-  height: 100%;
-}
+  #app {
+    width: 100%;
+    height: 100%;
+  }
 
-#app {
-  width: 100%;
-  height: 100%;
-}
+  html, body {
+    width: 100%;
+    height: 100%;
+    font-family: Bookman, serif;
+  }
+
+  a {
+    color: #42b983;
+  }
 </style>
