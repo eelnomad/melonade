@@ -3,33 +3,27 @@
 
 <template>
   <div id="blog">
-    <template v-for="post in top">
-      <router-link :to="post.type">
-        <div id="blog-type" :style="{ 'backgroundImage': 'url(' + post.background_image + ')' }">
-          <h3>{{post.title}}</h3>
-        </div>
-      </router-link>
-    </template>
+    <blog-type v-for="post in top" id="blog-type" :key="post._id" :post="post"></blog-type>
   </div>
 </template>
 
 <script>
 // Replace with restCall that returns most recent post (title, bg_image, date?, type) for each type
 import blogdata from '@/../data/blogdata.json'
+import BlogType from './BlogType'
 
 export default {
   name: 'blog',
   data () {
     return {
-      top: [],
-      blogdata: blogdata
+      top: []
     }
   },
   created () {
     this.getTop()
   },
   methods: {
-    getTop: function () {
+    getTop: function () { // Gets the top post for each category
       blogdata.sort(function (a, b) {
         return (a._id > b._id) ? -1 : ((a._id < b._id) ? 1 : 0)
       })
@@ -43,6 +37,9 @@ export default {
       }
       this.top = top
     }
+  },
+  components: {
+    BlogType
   }
 }
 </script>
@@ -52,21 +49,7 @@ export default {
 #blog {
   width: 100%;
   height: 100%;
-  column-count: 2;
-  column-gap: 0px;
-}
-
-#blog-type {
-  width: 100% !important;
-  height: 50% !important;
-  padding: 60px 60px 60px 60px;
-  box-sizing: border-box;
-  filter: blur(5px);
-}
-
-#blog-type:hover {
-  text-align: right;
-  vertical-align: text-bottom;
-  filter: blur(0px);
+  display: flex;
+  flex-direction: column;
 }
 </style>

@@ -14,7 +14,7 @@
   	"title": "The KingKiller Chronicles",
   	"body": "It's amazing, I'll tell you that!",
   	"create_date": "2017-07-26 10:37:42.231",
-  	"background_images": "https://upload.wikimedia.org/wikipedia/en/5/56/TheNameoftheWind_cover.jpg",
+  	"background_image": "https://upload.wikimedia.org/wikipedia/en/5/56/TheNameoftheWind_cover.jpg",
     "font_preview_color": "red"
   },
   {
@@ -23,8 +23,8 @@
   	"title": "League of Legends: Never making it to plat again",
   	"body": "I'm too devoted to ARAM. It's a slippery slope once you try some ARAM.",
   	"create_date": "2017-07-26 10:37:42.231",
-  	"background_image": "",
-    "font_preview_color": "black"
+  	"background_image": "https://images.pexels.com/photos/34950/pexels-photo.jpg?w=1260&h=750&auto=compress&cs=tinysrgb",
+    "font_preview_color": "grey"
   },
   {
   	"_id": 4,
@@ -33,7 +33,7 @@
   	"body": "Learning to develop with Vue. Its actually pretty nice! :D",
   	"create_date": "2017-07-26 10:37:42.231",
   	"background_image": "https://vuejs.org/images/logo.png",
-    "font_preview_color": "green"
+    "font_preview_color": "white"
   },
   {
   	"_id": 5,
@@ -41,7 +41,7 @@
   	"title": "King Crab!",
   	"body": "Bask in its former glory!",
   	"create_date": "2017-07-26 10:37:42.231",
-  	"background_image": "https://vuejs.org/images/logo.png",
+  	"background_image": "https://image.shutterstock.com/display_pic_with_logo/2959075/256752703/stock-photo-yellow-land-crab-cuba-256752703.jpg",
     "font_preview_color": "blue"
   }
 ]

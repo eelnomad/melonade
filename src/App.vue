@@ -13,18 +13,28 @@ export default {
 </script>
 
 <style>
-  #app {
-    width: 100%;
-    height: 100%;
-  }
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: Bookman, serif;
+}
 
-  html, body {
-    width: 100%;
-    height: 100%;
-    font-family: Bookman, serif;
-  }
+#app {
+  width: 100%;
+  height: 100%;
+}
 
-  a {
-    color: #42b983;
-  }
+.background {
+  display: flex;
+  position: relative;
+  z-index: -99;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+a {
+  text-decoration: none;
+}
 </style>
