@@ -33,7 +33,7 @@
   	"body": "Learning to develop with Vue. Its actually pretty nice! :D",
   	"create_date": "2017-07-26 10:37:42.231",
   	"background_image": "https://vuejs.org/images/logo.png",
-    "font_preview_color": "white"
+    "font_preview_color": "blue"
   },
   {
   	"_id": 5,
@@ -42,6 +42,6 @@
   	"body": "Bask in its former glory!",
   	"create_date": "2017-07-26 10:37:42.231",
   	"background_image": "https://image.shutterstock.com/display_pic_with_logo/2959075/256752703/stock-photo-yellow-land-crab-cuba-256752703.jpg",
-    "font_preview_color": "blue"
+    "font_preview_color": "purple"
   }
 ]
