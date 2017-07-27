@@ -12,7 +12,7 @@
 
 <script>
 // Replace with rest call that returns details of specific post id
-import blogdata from '@/../blogdata.json'
+import blogdata from '@/../data/blogdata.json'
 
 export default {
   name: 'blogPost',

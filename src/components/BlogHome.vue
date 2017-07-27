@@ -18,7 +18,7 @@
 
 <script>
 // Replace with rest call that returns 10 posts (title, preview, bg_image, date) for that type
-import blogdata from '@/../blogdata.json'
+import blogdata from '@/../data/blogdata.json'
 
 export default {
   name: 'blogHome',

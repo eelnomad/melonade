@@ -4,16 +4,18 @@
 <template>
   <div id="blog">
     <template v-for="post in top">
-      <div id="blog-type" :style="{ 'backgroundImage': 'url(' + post.background_image + ')' }">
-        <router-link :to="post.type">{{post.type}}</router-link>
-      </div>
+      <router-link :to="post.type">
+        <div id="blog-type" :style="{ 'backgroundImage': 'url(' + post.background_image + ')' }">
+          <h3>{{post.title}}</h3>
+        </div>
+      </router-link>
     </template>
   </div>
 </template>
 
 <script>
 // Replace with restCall that returns most recent post (title, bg_image, date?, type) for each type
-import blogdata from '@/../blogdata.json'
+import blogdata from '@/../data/blogdata.json'
 
 export default {
   name: 'blog',
@@ -57,9 +59,14 @@ export default {
 #blog-type {
   width: 100% !important;
   height: 50% !important;
-  text-align: right;
-  vertical-align: text-bottom;
   padding: 60px 60px 60px 60px;
   box-sizing: border-box;
+  filter: blur(5px);
+}
+
+#blog-type:hover {
+  text-align: right;
+  vertical-align: text-bottom;
+  filter: blur(0px);
 }
 </style>
