@@ -4,9 +4,18 @@ html, body {
   height: 100%;
 }
 
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
 span {
-  flex: 2 0 auto;
-  width: 100%;
+  flex: 99 1 auto;
 }
 
 h1 {

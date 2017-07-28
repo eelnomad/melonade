@@ -3,20 +3,23 @@
 
 <template>
   <router-link :to="post.type + '/' + post._id" v-on:mouseenter.native="mouseOver" v-on:mouseleave.native="mouseOver">
-    <div id="blog-preview" v-show="!active">
+    <div class="flex-column" id="blog-preview" v-show="!active">
       <span></span>
       <h1>{{post.type}}</h1>
       <span></span>
     </div>
-    <div id="blog-preview" v-show="active">
+    <div class="flex-column" id="blog-preview" v-show="active">
       <h2>{{post.title}}</h2>
       <h3>{{post.body}}</h3>
       <span></span>
-      <button id="blog-type-button" :to="post.type">
-        <router-link :to="post.type">
-          More {{post.type}}
-        </router-link>
-      </button>
+      <span class="flex-row" :style="{ 'flex': '1 0 auto' }">
+        <span></span>
+        <button id="blog-type-button" :to="post.type">
+          <router-link :to="post.type">
+            More {{post.type}}
+          </router-link>
+        </button>
+      </span>
     </div>
     <div class="background dim" :style="{ 'background-image': 'url(' + post.background_image + ')' }">
     </div>
@@ -58,8 +61,6 @@ export default {
 }
 
 #blog-preview {
-  display: flex;
-  flex-direction: column;
   width: 100%;
   padding: 20px 60px;
 }
