@@ -1,45 +1,56 @@
 <!-- Blog.vue
-     This is the landing page of the website with four quadrants to select what category of posts to look at.-->
+     Contains listof posts of specific type to select from.-->
 
 <template>
   <div id="blog">
-    <blog-type v-for="post in top" id="blog-type" :key="post._id" :post="post"></blog-type>
+    <div id="type-filter">
+      <ul v-for="type in Object.keys(types)" v-on:click="toggle(type)">
+        <button>
+        {{type}}
+        </button>
+      </ul>
+    </div>
+    <blog-nav v-for="post in filteredPosts" :key="post._id" :post="post">{{post.title}}</blog-nav>
   </div>
 </template>
 
 <script>
-// Replace with restCall that returns most recent post (title, bg_image, date?, type) for each type
+// Replace with rest call that returns 10 posts (title, preview, bg_image, date) for that type maybe
 import blogdata from '@/../data/blogdata.json'
-import BlogType from './BlogType'
+import BlogNav from './BlogNav'
 
 export default {
   name: 'blog',
   data () {
     return {
-      top: []
+      posts: blogdata,
+      types: {}
     }
   },
   created () {
-    this.getTop()
+    this.types = this.getTypes()
   },
   methods: {
-    getTop: function () { // Gets the top post for each category
-      blogdata.sort(function (a, b) {
-        return (a._id > b._id) ? -1 : ((a._id < b._id) ? 1 : 0)
-      })
-      var top = []
-      var types = []
+    toggle: function (type) {
+      this.types[type] = !this.types[type]
+    },
+    getTypes: function () {
+      var types = {}
       for (var i = 0; i < blogdata.length; i++) {
-        if (!types.includes(blogdata[i].type)) {
-          types.push(blogdata[i].type)
-          top.push(blogdata[i])
-        }
+        types[blogdata[i].type] = false
       }
-      this.top = top
+      return types
+    }
+  },
+  computed: {
+    filteredPosts () {
+      return this.posts.filter(post => {
+        return this.types[post.type]
+      })
     }
   },
   components: {
-    BlogType
+    BlogNav
   }
 }
 </script>
@@ -48,8 +59,11 @@ export default {
 <style scoped>
 #blog {
   width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  text-align: center;
+  color: black;
+}
+ul {
+  text-align: center;
+  display: inline;
 }
 </style>
