@@ -40,5 +40,6 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
+  position: absolute;
 }
 </style>

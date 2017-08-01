@@ -2,8 +2,8 @@
      Contains the actual content of the post-->
 
 <template>
-  <div class="blogPost">
-      <router-link id="wip-button" :to="{name: 'home'}">Not the best button, I know, but at least it will take you home</router-link> 
+  <div id="blog-post">
+    <router-link :to="{name: 'home'}">Not the best button, I know, but at least it will take you home</router-link> 
     <h2>{{ post.title }}</h2>
     <h4>{{ post.create_date }}</h4>
     <h3>{{ post.body }}</h3>
@@ -15,7 +15,7 @@
 import blogdata from '@/../data/blogdata.json'
 
 export default {
-  name: 'blogPost',
+  name: 'blog-post',
   data () {
     return {
       post: {}
@@ -27,7 +27,7 @@ export default {
   methods: {
     getPost: function () {
       for (var i = 0; i < blogdata.length; i++) {
-        if (blogdata[i]._id === this.$route.params.post_id) {
+        if (blogdata[i]._id.toString() === this.$route.params.post_id) {
           return blogdata[i]
         }
       }
@@ -38,7 +38,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#blogPost {
-  background-color: black;
+#blog-post {
+  height: 100%;
+  width: 100%;
+  position: absolute;
 }
 </style>

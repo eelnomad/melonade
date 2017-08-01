@@ -2,15 +2,17 @@
      Contains listof posts of specific type to select from.-->
 
 <template>
-  <div id="blog">
+  <div class="flex-row" id="blog">
+  <span></span>
+  <div id="blog-content">
     <div id="type-filter">
-      <ul v-for="type in Object.keys(types)" v-on:click="toggle(type)">
-        <button>
+      <button v-for="type in types" v-on:click="setFilter(type)">
         {{type}}
-        </button>
-      </ul>
+      </button>
     </div>
     <blog-nav v-for="post in filteredPosts" :key="post._id" :post="post">{{post.title}}</blog-nav>
+    </div>
+    <span></span>
   </div>
 </template>
 
@@ -24,20 +26,23 @@ export default {
   data () {
     return {
       posts: blogdata,
-      types: {}
+      types: [],
+      filter: 'Recent'
     }
   },
   created () {
     this.types = this.getTypes()
   },
   methods: {
-    toggle: function (type) {
-      this.types[type] = !this.types[type]
+    setFilter: function (type) {
+      this.filter = type
     },
     getTypes: function () {
-      var types = {}
+      var types = ['Recent']
       for (var i = 0; i < blogdata.length; i++) {
-        types[blogdata[i].type] = false
+        if (!types.includes(blogdata[i].type)) {
+          types.push(blogdata[i].type)
+        }
       }
       return types
     }
@@ -45,7 +50,7 @@ export default {
   computed: {
     filteredPosts () {
       return this.posts.filter(post => {
-        return this.types[post.type]
+        return post.type === this.filter || this.filter === 'Recent'
       })
     }
   },
@@ -58,12 +63,30 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #blog {
+  height: 100%;
   width: 100%;
   text-align: center;
   color: black;
+  position: absolute;
 }
-ul {
-  text-align: center;
-  display: inline;
+
+#blog-content {
+  flex: 3 12 auto;
+  background-color: black;
+  color: white;
+}
+
+.background {
+  z-index: -99;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.dim {
+  filter: brightness(.75);
 }
 </style>

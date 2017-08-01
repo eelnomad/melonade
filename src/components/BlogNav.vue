@@ -2,7 +2,7 @@
      This is the landing page of the website with four quadrants to select what category of routes to look at.-->
 
 <template>
-  <router-link id="blog-nav" :to="{name: 'blogPost', params: {post_id: post._id}}" v-on:mouseenter.native="mouseOver" v-on:mouseleave.native="mouseOver">
+  <router-link id="blog-nav" :to="{name: 'blogPost', params: {post_id: post._id.toString()}}" v-on:mouseenter.native="mouseOver" v-on:mouseleave.native="mouseOver">
     <div class="flex-column" id="blog-preview">
       <span></span>
       <h1>{{post.title}}</h1>
@@ -43,5 +43,6 @@ export default {
   color: black;
   vertical-align: center;
   z-index: 1;
+  color: white;
 }
 </style>

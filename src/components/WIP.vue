@@ -38,7 +38,7 @@ export default {
 #wip {
   overflow: auto;
   color: white;
-  position: relative;
+  position: absolute;
   height: 100%;
   width: 100%;
 }

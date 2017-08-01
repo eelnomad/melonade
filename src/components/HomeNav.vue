@@ -38,7 +38,7 @@ export default {
   transition: all .5s ease;
   transition-delay: .1s;
   display: flex;
-  flex: 1 1 auto;
+  flex: 1 0 auto;
   position: relative;
   color: white;
   vertical-align: center;
@@ -47,7 +47,7 @@ export default {
 
 #home-nav:hover {
   display: flex;
-  flex: 99 1 auto;
+  flex: 99 0 auto;
 }
 
 #home-preview {
