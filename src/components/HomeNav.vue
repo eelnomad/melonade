@@ -43,7 +43,7 @@ export default {
   color: white;
   vertical-align: center;
   z-index: 1;
-} 
+}
 
 #home-nav:hover {
   display: flex;

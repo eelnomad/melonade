@@ -41,5 +41,6 @@ export default {
   display: flex;
   flex-direction: column;
   position: absolute;
+  overflow: hidden;
 }
 </style>
