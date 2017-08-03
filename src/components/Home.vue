@@ -2,7 +2,7 @@
      This is the landing page of the website with four quadrants to select what category of posts to look at.-->
 
 <template>
-  <div id="home">
+  <div class="flex-column" id="home">
     <home-nav v-for="route in routes" :key="route.path" :route="route"></home-nav>
   </div>
 </template>
@@ -36,11 +36,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #home {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
   position: absolute;
-  overflow: hidden;
 }
 </style>

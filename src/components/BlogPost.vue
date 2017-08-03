@@ -2,11 +2,22 @@
      Contains the actual content of the post-->
 
 <template>
-  <div id="blog-post">
-    <router-link :to="{name: 'home'}">Not the best button, I know, but at least it will take you home</router-link> 
-    <h2>{{ post.title }}</h2>
-    <h4>{{ post.create_date }}</h4>
-    <h3>{{ post.body }}</h3>
+  <div class="flex-column" id="blog-post" :style="{ 'background-image': 'url(' + post.background_image + ')' }" v-on:scroll="handleScroll">
+    <div class="flex-row" v-bind:id="[ headerToggle ? 'post-header-small' : 'post-header-large']">
+      <span></span>
+      <div id="post-title">
+        <h1>{{ post.title }}</h1>
+      </div>
+      <span></span>
+    </div>
+    <div class="flex-row dim" id="post-body">
+        <span></span>
+      <div id="post-content">
+        <h4>Created on {{ post.create_date }}</h4>
+        <h3>{{ post.body }}</h3>
+      </div>
+      <span></span>
+    </div>
   </div>
 </template>
 
@@ -18,7 +29,8 @@ export default {
   name: 'blog-post',
   data () {
     return {
-      post: {}
+      post: {},
+      scroll: 0
     }
   },
   created () {
@@ -31,6 +43,17 @@ export default {
           return blogdata[i]
         }
       }
+    },
+    handleScroll: function () {
+      this.scroll = document.getElementById('blog-post').scrollTop
+    },
+    toTop: function () {
+      document.body.scrollTop = 0
+    }
+  },
+  computed: {
+    headerToggle: function () {
+      return this.scroll > 100
     }
   }
 }
@@ -39,8 +62,64 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #blog-post {
-  height: 100%;
-  width: 100%;
+  height: 100vh;
+  width: 100vw;
   position: absolute;
+  color: white;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow-y: scroll;
+}
+
+#post-header-large {
+  position: fixed;
+  font-size: 3vw;
+  height: 30vh;
+  width: 100%;
+  transition: all .5s ease;
+  background-image: inherit;
+}
+
+#post-header-small {
+  position: fixed;
+  font-size: 2vw;
+  height: 10vh;
+  width: 100%;
+  transition: all .5s ease;
+  background-image: inherit;
+}
+
+#post-title {
+  width: 100%;
+  padding: 1% 30px 0px 30px;
+  align-self: flex-end;
+  box-sizing: border-box;
+  border-bottom-style: solid;
+  border-bottom-width: 3px;
+  border-color: white;
+}
+
+#post-body {
+  position: relative;
+  margin-top: 40vh;
+  margin-bottom: 80vh;
+}
+
+#post-content {
+  width: 60%;
+}
+
+h1 {
+  font-size: inherit;
+}
+
+h3 {
+  line-height: 35px;
+}
+
+.dim:before {
+  position: fixed;
 }
 </style>

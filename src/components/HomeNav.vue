@@ -2,13 +2,13 @@
      This is the landing page of the website with four quadrants to select what category of routes to look at.-->
 
 <template>
-  <router-link id="home-nav" :to="route.name" v-on:mouseenter.native="mouseOver" v-on:mouseleave.native="mouseOver">
+  <router-link id="home-nav" :to="route.name" v-on:mouseenter.native="mouseOver" v-on:mouseleave.native="mouseOver" :style="{ 'background-image': 'url(' + route.background_image + ')' }">
     <div class="flex-column" id="home-preview">
       <span></span>
       <h1>{{route.display_name}}</h1>
       <span></span>
     </div>
-    <div class="background dim" :style="{ 'background-image': 'url(' + route.background_image + ')' }">
+    <div class="background dim">
     </div>
   </router-link>
 </template>
@@ -42,7 +42,9 @@ export default {
   position: relative;
   color: white;
   vertical-align: center;
-  z-index: 1;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 #home-nav:hover {
@@ -53,19 +55,6 @@ export default {
 #home-preview {
   width: 100%;
   padding: 20px 60px;
-}
-
-.background {
-  z-index: -99;
-  width: 100%;
-  height: 101%;
-  position: absolute;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.dim {
-  filter: brightness(.5);
+  z-index: 1;
 }
 </style>

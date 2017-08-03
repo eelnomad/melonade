@@ -6,6 +6,7 @@
     <div class="flex-column" id="blog-preview">
       <span></span>
       <h1>{{post.title}}</h1>
+      <h1>{{post.body}}</h1>
       <span></span>
     </div>
     <div class="background dim" :style="{ 'background-image': 'url(' + post.background_image + ')' }">
@@ -43,6 +44,9 @@ export default {
   color: black;
   vertical-align: center;
   z-index: 1;
-  color: white;
+}
+
+#blog-nav:hover {
+  background-color: grey;
 }
 </style>

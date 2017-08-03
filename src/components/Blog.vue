@@ -2,17 +2,21 @@
      Contains listof posts of specific type to select from.-->
 
 <template>
-  <div class="flex-row" id="blog">
-  <span></span>
-  <div id="blog-content">
-    <div id="type-filter">
-      <button v-for="type in types" v-on:click="setFilter(type)">
-        {{type}}
-      </button>
+  <div id="blog">
+    <div id="blog-header">
+      <div id="blog-filter">
+        <button v-for="type in types" v-on:click="setFilter(type); toTop">
+          {{type}}
+        </button>
+      </div>
     </div>
-    <blog-nav v-for="post in filteredPosts" :key="post._id" :post="post">{{post.title}}</blog-nav>
+    <div class="flex-row" id="blog-content">
+      <span></span>
+      <div id="blog-listing">
+        <blog-nav v-for="post in filteredPosts" :key="post._id" :post="post">{{post.title}}</blog-nav>
+      </div>
+      <span></span>
     </div>
-    <span></span>
   </div>
 </template>
 
@@ -27,11 +31,16 @@ export default {
     return {
       posts: blogdata,
       types: [],
-      filter: 'Recent'
+      filter: 'Recent',
+      scroll: 0
     }
   },
   created () {
     this.types = this.getTypes()
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  destroyed () {
+    window.removeEventListener('scroll', this.handleScroll)
   },
   methods: {
     setFilter: function (type) {
@@ -45,6 +54,12 @@ export default {
         }
       }
       return types
+    },
+    handleScroll: function () {
+      this.scroll = document.body.scrollTop
+    },
+    toTop: function () {
+      document.body.scrollTop = 10
     }
   },
   computed: {
@@ -63,30 +78,36 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #blog {
-  height: 100%;
   width: 100%;
   text-align: center;
-  color: black;
   position: absolute;
+  overflow-y: auto;
+}
+
+#blog-header {
+  width: 100%;
+  position: fixed;
+  z-index: 5;
 }
 
 #blog-content {
-  flex: 3 12 auto;
-  background-color: black;
+  width: 100%;
+  height: 100vh;
   color: white;
 }
 
-.background {
-  z-index: -99;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+#blog-listing {
+  width: 65%;
+  flex: 1 0 auto;
 }
 
-.dim {
-  filter: brightness(.75);
+#blog-top {
+  position: fixed;
+  bottom: 5%;
+  right: 7%;
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .5s
 }
 </style>
