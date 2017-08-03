@@ -2,7 +2,7 @@
      Contains the actual content of the post-->
 
 <template>
-  <div class="flex-column" id="blog-post" :style="{ 'background-image': 'url(' + post.background_image + ')' }" v-on:scroll="handleScroll">
+  <div class="flex-column" id="blog-post">
     <div class="flex-row" v-bind:id="[ headerToggle ? 'post-header-small' : 'post-header-large']">
       <span></span>
       <div id="post-title">
@@ -10,7 +10,7 @@
       </div>
       <span></span>
     </div>
-    <div class="flex-row dim" id="post-body">
+    <div class="flex-row" id="post-body">
         <span></span>
       <div id="post-content">
         <h4>Created on {{ post.create_date }}</h4>
@@ -35,6 +35,10 @@ export default {
   },
   created () {
     this.post = this.getPost()
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  destroyed () {
+    window.removeEventListener('scroll', this.handleScroll)
   },
   methods: {
     getPost: function () {
@@ -45,10 +49,10 @@ export default {
       }
     },
     handleScroll: function () {
-      this.scroll = document.getElementById('blog-post').scrollTop
+      this.scroll = document.body.scrollTop
     },
     toTop: function () {
-      document.body.scrollTop = 0
+      document.getElementById('blog-post').scrollTop = 0
     }
   },
   computed: {
@@ -65,61 +69,56 @@ export default {
   height: 100vh;
   width: 100vw;
   position: absolute;
-  color: white;
-  background-size: cover;
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  overflow-y: scroll;
+  color: #262626;
+  background: white;
 }
 
 #post-header-large {
   position: fixed;
-  font-size: 3vw;
+  font-size: 5vw;
   height: 30vh;
   width: 100%;
   transition: all .5s ease;
-  background-image: inherit;
+  background: white;
+  z-index: 1;
 }
 
 #post-header-small {
   position: fixed;
   font-size: 2vw;
-  height: 10vh;
+  height: 8vh;
   width: 100%;
   transition: all .5s ease;
-  background-image: inherit;
+  background: white;
+  z-index: 1;
 }
 
 #post-title {
-  width: 100%;
+  width: 90%;
   padding: 1% 30px 0px 30px;
-  align-self: flex-end;
   box-sizing: border-box;
   border-bottom-style: solid;
   border-bottom-width: 3px;
-  border-color: white;
+  border-color: #262626;
+  align-self: flex-end;
 }
 
 #post-body {
   position: relative;
-  margin-top: 40vh;
+  margin-top: 35vh;
   margin-bottom: 80vh;
 }
 
 #post-content {
-  width: 60%;
+  width: 50%;
 }
 
 h1 {
   font-size: inherit;
+  line-height: inherit;
 }
 
 h3 {
-  line-height: 35px;
-}
-
-.dim:before {
-  position: fixed;
+  line-height: 5vh;
 }
 </style>

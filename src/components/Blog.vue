@@ -3,46 +3,52 @@
 
 <template>
   <div id="blog">
-    <div id="blog-header">
-      <div id="blog-filter">
-        <button v-for="type in types" v-on:click="setFilter(type); toTop">
-          {{type}}
-        </button>
-      </div>
+    <div id="blog-filter">
+      <button v-for="type in types" v-on:click="setFilter(type)">
+        {{type}}
+      </button>
     </div>
     <div class="flex-row" id="blog-content">
       <span></span>
       <div id="blog-listing">
-        <blog-nav v-for="post in filteredPosts" :key="post._id" :post="post">{{post.title}}</blog-nav>
+        <router-link v-for="post in filteredPosts" :key="post._id" :to="{name: 'blogPost', params: {post_id: post._id.toString()}}">
+          <div id="post-preview" v-on:mouseenter="setImage(post.background_image)">
+            <h1>{{post.title}}</h1>
+          </div>
+        </router-link>
       </div>
       <span></span>
     </div>
+    <transition name="fade">
+      <div id="background" :style="{ 'background-image': 'url(' + background_image + ')' }"></div>
+      </transition>
   </div>
 </template>
 
 <script>
 // Replace with rest call that returns 10 posts (title, preview, bg_image, date) for that type maybe
 import blogdata from '@/../data/blogdata.json'
-import BlogNav from './BlogNav'
 
 export default {
   name: 'blog',
   data () {
     return {
+      background_image: '',
       posts: blogdata,
       types: [],
-      filter: 'Recent',
-      scroll: 0
+      filter: 'Recent'
     }
   },
   created () {
     this.types = this.getTypes()
-    window.addEventListener('scroll', this.handleScroll)
+    this.background_image = this.posts[0].background_image
   },
   destroyed () {
-    window.removeEventListener('scroll', this.handleScroll)
   },
   methods: {
+    setImage: function (image) {
+      this.background_image = image
+    },
     setFilter: function (type) {
       this.filter = type
     },
@@ -54,12 +60,6 @@ export default {
         }
       }
       return types
-    },
-    handleScroll: function () {
-      this.scroll = document.body.scrollTop
-    },
-    toTop: function () {
-      document.body.scrollTop = 10
     }
   },
   computed: {
@@ -68,9 +68,6 @@ export default {
         return post.type === this.filter || this.filter === 'Recent'
       })
     }
-  },
-  components: {
-    BlogNav
   }
 }
 </script>
@@ -78,36 +75,42 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #blog {
-  width: 100%;
+  width: 100vw;
+  height: 100%;
   text-align: center;
   position: absolute;
-  overflow-y: auto;
+  transition: opacity .5s ease;
 }
 
-#blog-header {
-  width: 100%;
-  position: fixed;
-  z-index: 5;
+#blog-filter {
+  background: none;
 }
 
 #blog-content {
-  width: 100%;
-  height: 100vh;
-  color: white;
+  width: 100vw;
 }
 
 #blog-listing {
-  width: 65%;
-  flex: 1 0 auto;
+  width: 60%;
+  background-color: transparent;
 }
 
-#blog-top {
-  position: fixed;
-  bottom: 5%;
-  right: 7%;
+a{
+  color: white;
 }
 
-.fade-enter-active, .fade-leave-active {
-    transition: opacity .5s
+#background {
+  height: 100vh;
+  width: 100vw;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  transition: opacity 1s ease;
+  z-index: -1;
+  filter: brightness(.5);
 }
 </style>

@@ -2,7 +2,7 @@
      This is the landing page of the website with four quadrants to select what category of routes to look at.-->
 
 <template>
-  <router-link id="home-nav" :to="route.name" v-on:mouseenter.native="mouseOver" v-on:mouseleave.native="mouseOver" :style="{ 'background-image': 'url(' + route.background_image + ')' }">
+  <router-link id="home-nav" :to="route.name" :style="{ 'background-image': 'url(' + route.background_image + ')' }">
     <div class="flex-column" id="home-preview">
       <span></span>
       <h1>{{route.display_name}}</h1>
@@ -19,13 +19,9 @@ export default {
   props: ['route'],
   data () {
     return {
-      active: false
     }
   },
   methods: {
-    mouseOver: function () {
-      this.active = !this.active
-    }
   },
   created () {
   }

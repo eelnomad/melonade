@@ -37,9 +37,9 @@ export default {
 #wip {
   overflow: auto;
   color: white;
-  position: relative;
-  height: 100%;
-  width: 100%;
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
