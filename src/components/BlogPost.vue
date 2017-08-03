@@ -85,7 +85,7 @@ export default {
 
 #post-header-small {
   position: fixed;
-  font-size: 2vw;
+  font-size: 1.5vw;
   height: 8vh;
   width: 100%;
   transition: all .5s ease;
@@ -119,6 +119,6 @@ h1 {
 }
 
 h3 {
-  line-height: 5vh;
+  line-height: 3vw;
 }
 </style>
