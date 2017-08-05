@@ -41,6 +41,7 @@ export default {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  font-size: 2.5vw;
 }
 
 #home-nav:hover {
@@ -53,4 +54,8 @@ export default {
   padding: 20px 60px;
   z-index: 1;
 }
+
+  h1 {
+    font-size: inherit;
+  }
 </style>

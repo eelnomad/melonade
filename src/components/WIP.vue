@@ -3,7 +3,7 @@
 
 <template>
   <div class="flex-row dim" id="wip">
-      <router-link id="wip-button" :to="{name: 'home'}">Home</router-link> 
+      <router-link id="wip-button" :to="{name: 'home'}">Home</router-link>
     <span></span>
     <div class="flex-column" id="wip-text">
       <span></span>
@@ -43,7 +43,7 @@ export default {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-image: url('https://lh3.googleusercontent.com/b8EzdeVkc71MSR7z86IMhnUJgUN2wKsopJHJukf6wRFx0hLDEtJgXQyPGQSBx9_KmD4CPZZeMmm48zlDOlJFg-tdgi2W8O56QFu9sXuC_3cIoVFv-yaWi5pCAICiT4Ij6d9C2SfuCpPI47hAzinDGrDSN6mTnERsj_Zg9AcDgmX2a-8EZDXoxAYpY_afd6TaeVp8XNiqCBp6mJiAi4-6_RWDfOd-FRfI8pzWKaKInlrUZMnPk5AuOx85UEQlZG1EpZZoWOS_0GYVYW9RKZproKkg9HBzPgRjz5CP8K_WxG-sYivc7aksZw0YNwOV4QaP_kkvVlnY7xDvaJU0xapdm7UP_rPVV_dbGX3YznfUYSZjJT74HMuvJtRioQGURqeBuwchczLbssj9ssxquVyTKUmGE9pI0IayNjtT2vpJMjjJtoXaGC7K08mAoXBX2B7WXpPFiVPQOYz6-HyzqW6xNl1aAos5ReWQqAeEDHdQR7wdZ8ArnV9oIoceCdnIa9tjS9tbqRopfZJUwFX4yhXMDUwOZMM-RCHgWkVBtBUuKahlXwUT1FEAfvxC4Sl-rAsU5ki7Ilww-Lbpo2YxXY5NhYLbZTIu5ZWN7PSYJASYuO5SKVIAs5gP53fl1-dAFY9it_m21tpaahIFFRq1UwbTsxret0zSp68-nAyuVoqiH3di_g=w2398-h1598-no');
+  background-image: url('https://lh3.googleusercontent.com/pgY8k0ee8T3pTe_qN8IhZfoisanvOleNXeT3MSAkVxJeyixkzhNKGPBfr_uYL6warS4QXAVVXi9BPg4bfJ78Vl5ugwxue6nF1Nc8A1aSMLOYBt4DoQ1ULH4bFz4sjjQzCMuWkD379lA_GXLEjqPw1rKJafuYJnwjHLSfD5lO-clJXz_QJ5nqltJBNk9R3Dt-RiBjLnft1VyMX0xGeC2pN-yYvpXNIsjwHQ1-y4s2Yd32Ql-E-lBH2V8pzrMgZ7JLF4I3MVZ3_dB2PuZpOY21rlaQkJNnAYSOIvv6-UMX4i9daSow3K3Tx8wPivBu_qyb_7zjejRHELxMpl0Pz6cu6zXt3uwj3KbEjoe3gFNMyX3y9QkWS-VeS3LtKbO1dsOEtm3Lbbk325fGRGGoaNhpaC_1w4ggglbLKuCQSN_vg9feDh77yQYJO70Pr12eCn0FsyIzdc6iho-f2RUOwblCDhpBNI_Vfo-4kwZA8iyZNTNpPJ1MLgpC--fStD3huFjecR1OtdWfvHjRf7975batFmP-hfYkd16jz1JDwEd8poLsexbK71p_nK5ozv9HBTUcLh30VBnTvZcEs8-JlMOofqWqvOUuhoj0tMIjBMZo8WQjF9qH9SmRL8pQ8_SOKqPWAGrFj6qhq4ShrfPtVyzJPMfFhB-xP1k_MrkQ2famQFjfVQ=w1425-h950-no?.jpg');
 }
 
 #wip-text {
@@ -77,12 +77,13 @@ export default {
   outline: none;
 }
 
-h1 { 
-  font-size: 50px; 
-  margin-bottom: 75px;
+h1 {
+  font-size: 5vw;
+  margin-bottom: 6vw;
 }
 
 p {
+  font-size: 1.2vw;
   line-height: 0px;
 }
 </style>
