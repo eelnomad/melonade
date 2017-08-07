@@ -2,23 +2,23 @@
      Contains the actual content of the post-->
 
 <template>
-  <div class="flex-column" id="blog-post" @scroll="handleScroll">
+  <div class="flex-row" id="blog-post">
     <div class="flex-row" :id="[ headerToggle ? 'post-header-small' : 'post-header-large']">
-      <span></span>
+      <transition name="fade">
+        <div v-show="!headerToggle" class="background dim" :style="{ 'background-image': 'url(' + post.background_image + ')' }"></div>
+      </transition>
       <div class="flex-column" id="post-title">
         <span></span>
         <h1>{{ post.title }}</h1>
       </div>
-      <span></span>
     </div>
-    <div class="flex-row" id="post-body">
-        <span></span>
-      <div id="post-content">
-        <h4>Created on {{ post.create_date }}</h4>
-        <h3>{{ post.body }}</h3>
-      </div>
-      <span></span>
+    <span></span>
+    <div id="post-content">
+      <h4>Created on {{ post.create_date }}</h4>
+      <h3>{{ post.body }}</h3>
+      <div id="footer-spacer"></div>
     </div>
+    <span></span>
   </div>
 </template>
 
@@ -36,8 +36,10 @@ export default {
   },
   created () {
     this.post = this.getPost()
+    window.addEventListener('scroll', this.handleScroll)
   },
   destroyed () {
+    window.removeEventListener('scroll', this.handleScroll)
   },
   methods: {
     getPost: function () {
@@ -48,15 +50,15 @@ export default {
       }
     },
     handleScroll: function () {
-      this.scroll = document.getElementById('blog-post').scrollTop
+      this.scroll = document.body.scrollTop
     },
     toTop: function () {
-      document.getElementById('blog-post').scrollTop = 0
+      document.body.scrollTop = 0
     }
   },
   computed: {
     headerToggle: function () {
-      return this.scroll > 100
+      return this.scroll > 50
     }
   }
 }
@@ -66,55 +68,68 @@ export default {
 <style scoped>
 #blog-post {
   height: 100%;
-  width: 100vw;
+  width: 100%;
   position: absolute;
   color: #262626;
   background: white;
-  overflow-x: hidden;
 }
 
 #post-header-large {
   position: fixed;
   font-size: 5vw;
-  height: 30vh;
+  height: 80vh;
   width: 100%;
   transition: all .5s ease;
   z-index: 1;
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 -10px 10px 10px black;
 }
 
 #post-header-small {
   position: fixed;
-  font-size: 1.5vw;
+  font-size: 1.85vw;
   height: 8vh;
   width: 100%;
   transition: all .5s ease;
   z-index: 1;
+  color: black;
+  border-color: #262626;
+  background-color: white;
 }
 
 #post-title {
   height: 100%;
-  width: 90%;
-  align-content: flex-end;
-  padding: 0 30px;
+  width: 100%;
+  margin: 0 50px;
+  padding: 0 20px;
   box-sizing: border-box;
   border-bottom-style: solid;
   border-bottom-width: 3px;
-  border-color: #262626;
-  background: white;
-  justify-content: flex-end;
-}
-
-#post-body {
-  position: relative;
-  width: 100%;
-  margin-top: 35vh;
-  margin-left: 0;
-  margin-right: 0;
+  border-color: inherit;
 }
 
 #post-content {
   width: 50%;
+  margin-top: 80vh;
+  padding-bottom: 20vh;
   color: #262626;
+}
+
+#footer-spacer {
+  height: 20vh;
+}
+
+.background {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  position: absolute;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  z-index: -1;
 }
 
 h1 {

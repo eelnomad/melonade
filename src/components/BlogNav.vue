@@ -1,8 +1,8 @@
-<!-- Blog.vue
+<!-- BlogNav.vue
      Contains listof posts of specific type to select from.-->
 
 <template>
-  <div id="blog">
+  <div id="blog-nav">
     <div id="blog-filter">
       <button v-for="type in types" v-on:click="setFilter(type)">
         {{type}}
@@ -24,7 +24,6 @@
 <script>
 // Replace with rest call that returns 10 posts (title, preview, bg_image, date) for that type maybe
 import blogdata from '@/../data/blogdata.json'
-import BlogNav from './BlogNav'
 
 export default {
   name: 'blog',
@@ -61,16 +60,13 @@ export default {
         return post.type === this.filter || this.filter === 'Recent'
       })
     }
-  },
-  components: {
-    BlogNav
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#blog {
+#blog-nav {
   width: 100vw;
   height: 100%;
   text-align: center;
