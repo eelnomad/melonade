@@ -33,7 +33,6 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   #wip {
-    overflow: auto;
     color: white;
     position: absolute;
     height: 100vh;

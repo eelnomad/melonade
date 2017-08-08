@@ -10,11 +10,8 @@
     </div>
     <div class="flex-row">
       <span></span>
-      <div id="blog-listing">
-        <router-link id="blog-nav" v-for="post in filteredPosts" :key="post._id" :to="{name: 'blogPost', params: {post_id: post._id.toString()}}">
-          <h1>{{post.title}}</h1>
-          <h4>{{post.create_date}}</h4>
-        </router-link>
+      <div id="blog-listing" class="flex-column">
+        <blog-nav v-for="post in filteredPosts" :key="post._id" :post="post"></blog-nav>
       </div>
       <span></span>
     </div>
@@ -84,14 +81,6 @@ export default {
 #blog-listing {
   text-align: left;
   width: 60%;
-}
-
-#blog-nav {
-  background-color: black;
-}
-
-#blog-nav:hover {
-  background-color: grey;
 }
 
 a{
