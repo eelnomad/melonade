@@ -126,7 +126,7 @@ export default {
   left: 0;
   right: 0;
   position: absolute;
-  background-position: center;
+  background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
   z-index: -1;
