@@ -8,36 +8,36 @@
 </template>
 
 <script>
-import HomeNav from './HomeNav'
+  import HomeNav from './HomeNav'
 
-export default {
-  name: 'home',
-  data () {
-    return {
-      routes: []
+  export default {
+    name: 'home',
+    data () {
+      return {
+        routes: []
+      }
+    },
+    created () {
+      this.routes = this.getRoutes()
+    },
+    methods: {
+      getRoutes: function () {
+        return this.$router.options.routes.filter(function (route) {
+          return route.level === 'home'
+        })
+      }
+    },
+    components: {
+      HomeNav
     }
-  },
-  created () {
-    this.routes = this.getRoutes()
-  },
-  methods: {
-    getRoutes: function () {
-      return this.$router.options.routes.filter(function (route) {
-        return route.level === 'home'
-      })
-    }
-  },
-  components: {
-    HomeNav
   }
-}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#home {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-}
+  #home {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
 </style>

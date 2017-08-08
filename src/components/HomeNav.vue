@@ -14,46 +14,44 @@
 </template>
 
 <script>
-export default {
-  name: 'home-nav',
-  props: ['route'],
-  data () {
-    return {
+  export default {
+    name: 'home-nav',
+    props: ['route'],
+    data () {
+      return {}
+    },
+    methods: {},
+    created () {
     }
-  },
-  methods: {
-  },
-  created () {
   }
-}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#home-nav {
-  transition: all .5s ease;
-  transition-delay: .1s;
-  display: flex;
-  flex: 1 0 auto;
-  position: relative;
-  color: white;
-  vertical-align: center;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  font-size: 2.5vw;
-}
+  #home-nav {
+    transition: all .5s ease;
+    transition-delay: .1s;
+    display: flex;
+    flex: 1 0 auto;
+    position: relative;
+    color: white;
+    vertical-align: center;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-size: 2.5vw;
+  }
 
-#home-nav:hover {
-  display: flex;
-  flex: 99 0 auto;
-}
+  #home-nav:hover {
+    display: flex;
+    flex: 99 0 auto;
+  }
 
-#home-preview {
-  width: 100%;
-  padding: 20px 60px;
-  z-index: 1;
-}
+  #home-preview {
+    width: 100%;
+    padding: 20px 60px;
+    z-index: 1;
+  }
 
   h1 {
     font-size: inherit;
