@@ -30,17 +30,18 @@
     display: flex;
     flex: 1 0 auto;
     position: relative;
-    color: black;
     vertical-align: center;
     font-size: 2.5vw;
+    color: white;
+    background-color: rgba(0,0,0,.5);
 
   }
 
   #blog-nav:hover {
+    color: black;
+    background-color: white;
     display: flex;
     flex: 99 0 auto;
-    color: white;
-    background-color: rgba(0,0,0,.5);
   }
 
   #blog-preview {
