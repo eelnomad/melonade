@@ -3,10 +3,19 @@
 
 <template>
   <div id="blog">
-    <div id="blog-filter">
-      <button v-for="type in types" v-on:click="setFilter(type)">
-        {{type}}
-      </button>
+    <div class="flex-row">
+      <span></span>
+      <div id="logo">Melonade</div>
+      <span></span>
+    </div>
+    <div class="flex-row">
+      <span></span>
+      <div id="blog-filter">
+        <button :class="{'selected' : type === filter}" v-for="type in types" @click="setFilter(type)">
+          {{type}}
+        </button>
+      </div>
+      <span></span>
     </div>
     <div class="flex-row">
       <span></span>
@@ -70,12 +79,28 @@ export default {
 #blog {
   width: 100vw;
   height: 100%;
-  text-align: center;
   position: absolute;
   transition: opacity .5s ease;
 }
 
+#logo {
+  font-family: 'Sacramento', cursive;
+  font-size: 80px;
+  text-align: center;
+  margin-top: 35px;
+  margin-bottom: 0;
+  width: 80%;
+  border-bottom-style: solid;
+  border-bottom-color: #262626;
+  border-bottom-width: 1px;
+}
+
 #blog-filter {
+  text-align: center;
+  width: 80%;
+  border-bottom-style: solid;
+  border-bottom-color: #262626;
+  border-bottom-width: 1px;
 }
 
 #blog-listing {
@@ -83,7 +108,23 @@ export default {
   width: 60%;
 }
 
-a{
+button {
+  transition: all .25s ease;
+  background-color: white;
+  border-style: none;
+  color: black;
+  font-family: 'Fredericka the Great', cursive;
+  font-size: 2vw;
+}
+
+button:hover, button:focus, .selected {
+  outline: none;
+  transition: all .25s ease;
+  background-color: rgba(0,0,0,.80);
+  color: white;
+}
+
+a {
   color: black;
 }
 
