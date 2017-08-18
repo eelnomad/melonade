@@ -4,7 +4,7 @@
 <template>
   <router-link id="blog-nav" :to="{name: 'blogPost', params: {post_id: post._id.toString()}}">
     <div class="flex-column" id="blog-preview">
-      <h1>{{post.title}}</h1>
+      <h2>{{post.title}}</h2>
       <h4>{{post.create_date}}</h4>
     </div>
   </router-link>
@@ -31,25 +31,30 @@
     flex: 1 0 auto;
     position: relative;
     vertical-align: center;
-    font-size: 2.5vw;
-    color: white;
-    background-color: rgba(0,0,0,.5)
-
+    color: black;
+    background-color: white;
+    margin: 0% 10%;
   }
 
   #blog-nav:hover {
-    color: black;
-    background-color: white;
+    color: white;
+    background-color: rgba(0,0,0,.5);
     display: flex;
     flex: 99 0 auto;
   }
 
   #blog-preview {
-    padding: 20px 60px;
+    padding: 10px 60px;
     z-index: 1;
   }
 
-  h1 {
-    font-size: inherit;
+  h2 {
+    font-size: 1.75vw;
+    line-height: 0px;
+  }
+
+  h4 {
+    font-size: 1vw;
+    line-height: 0px;
   }
 </style>

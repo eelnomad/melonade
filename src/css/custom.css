@@ -22,7 +22,7 @@ span {
 }
 
 h1 {
-  font-family: Coustard;
+  font-family: 'Quicksand', sans-serif;
   font-size: 24px;
   font-style: normal;
   font-variant: normal;
@@ -31,7 +31,7 @@ h1 {
 }
 
 h2 {
-  font-family: Coustard;
+  font-family: 'Quicksand', sans-serif;
   font-size: 29px;
   font-style: normal;
   font-variant: normal;
@@ -39,7 +39,7 @@ h2 {
   line-height: 20.9px;
 }
 h3 {
-  font-family: Coustard;
+  font-family: 'Quicksand', sans-serif;
   font-size: 14px;
   font-style: normal;
   font-variant: normal;
@@ -47,7 +47,7 @@ h3 {
   line-height: 15.4px;
 }
 h4 {
-  font-family: Coustard;
+  font-family: 'Quicksand', sans-serif;
   font-size: 12px;
   font-style: normal;
   font-variant: normal;
@@ -55,7 +55,7 @@ h4 {
   line-height: 0px;
 }
 a {
-  font-family: Coustard;
+  font-family: 'Quicksand', sans-serif;
   font-size: 14px;
   font-style: normal;
   font-variant: normal;
@@ -64,7 +64,7 @@ a {
   text-decoration: none;
 }
 p {
-  font-family: Coustard;
+  font-family: 'Quicksand', sans-serif;
   font-size: 14px;
   font-style: normal;
   font-variant: normal;
@@ -72,7 +72,7 @@ p {
   line-height: 20px;
 }
 blockquote {
-  font-family: Coustard;
+  font-family: 'Quicksand', sans-serif;
   font-size: 21px;
   font-style: normal;
   font-variant: normal;
@@ -80,7 +80,7 @@ blockquote {
   line-height: 30px;
 }
 pre {
-  font-family: Coustard;
+  font-family: 'Quicksand', sans-serif;
   font-size: 13px;
   font-style: normal;
   font-variant: normal;
@@ -98,4 +98,4 @@ pre {
   background: rgba(0,0,0, 0.5);
 }
 
-@import url('https://fonts.googleapis.com/css?family=Coustard|Fredericka+the+Great|Sacramento');
+@import url('https://fonts.googleapis.com/css?family=Sacramento|Fredericka+the+Great|Quicksand');
