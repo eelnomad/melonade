@@ -6,7 +6,11 @@
     <div class="flex-row" id="blog-header">
       <span></span>
         <div class="flex-column" id="blog-header-content">
-          <div id="logo">Melonade</div>
+            <div id="logo">
+              <router-link :to="'/'" id="logo">
+              Melonade
+              </router-link>
+            </div>
           <span></span>
           <div id="blog-filter">
             <button :class="{'selected' : type === filter}" v-for="type in types" @click="setFilter(type)">
@@ -19,10 +23,9 @@
     <div class="flex-row">
       <span></span>
       <div id="blog-listing" class="flex-column">
-        <div id="blog-banner" :style="{ 'background-image': 'url(' + posts[Math.floor(Math.random() * posts.length)].background_image + ')' }">
-
+        <div id="blog-banner" :style="{ 'background-image': 'url(' + randomPost.background_image + ')' }">
         </div>
-        <blog-nav v-for="post in filteredPosts" :key="post._id" :post="post"></blog-nav>
+        <blog-nav v-for="post in filteredPosts.slice(0,10)" :key="post._id" :post="post"></blog-nav>
         <div id="footer-spacer"></div>
       </div>
       <span></span>
@@ -69,6 +72,9 @@ export default {
       return this.posts.filter(post => {
         return post.type === this.filter || this.filter === 'Recent'
       })
+    },
+    randomPost () {
+      return this.posts[Math.floor(Math.random() * this.posts.length)]
     }
   },
   components: {
@@ -131,8 +137,8 @@ export default {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-    box-shadow: inset 0 0 20px grey;
-    border-radius: 0 0 30px 30px;
+  box-shadow: inset 0 0 5px white;
+  border-radius: 0 0 20px 20px;
 }
 
 #footer-spacer {

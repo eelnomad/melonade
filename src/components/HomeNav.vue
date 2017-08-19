@@ -42,7 +42,8 @@
     font-size: 2.5vw;
   }
 
-  #home-nav:hover {
+  #home-nav:hover, #home-nav:focus {
+    outline: none;
     display: flex;
     flex: 99 0 auto;
   }

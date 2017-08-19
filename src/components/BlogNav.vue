@@ -38,14 +38,22 @@
 
   #blog-nav:hover {
     color: white;
-    background-color: rgba(0,0,0,.5);
+    background-color: rgba(0,0,0,.70);
     display: flex;
     flex: 99 0 auto;
+    box-shadow: inset 0 0 5px white;
   }
 
   #blog-preview {
     padding: 10px 60px;
     z-index: 1;
+  }
+
+  #blog-nav:focus{
+    outline: none;
+    transition: all .25s ease;
+    background-color: rgba(0,0,0,.80);
+    color: white;
   }
 
   h2 {
