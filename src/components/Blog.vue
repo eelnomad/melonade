@@ -2,7 +2,7 @@
      Contains listof posts of specific type to select from.-->
 
 <template>
-  <div id="blog">
+  <div class="flex-row" id="blog">
     <div class="flex-row" id="blog-header">
       <span></span>
         <div class="flex-column" id="blog-header-content">
@@ -20,16 +20,13 @@
         </div>
       <span></span>
     </div>
-    <div class="flex-row">
-      <span></span>
-      <div id="blog-listing" class="flex-column">
-        <div id="blog-banner" :style="{ 'background-image': 'url(' + randomPost.background_image + ')' }">
-        </div>
-        <blog-nav v-for="post in filteredPosts.slice(0,10)" :key="post._id" :post="post"></blog-nav>
-        <div id="footer-spacer"></div>
-      </div>
-      <span></span>
+    <span></span>
+    <div id="blog-listing">
+      <div id="blog-banner" :style="{ 'background-image': 'url(' + randomPost.background_image + ')' }"></div>
+      <blog-nav v-for="post in filteredPosts.slice(0,10)" :key="post._id" :post="post"></blog-nav>
+      <div id="footer-spacer"></div>
     </div>
+    <span></span>
   </div>
 </template>
 
@@ -86,28 +83,28 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #blog {
-  width: 100vw;
+  width: 100%;
   height: 100%;
   position: absolute;
-  transition: opacity .5s ease;
 }
 
 #blog-header {
   position: fixed;
-  width: 100%;
+  width: 100vw;
   height: 18vmin;
-  z-index: 2;
+  z-index: 1;
   background-color: white;
 }
 
 #blog-header-content {
-  width: 80%;
+  width: 85%;
 }
 
 #logo {
   font-family: 'Sacramento', cursive;
-  font-size: 10vmin;
+  font-size: 9vmin;
   text-align: center;
+  padding: 0 10vw;
   margin-top: 3vmin;
   margin-bottom: 0;
 }
@@ -133,12 +130,13 @@ export default {
 
 #blog-banner {
   height: 60vh;
+  margin-bottom: 3px;
   background-color: grey;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  box-shadow: inset 0 0 5px white;
   border-radius: 0 0 20px 20px;
+  box-shadow: 0 2px 5px -2px black;
 }
 
 #footer-spacer {

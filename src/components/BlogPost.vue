@@ -97,7 +97,6 @@
     color: black;
     border-color: #262626;
     background-color: white;
-    overflow: hidden;
   }
 
   #post-title {

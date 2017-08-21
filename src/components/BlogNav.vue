@@ -46,7 +46,6 @@
 
   #blog-preview {
     padding: 10px 60px;
-    z-index: 1;
   }
 
   #blog-nav:focus{
