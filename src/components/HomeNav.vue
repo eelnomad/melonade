@@ -46,11 +46,12 @@
     outline: none;
     display: flex;
     flex: 99 0 auto;
+    font-size: 4vw;
   }
 
   #home-preview {
     width: 100%;
-    padding: 20px 60px;
+    padding: 0px 60px;
     z-index: 1;
   }
 

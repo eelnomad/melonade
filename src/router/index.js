@@ -27,6 +27,24 @@ export default new Router({
       background_image: 'https://lh3.googleusercontent.com/9sPGU35bYAUlVVS7awmiJ3ye9QJ74T0E_SyTqKAP6NI0cLmMwq3XfZHhE5XwXzAWxIAFLNGNdpFR5oR1nVOX7eTNZ7Ssx-44CX0GDsDHw_yOZjAhGCb3cHdPj8Vw4x614z52wkObt5gJwqRe8hT58CkYSnF0hzre4RcpSgfcC7IQ5Gw7Y67bkYtX5nejlkw0EAIKbGkPIiwBy9lYPvUxcnDWv7Muto_wAGd_g-zuux8aMCCihvY44l9ph-gxymyscMG5KuxfNeo_usRUQYbB2pI6gtDp6pnt_mODKmMSv18ozVjHFmNvkw-9_D0F_Bq9_VRN8kbNyYUV8TnlAQLa4kbvMFK4G9QN01Eq3tHqyyBW_ipGfzR3t68q_RXpGT283DLxSYvs1fPP_2BdGaZpAOfGbUsijMPSRYJAo1TWRLvWaWd1fn_6yFeJPIVSykpioCuoKlkZmxNFyfg967MF5wp9RwbYUuLGHcSJ76LEQKitRUm7p5iPLn5vbtfLAtc-7iOF6ex3NH1g7WGGu6Cr52VzvViCc0QQ-1609kIZ2PMoRdxTMOkt-GgMQS_QeSLI9UYXMkkRfALO6iykcqN2TE6evbMFNJOALwLb1s8Xy683k7w8ashPsMuiITZq0ClW2a8lFisvWQyLCdUZ7xAP6E9NPLNREceSzSxUEhAfqgW4zg=w1425-h950-no?.jpg'
     },
     {
+      path: '/photos',
+      name: 'photos',
+      component: WIP,
+      display_name: 'Photo Gallery',
+      description: 'Various Photos I\'ve Taken',
+      level: 'home',
+      background_image: 'https://lh3.googleusercontent.com/Y2wYl6KgubHSz3Zvh0GXN7a8_grOTse9fqbFUlwVliu3tk6HEIZNTGl-b5Z0-GYcRZoq9i_s3nFB6mEiHjxKMoaYjrOUNjBgO1GgNXDfKskM-4XB1zTGOFWRYVMOr4AvKWmxr7yRMWMzkakRrzaZe4xIqipojah7CMnY8EZO8V19yGjbdi7pLFWm7GM5fmgBU_HqS-Fu3X_Cmzf_cB6LmgaJLrYElcCEHEIsquzZKOygnR1l_Tuk475BDR-MYKXv9Tj_QQV12utkH9Klgp-D9ugxw2ur_zGEo94LeE8rw7eT-K0eFv2nEs5lCszioDyO2bgioSLMO116eraXtJK3G5FqeXRs5nb5j6Zx9bUtUBXOjq2_mn6y3REG8XxSYy6qpT31aRxM4P-yrjbTJazPMpDLgXAOkGFUy3NwTq2I9Kioil61rouKUqyvxpQda-eJkwl5j794GQhKcSmJA67Tt4Lf6mf9GPWZPdRH6CpQazB2AIP_5Q9oYzU94kritAi3m5tV_CRewOizz29auJ7A9aWJrWKQqFTh1vK-AMPpw0tt9Tf7uoC1wOQm5gPnEsn3UpPNERKVvwnlB611qJ6oyO_tjI-cr98aQybVIqOPmWH_FgmWuMZ9biQlhVkGu_0miBw6o9JXiMyr4mymuz6-B-vKtQOSTYZl4LEDIXgUxrY8KQ=w1425-h950-no?.jpg'
+    },
+    {
+      path: '/showerthoughts',
+      name: 'showerthoughts',
+      component: WIP,
+      display_name: 'Shower Thoughts',
+      description: 'Random Thoughts',
+      level: 'home',
+      background_image: 'https://lh3.googleusercontent.com/kZZ3Em_o77SevGgkc3kk20uwcI9bXSnJ8k8wFFbn8o0Sjojx8WwbywNKH90Q-8C39qXhXXSMvcJJx-SAKmasI4Yg69MVe0qVW2L6IFS5UxvCJ8O5hlBye__8BA0u0ghNNpy7TACdP_O3fC8-l2EZID4nnUa-gFt4WN9cPq8Q4Z5Sc7iZJNTjeCe8oxDumA5HX4KErXne20wPXEJa3zOyt0-1SaZy36sRFkE0jlhZa7wrXGzAnh92dWydExUBQhGM9ej4xCZxYecy40XZhoz2t964IbaYt3CLjK0k-2iqUMhMCPlUPCCqw2i5vPXYao4adqijtYyHhcd2rrVrGrQPEAOzCOhkzQWv-rfcks9f0UrfAeXqCpdaoI97TtggNgpJp-R_QsEDNDpKFvC7R8LqwzUsQQH0GOUk8MUISktZwIr1g2sKmVoZuKi-yNL6lWl7zQrwlQKJo9SMPqzwRIBiIlzfxNXkz645zFDWriJ56ae-R-rf_RHw2lefAB4wL9tjOX2esKIKEFoCp3XBM5frTf35s7oPsiwIONvM-bTNCrUs9XgCHFLNSohq-U8cfL0JcMEiHKHR1OkfpLZqtQ2v1RJpHYxnC38RoKlO6pUe3DaO9SFa2MZpEGp68NUwxPqNws4Nyw932I_u3vhwlEu5_UyvpwitaXJ_HFhoNKF4c2AxgA=w1425-h950-no?.jpg'
+    },
+    {
       path: '/blog/:post_id',
       name: 'blogPost',
       component: BlogPost
