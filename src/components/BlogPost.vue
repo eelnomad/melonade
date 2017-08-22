@@ -37,9 +37,11 @@
     },
     created () {
       this.post = this.getPost()
+    },
+    mounted () {
       window.addEventListener('scroll', this.handleScroll)
     },
-    destroyed () {
+    beforeDestroy () {
       window.removeEventListener('scroll', this.handleScroll)
     },
     methods: {

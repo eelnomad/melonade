@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import Blog from '@/components/Blog'
 import BlogPost from '@/components/BlogPost'
+import ShowerThoughts from '@/components/ShowerThoughts'
 // import League from '@/components/League'
 // import About from '@/components/About'
 import WIP from '@/components/WIP'
@@ -38,7 +39,7 @@ export default new Router({
     {
       path: '/showerthoughts',
       name: 'showerthoughts',
-      component: WIP,
+      component: ShowerThoughts,
       display_name: 'Shower Thoughts',
       description: 'Random Thoughts',
       level: 'home',
