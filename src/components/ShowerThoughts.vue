@@ -7,11 +7,11 @@
     <div class="overlay">
       <span v-for="i in grid" :class="['opacity-' + i.toString()]"></span>
     </div>
-    <transition name="fade" >
-      <div id="thought-bubble" v-for="thought in randomThoughts" :key="thought.thought" :style="thought.style">
+    <transition-group name="fade" :style="{'background': 'transparent'}">
+      <div id="thought-bubble" v-for="thought in randomThoughts" :key="thought.key" :style="thought.style">
         <h1>{{thought.thought}}</h1>
       </div>
-    </transition>
+    </transition-group>
   </div>
 </template>
 
@@ -36,11 +36,11 @@
         this.randomizeFade()
       }.bind(this), 3000)
       this.thoughtInterval = setInterval(function () {
-        if (Math.random() < 0.35) {
+        if (Math.random() < 0.5 - this.randomThoughts.length * 0.1) {
           this.addRandomThought()
-          this.removeRandomThought()
         }
-      }.bind(this), 4000)
+        this.removeRandomThought()
+      }.bind(this), 1000)
     },
     mounted () {
       window.addEventListener('resize', this.getGrid)
@@ -50,18 +50,25 @@
     },
     methods: {
       addRandomThought: function () {
-        var randomIndex = Math.floor(Math.random() * this.thoughts.length)
-        var temp = this.thoughts[randomIndex]
-        temp.style = this.generateStyle()
-        this.randomThoughts.push(temp)
-        this.thoughts.splice(randomIndex, 1)
+        if (this.thoughts.length > 0) {
+          var randomIndex = Math.floor(Math.random() * this.thoughts.length)
+          var temp = this.thoughts[randomIndex]
+          temp.style = this.generateStyle(temp.thought.length)
+          temp.timer = Math.random() * 4 + 5
+          temp.key = Math.random()
+          this.randomThoughts.push(temp)
+          this.thoughts.splice(randomIndex, 1)
+        }
       },
       removeRandomThought: function () {
-        var randomIndex = Math.floor(Math.random() * (this.randomThoughts.length - 1))
-        this.thoughts.push(this.randomThoughts[randomIndex])
-        console.log(this.randomThoughts)
-        this.randomThoughts.splice(randomIndex, 1)
-        console.log(this.randomThoughts)
+        for (var i = 0; i < this.randomThoughts.length; i++) {
+          this.randomThoughts[i].timer--
+          if (this.randomThoughts[i].timer < 0) {
+            this.thoughts.push(this.randomThoughts[i])
+            this.randomThoughts.splice(i, 1)
+            i--
+          }
+        }
       },
       getGrid: function () {
         var grids = Math.floor(document.documentElement.clientHeight * 8 / document.documentElement.clientWidth * 9)
@@ -79,20 +86,21 @@
         this.grid.pop()
         this.grid.push(0)
       },
-      generateStyle: function () {
+      generateStyle: function (stringLength) {
         var alignments = ['left', 'right', 'center']
         var height = Math.random() * 40 + 20
-        var width = Math.random() * 20 + height
+        var width = Math.random() * 40 + height
         return {
           'position': 'absolute',
           'width': width + '%',
           'height': height + '%',
           'left': Math.floor(Math.random() * (100 - width)) + '%',
           'top': Math.floor(Math.random() * (100 - height)) + '%',
-          'font-size': height * 0.125 + 'vw',
-          'line-height': height * 0.125 + 'vw',
-          'transition': 'opacity ' + Math.random() * 3.5 + 1 + 's ease',
+          'font-size': height / stringLength * (Math.random() * 0.5 + 3.75) + 'vw',
+          'line-height': height / stringLength * (Math.random() * 0.5 + 5) + 'vw',
+          'transition': 'opacity ' + (Math.random() * 2 + 2) + 's ease',
           'text-align': alignments[Math.floor(Math.random() * alignments.length)]
+          // 'background-color': 'white'
         }
       }
     }
@@ -124,7 +132,7 @@
   }
 
   .opacity-0 {
-    background: rgba(0,0,0,.8);
+    background: rgba(0,0,0,.9);
     z-index: -1;
   }
 
@@ -205,7 +213,7 @@
     height: 12.5vw;
     box-sizing:border-box;
     border: .1px solid #111;
-    background: #000;
+    background: #111;
     z-index: -1;
     transition: background 4s linear;
   }
