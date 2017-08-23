@@ -3,8 +3,8 @@
 
 <template>
   <div id="shower-thoughts">
-    <div id="overlay">
-      <span v-for="i in grid" :style="{ 'background': 'rgba(0,0,0, ' + i + ')'}"></span>
+    <div class="overlay">
+      <span v-for="i in grid" :class="['opacity-' + i.toString()]"></span>
     </div>
   </div>
 </template>
@@ -23,11 +23,11 @@
     },
     created () {
       this.thoughts = showa
-      this.getGrid()
+      this.grid = new Array(Math.floor(document.documentElement.clientHeight * 8 / document.documentElement.clientWidth * 9))
       this.randomizeFade()
       this.interval = setInterval(function () {
         this.randomizeFade()
-      }.bind(this), 3000)
+      }.bind(this), 1000)
     },
     mounted () {
       window.addEventListener('resize', this.getGrid)
@@ -37,12 +37,17 @@
     },
     methods: {
       getGrid: function () {
-        this.grid = new Array(Math.floor(document.documentElement.clientHeight * 8 / document.documentElement.clientWidth * 9))
+        while (this.grid.length > Math.floor(document.documentElement.clientHeight * 8 / document.documentElement.clientWidth * 9)) {
+          this.grid.pop()
+        }
+        while (this.grid.length < Math.floor(document.documentElement.clientHeight * 8 / document.documentElement.clientWidth * 9)) {
+          this.grid.push(4)
+        }
       },
       randomizeFade: function () {
         console.log('running')
         for (var i = 0; i < this.grid.length; i++) {
-          this.grid[i] = Math.random() * 0.5
+          this.grid[i] = Math.floor(Math.random() * 4)
         }
         this.grid.pop()
         this.grid.push(0)
@@ -69,8 +74,8 @@
     overflow-y: hidden;
   }
 
-  .overlay{
-    position:absolute;
+  .overlay {
+    position:fixed;
     left:0;
     top:0;
     width:100%;
@@ -79,14 +84,34 @@
     overflow: none;
   }
 
+  .opacity-0 {
+    opacity: 0;
+  }
+
+  .opacity-1 {
+    opacity: .05);
+  }
+
+  .opacity-2 {
+    opacity: .75;
+  }
+
+  .opacity-3 {
+    opacity: .10;
+  }
+
+  .opacity-4 {
+    opacity: 1;
+  }
+
   span{
     float:left;
     width: 12.5vw;
     height: 12.5vw;
     box-sizing:border-box;
-    opacity:1;
-    border-bottom: .1px solid #111;
-    border-right: .1px solid #111;
-    transition: opacity 3s linear;
+    opacity: 1;
+    border: .1px solid #111;
+    background: #000;
+    transition: opacity 4s ease;
   }
 </style>
