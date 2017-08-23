@@ -3,9 +3,15 @@
 
 <template>
   <div id="shower-thoughts">
+    <router-link id="home-button" :to="{name: 'home'}">Home</router-link>
     <div class="overlay">
       <span v-for="i in grid" :class="['opacity-' + i.toString()]"></span>
     </div>
+    <transition name="fade" >
+      <div id="thought-bubble" v-for="thought in randomThoughts" :key="thought.thought" :style="thought.style">
+        <h1>{{thought.thought}}</h1>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -18,16 +24,23 @@
     data () {
       return {
         thoughts: [],
-        grid: []
+        grid: [],
+        randomThoughts: []
       }
     },
     created () {
       this.thoughts = showa
-      this.grid = new Array(Math.floor(document.documentElement.clientHeight * 8 / document.documentElement.clientWidth * 9))
-      this.randomizeFade()
-      this.interval = setInterval(function () {
+      this.getGrid()
+      this.addRandomThought()
+      this.fadeInterval = setInterval(function () {
         this.randomizeFade()
-      }.bind(this), 1000)
+      }.bind(this), 3000)
+      this.thoughtInterval = setInterval(function () {
+        if (Math.random() < 0.35) {
+          this.addRandomThought()
+          this.removeRandomThought()
+        }
+      }.bind(this), 4000)
     },
     mounted () {
       window.addEventListener('resize', this.getGrid)
@@ -36,26 +49,52 @@
       window.removeEventListener('resize', this.getGrid)
     },
     methods: {
+      addRandomThought: function () {
+        var randomIndex = Math.floor(Math.random() * this.thoughts.length)
+        var temp = this.thoughts[randomIndex]
+        temp.style = this.generateStyle()
+        this.randomThoughts.push(temp)
+        this.thoughts.splice(randomIndex, 1)
+      },
+      removeRandomThought: function () {
+        var randomIndex = Math.floor(Math.random() * (this.randomThoughts.length - 1))
+        this.thoughts.push(this.randomThoughts[randomIndex])
+        console.log(this.randomThoughts)
+        this.randomThoughts.splice(randomIndex, 1)
+        console.log(this.randomThoughts)
+      },
       getGrid: function () {
-        while (this.grid.length > Math.floor(document.documentElement.clientHeight * 8 / document.documentElement.clientWidth * 9)) {
+        var grids = Math.floor(document.documentElement.clientHeight * 8 / document.documentElement.clientWidth * 9)
+        while (this.grid.length > grids) {
           this.grid.pop()
         }
-        while (this.grid.length < Math.floor(document.documentElement.clientHeight * 8 / document.documentElement.clientWidth * 9)) {
-          this.grid.push(4)
+        while (this.grid.length < grids) {
+          this.grid.push(0)
         }
       },
       randomizeFade: function () {
-        console.log('running')
         for (var i = 0; i < this.grid.length; i++) {
-          this.grid[i] = Math.floor(Math.random() * 4)
+          this.grid[i] = Math.floor(Math.random() * 7) + 1
         }
         this.grid.pop()
         this.grid.push(0)
+      },
+      generateStyle: function () {
+        var alignments = ['left', 'right', 'center']
+        var height = Math.random() * 40 + 20
+        var width = Math.random() * 20 + height
+        return {
+          'position': 'absolute',
+          'width': width + '%',
+          'height': height + '%',
+          'left': Math.floor(Math.random() * (100 - width)) + '%',
+          'top': Math.floor(Math.random() * (100 - height)) + '%',
+          'font-size': height * 0.125 + 'vw',
+          'line-height': height * 0.125 + 'vw',
+          'transition': 'opacity ' + Math.random() * 3.5 + 1 + 's ease',
+          'text-align': alignments[Math.floor(Math.random() * alignments.length)]
+        }
       }
-    },
-    ready () {
-    },
-    components: {
     }
   }
 </script>
@@ -75,7 +114,7 @@
   }
 
   .overlay {
-    position:fixed;
+    position: absolute;
     left:0;
     top:0;
     width:100%;
@@ -85,23 +124,79 @@
   }
 
   .opacity-0 {
-    opacity: 0;
+    background: rgba(0,0,0,.8);
+    z-index: -1;
   }
 
   .opacity-1 {
-    opacity: .05);
+    background: rgba(0,0,0,.1);
+    z-index: -1;
   }
 
   .opacity-2 {
-    opacity: .75;
+    background: rgba(0,0,0,.25);
+    z-index: -1;
   }
 
   .opacity-3 {
-    opacity: .10;
+    background: rgba(0,0,0,.35);
+    z-index: -1;
   }
 
   .opacity-4 {
-    opacity: 1;
+    background: rgba(0,0,0,.45);
+    z-index: -1;
+  }
+
+  .opacity-5 {
+    background: rgba(0,0,0,.65);
+    z-index: -1;
+  }
+
+  .opacity-6 {
+    background: rgba(0,0,0,.7);
+    z-index: -1;
+  }
+
+  .opacity-7 {
+    background: rgba(0,0,0,.8);
+    z-index: -1;
+  }
+
+  #home-button {
+    bottom: 0;
+    right: 0;
+    margin: 20px 50px;
+    padding: 10px 20px;
+    position: absolute;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border-style: solid;
+    border-width: 1px;
+    border-bottom-width: 3px;
+    border-color: white;
+    color: white;
+    float: right;
+    outline-width: 1px;
+    outline-color: white;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  #home-button:hover {
+    border-bottom-width: 2px;
+    outline: none;
+  }
+
+  #thought-bubble {
+    z-index: 5;
+    background-color: transparent;
+    position: absolute;
+  }
+
+  h1 {
+    font-size: inherit;
+    line-height: inherit;
   }
 
   span{
@@ -109,9 +204,9 @@
     width: 12.5vw;
     height: 12.5vw;
     box-sizing:border-box;
-    opacity: 1;
     border: .1px solid #111;
     background: #000;
-    transition: opacity 4s ease;
+    z-index: -1;
+    transition: background 4s linear;
   }
 </style>

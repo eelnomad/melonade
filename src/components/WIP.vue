@@ -3,7 +3,7 @@
 
 <template>
   <div class="flex-row dim" id="wip">
-    <router-link id="wip-button" :to="{name: 'home'}">Home</router-link>
+    <router-link id="home-button" :to="{name: 'home'}">Home</router-link>
     <span></span>
     <div class="flex-column" id="wip-text">
       <span></span>
@@ -35,8 +35,8 @@
   #wip {
     color: white;
     position: absolute;
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -49,7 +49,7 @@
     z-index: 1;
   }
 
-  #wip-button {
+  #home-button {
     bottom: 0;
     right: 0;
     margin: 20px 50px;
@@ -69,7 +69,7 @@
     z-index: 2;
   }
 
-  #wip-button:hover {
+  #home-button:hover {
     border-bottom-width: 2px;
     outline: none;
   }
