@@ -17,7 +17,7 @@
 
 <script>
   // Replace with rest call that returns details of specific post id
-  import showa from '@/../data/showerdata.json'
+  import showa from '@/../static/data/showerdata.json'
 
   export default {
     name: 'shower-thoughts',
@@ -211,7 +211,7 @@
     width: 12.5vw;
     height: 12.5vw;
     box-sizing: border-box;
-    text-shadow: 2px 2px 4px black;
+    text-shadow: 0px 0px 12px black;
     border: .1px solid #111;
     background: #111;
     z-index: -1;

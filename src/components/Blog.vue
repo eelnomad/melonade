@@ -32,7 +32,7 @@
 
 <script>
 // Replace with rest call that returns 10 posts (title, preview, bg_image, date) for that type maybe
-import blogdata from '@/../data/blogdata.json'
+import blogdata from '@/../static/data/blogdata.json'
 import BlogNav from './BlogNav'
 
 export default {
