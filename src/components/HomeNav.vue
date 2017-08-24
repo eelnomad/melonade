@@ -51,7 +51,7 @@
 
   #home-preview {
     width: 100%;
-    padding: 0px 60px;
+    padding: 10px 60px;
     z-index: 1;
   }
 

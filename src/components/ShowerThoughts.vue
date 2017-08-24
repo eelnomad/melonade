@@ -89,17 +89,17 @@
       generateStyle: function (stringLength) {
         var alignments = ['left', 'right', 'center']
         var height = Math.random() * 40 + 20
-        var width = Math.random() * 40 + height
+        var width = Math.random() * 30 + height
         return {
           'position': 'absolute',
           'width': width + '%',
-          'height': height + '%',
           'left': Math.floor(Math.random() * (100 - width)) + '%',
           'top': Math.floor(Math.random() * (100 - height)) + '%',
-          'font-size': height / stringLength * (Math.random() * 0.5 + 3.75) + 'vw',
+          'font-size': height / Math.max(stringLength, 30) * (Math.random() * 0.5 + 3.75) + 'vw',
           'line-height': height / stringLength * (Math.random() * 0.5 + 5) + 'vw',
           'transition': 'opacity ' + (Math.random() * 2 + 2) + 's ease',
-          'text-align': alignments[Math.floor(Math.random() * alignments.length)]
+          'text-align': alignments[Math.floor(Math.random() * alignments.length)],
+          'overflow': 'hidden'
           // 'background-color': 'white'
         }
       }
@@ -123,51 +123,50 @@
 
   .overlay {
     position: absolute;
-    left:0;
-    top:0;
-    width:100%;
-    height:100%;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
     flex-wrap: wrap;
-    overflow: none;
   }
 
   .opacity-0 {
-    background: rgba(0,0,0,.9);
+    background: rgba(0, 0, 0, .9);
     z-index: -1;
   }
 
   .opacity-1 {
-    background: rgba(0,0,0,.1);
+    background: rgba(0, 0, 0, .1);
     z-index: -1;
   }
 
   .opacity-2 {
-    background: rgba(0,0,0,.25);
+    background: rgba(0, 0, 0, .25);
     z-index: -1;
   }
 
   .opacity-3 {
-    background: rgba(0,0,0,.35);
+    background: rgba(0, 0, 0, .35);
     z-index: -1;
   }
 
   .opacity-4 {
-    background: rgba(0,0,0,.45);
+    background: rgba(0, 0, 0, .45);
     z-index: -1;
   }
 
   .opacity-5 {
-    background: rgba(0,0,0,.65);
+    background: rgba(0, 0, 0, .65);
     z-index: -1;
   }
 
   .opacity-6 {
-    background: rgba(0,0,0,.7);
+    background: rgba(0, 0, 0, .7);
     z-index: -1;
   }
 
   .opacity-7 {
-    background: rgba(0,0,0,.8);
+    background: rgba(0, 0, 0, .8);
     z-index: -1;
   }
 
@@ -207,11 +206,11 @@
     line-height: inherit;
   }
 
-  span{
-    float:left;
+  span {
+    float: left;
     width: 12.5vw;
     height: 12.5vw;
-    box-sizing:border-box;
+    box-sizing: border-box;
     border: .1px solid #111;
     background: #111;
     z-index: -1;
