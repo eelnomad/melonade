@@ -11,7 +11,19 @@
   import '../src/css/custom.css'
 
   export default {
-    name: 'app'
+    name: 'app',
+    head: {
+      title: {
+        inner: 'Melonade'
+      },
+      link: [
+        {
+          rel: 'icon',
+          type: 'image/png',
+          href: 'static/images/favicon.png'
+        }
+      ]
+    }
   }
 </script>
 

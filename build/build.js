@@ -29,7 +29,6 @@ rm(path.join(config.build.assetsRoot, '*'), err => {
 
     // Copy of files from root to docs
     fs.createReadStream('root/CNAME').pipe(fs.createWriteStream('docs/CNAME'));
-    fs.createReadStream('root/favicon.ico').pipe(fs.createWriteStream('docs/favicon.ico'));
 
     console.log(chalk.cyan('  Build complete.\n'))
     console.log(chalk.yellow(
