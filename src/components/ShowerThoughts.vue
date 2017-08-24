@@ -211,6 +211,7 @@
     width: 12.5vw;
     height: 12.5vw;
     box-sizing: border-box;
+    text-shadow: 2px 2px 4px black;
     border: .1px solid #111;
     background: #111;
     z-index: -1;
