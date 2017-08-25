@@ -29,15 +29,15 @@
       }
     },
     created () {
-      this.addRandomThought()
       this.thoughts = showa
       this.getGrid()
       this.fadeInterval = setInterval(function () {
         this.randomizeFade()
       }.bind(this), 3000)
+      this.addRandomThought()
       this.thoughtInterval = setInterval(function () {
-        this.addRandomThought()
         this.removeRandomThought()
+        this.addRandomThought()
       }.bind(this), 1000)
     },
     mounted () {
@@ -58,6 +58,7 @@
     methods: {
       addRandomThought: function () {
         if (Math.random() < 0.5 - this.randomThoughts.length * 0.1) {
+        // if (Math.random() < 1) {
           if (this.thoughts.length > 0) {
             // Random Thought Selection
             var randomIndex = Math.floor(Math.random() * this.thoughts.length)
@@ -65,11 +66,11 @@
             // Styling prep calculations
             var width = Math.random() * 60 + 20
             var rows = Math.ceil(Math.random() + Math.random() + Math.random())
-            var fontSize = Math.min(7, width * Math.max(1.25, rows) / temp.thought.length / 0.65)
-            var height = fontSize * rows * 2.5
+            var fontSize = Math.max(1, Math.min(7, width * Math.max(1.25, rows) / temp.thought.length / 0.65))
+            var height = fontSize * rows * 2.6
             var left = Math.floor(Math.random() * (100 - width))
             var top = Math.floor(Math.random() * (100 - height - 10))
-            var lineHeight = fontSize * (Math.random() * 0.55 + 1)
+            var lineHeight = fontSize * (Math.random() * 0.6 + 1.2)
             temp.raw = {
               'width': width,
               'height': height,
@@ -102,53 +103,49 @@
             } else {
               this.randomThoughts[i].timer--
             }
+          } else {
+            this.activateThought(this.randomThoughts[i])
           }
         }
-        switch (this.randomThoughts.length) {
-          case 0:
-            break
-          case 1:
-            this.randomThoughts[0].active = true
-            break
-          default:
-            for (i = 0; i < this.randomThoughts.length; i++) {
-              if (!this.randomThoughts[i].active) {
-                var status = true
-                // Setting to be rendered element properties
-                var top = this.randomThoughts[i].raw.top
-                var bottom = top + this.randomThoughts[i].raw.height
-                var left = this.randomThoughts[i].raw.left
-                var right = left + this.randomThoughts[i].raw.width
-                var area = (right - left) * (bottom - top)
-                // Comparing against rendered elements
-                for (var j = 0; j < this.randomThoughts.length; j++) {
-                  if (i !== j && this.randomThoughts[j].active) {
-                    // Setting rendered element properties
-                    var elemTop = this.randomThoughts[j].raw.top
-                    var elemBottom = top + this.randomThoughts[j].raw.height
-                    var elemLeft = this.randomThoughts[j].raw.left
-                    var elemRight = left + this.randomThoughts[j].raw.width
-                    var elemArea = (elemRight - elemLeft) * (elemBottom - elemTop)
-                    // Comparing for overlap
-                    var interHeight = Math.min(bottom, elemBottom) - Math.max(top, elemTop)
-                    var interWidth = Math.min(right, elemRight) - Math.max(left, elemLeft)
-                    var interArea = interHeight * interWidth
-                    // console.log(this.randomThoughts[i].thought)
-                    // console.log(interHeight > 0 && interWidth > 0)
-                    // console.log(interArea / area)
-                    // console.log(interArea / elemArea)
-                    if (interHeight > 0 && interWidth > 0) {
-                      if (interArea / area > 0 || interArea / elemArea > 0) {
-                        status = false
-                      }
-                    }
-                  }
-                }
-                this.randomThoughts[i].active = status
+      },
+      activateThought: function (thought) {
+        // console.log(thought.thought)
+        var status = true
+        // Setting to be rendered element properties
+        var top = thought.raw.top
+        var bottom = top + thought.raw.height
+        var left = thought.raw.left
+        var right = left + thought.raw.width
+        var area = (right - left) * (bottom - top)
+        // Comparing against rendered elements
+        for (var i = 0; i < this.randomThoughts.length; i++) {
+          if (this.randomThoughts[i].active) {
+            // Setting rendered element properties
+            var elemTop = this.randomThoughts[i].raw.top
+            var elemBottom = elemTop + this.randomThoughts[i].raw.height
+            var elemLeft = this.randomThoughts[i].raw.left
+            var elemRight = elemLeft + this.randomThoughts[i].raw.width
+            var elemArea = (elemRight - elemLeft) * (elemBottom - elemTop)
+            var interHeight = Math.min(bottom, elemBottom) - Math.max(top, elemTop)
+            var interWidth = Math.min(right, elemRight) - Math.max(left, elemLeft)
+            // Debugging
+            // console.log(Math.floor(elemTop) + ' vs ' + Math.floor(top))
+            // console.log(Math.floor(elemBottom) + ' vs ' + Math.floor(bottom))
+            // console.log(Math.floor(elemLeft) + ' vs ' + Math.floor(left))
+            // console.log(Math.floor(elemRight) + ' vs ' + Math.floor(right))
+            // console.log('interHeight: ' + interHeight)
+            // console.log('interWidth: ' + interWidth)
+            // Comparing for overlap
+            var interArea = interHeight * interWidth
+            if (Math.min(interHeight, interWidth) > 0) {
+              if (Math.max(interArea / area, interArea / elemArea) > 0) {
+                status = false
               }
-              if (status) break
             }
+          }
         }
+        thought.active = status
+        // console.log('status: ' + status)
       },
       getGrid: function () {
         var grids = Math.floor(document.documentElement.clientHeight * 8 / document.documentElement.clientWidth * 9)
@@ -262,7 +259,6 @@
     position: absolute;
     overflow: hidden;
     margin: 0px 0px;
-    cursor: default;
     /*background-color: white;*/
   }
   h1 {

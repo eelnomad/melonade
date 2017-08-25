@@ -5,7 +5,7 @@ import Blog from '@/components/Blog'
 import BlogPost from '@/components/BlogPost'
 import ShowerThoughts from '@/components/ShowerThoughts'
 // import League from '@/components/League'
-// import About from '@/components/About'
+import About from '@/components/About'
 import WIP from '@/components/WIP'
 
 Vue.use(Router)
@@ -62,7 +62,7 @@ export default new Router({
     {
       path: '/about',
       name: 'about',
-      component: WIP,
+      component: About,
       display_name: 'About me!',
       description: 'About me!',
       level: 'home',
