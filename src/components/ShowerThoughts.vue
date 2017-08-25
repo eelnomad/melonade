@@ -35,9 +35,8 @@
       this.fadeInterval = setInterval(function () {
         this.randomizeFade()
       }.bind(this), 3000)
-      this.thoughtRemovalInterval = setInterval(function () {
+      this.thoughtInterval = setInterval(function () {
         this.addRandomThought()
-        this.activateThought()
         this.removeRandomThought()
       }.bind(this), 1000)
     },
@@ -46,6 +45,8 @@
     },
     beforeDestroy () {
       window.removeEventListener('resize', this.getGrid)
+      clearInterval(this.fadeInterval)
+      clearInterval(this.thoughtInterval)
     },
     computed: {
       activeRandomThoughts () {
@@ -63,11 +64,12 @@
             var temp = this.thoughts[randomIndex]
             // Styling prep calculations
             var width = Math.random() * 60 + 20
+            var rows = Math.ceil(Math.random() + Math.random() + Math.random())
+            var fontSize = Math.min(7, width * Math.max(1.25, rows) / temp.thought.length / 0.65)
+            var height = fontSize * rows * 2.5
             var left = Math.floor(Math.random() * (100 - width))
-            var top = Math.floor(Math.random() * (100 - (Math.random() * 20 + (20 * document.documentElement.clientWidth / document.documentElement.clientHeight))))
-            var fontSize = width / temp.thought.length * (Math.random() * 1.5 + 3)
-            var lineHeight = width / temp.thought.length * (Math.random() * 0.5 + 5)
-            var height = fontSize * Math.min(fontSize, 4) * Math.max(temp.thought.length, 30) / width + lineHeight
+            var top = Math.floor(Math.random() * (100 - height - 10))
+            var lineHeight = fontSize * (Math.random() * 0.55 + 1)
             temp.raw = {
               'width': width,
               'height': height,
@@ -144,10 +146,9 @@
                 }
                 this.randomThoughts[i].active = status
               }
+              if (status) break
             }
         }
-      },
-      activateThought: function () {
       },
       getGrid: function () {
         var grids = Math.floor(document.documentElement.clientHeight * 8 / document.documentElement.clientWidth * 9)
@@ -169,7 +170,6 @@
         var alignments = ['left', 'right', 'center']
         return {
           'width': raw.width + '%',
-          // 'height': raw.height + '%',
           'left': raw.left + '%',
           'top': raw.top + '%',
           'font-size': raw.fontSize + 'vw',
@@ -262,6 +262,7 @@
     position: absolute;
     overflow: hidden;
     margin: 0px 0px;
+    cursor: default;
     /*background-color: white;*/
   }
   h1 {
