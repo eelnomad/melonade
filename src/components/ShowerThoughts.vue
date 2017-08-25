@@ -18,7 +18,6 @@
 <script>
   // Replace with rest call that returns details of specific post id
   import showa from '@/../static/data/showerdata.json'
-
   export default {
     name: 'shower-thoughts',
     data () {
@@ -37,9 +36,7 @@
         this.randomizeFade()
       }.bind(this), 3000)
       this.thoughtRemovalInterval = setInterval(function () {
-        if (Math.random() < 0.5 - this.randomThoughts.length * 0.1) {
-          this.addRandomThought()
-        }
+        this.addRandomThought()
         this.activateThought()
         this.removeRandomThought()
       }.bind(this), 1000)
@@ -59,48 +56,47 @@
     },
     methods: {
       addRandomThought: function () {
-        console.log('execeute')
-        if (this.thoughts.length > 0) {
-          // Random Thought Selection
-          var randomIndex = Math.floor(Math.random() * this.thoughts.length)
-          var temp = this.thoughts[randomIndex]
-
-          // Styling prep calculations
-          var width = Math.random() * 60 + 20
-          var left = Math.floor(Math.random() * (100 - width))
-          var top = Math.floor(Math.random() * (100 - (Math.random() * 20 + 20)))
-          var fontSize = width / Math.max(temp.thought.length, 30) * (Math.random() * 1.5 + 3)
-          var lineHeight = width / temp.thought.length * (Math.random() * 0.5 + 5)
-
-          temp.raw = {
-            'width': width,
-            'left': left,
-            'top': top,
-            'fontSize': fontSize,
-            'lineHeight': lineHeight
+        if (Math.random() < 0.5 - this.randomThoughts.length * 0.1) {
+          if (this.thoughts.length > 0) {
+            // Random Thought Selection
+            var randomIndex = Math.floor(Math.random() * this.thoughts.length)
+            var temp = this.thoughts[randomIndex]
+            // Styling prep calculations
+            var width = Math.random() * 60 + 20
+            var left = Math.floor(Math.random() * (100 - width))
+            var top = Math.floor(Math.random() * (100 - (Math.random() * 20 + (20 * document.documentElement.clientWidth / document.documentElement.clientHeight))))
+            var fontSize = width / Math.max(temp.thought.length, 30) * (Math.random() * 1.5 + 3)
+            var lineHeight = width / temp.thought.length * (Math.random() * 0.5 + 5)
+            temp.raw = {
+              'width': width,
+              'left': left,
+              'top': top,
+              'fontSize': fontSize,
+              'lineHeight': lineHeight
+            }
+            temp.style = this.generateStyle(temp.raw)
+            temp.timer = Math.random() * 4 + 5
+            temp.key = Math.random()
+            temp.active = false
+            this.randomThoughts.push(temp)
+            this.thoughts.splice(randomIndex, 1)
+          } else {
+            // Repopulate thoughts after all thoughts have been shown
+            this.thoughts = this.oldThoughts
+            this.oldThoughts = []
           }
-          temp.style = this.generateStyle(temp.raw)
-          temp.timer = Math.random() * 4 + 5
-          temp.key = Math.random()
-          temp.active = false
-
-          this.randomThoughts.push(temp)
-          this.thoughts.splice(randomIndex, 1)
-        } else {
-          // Repopulate thoughts after all thoughts have been shown
-          this.thoughts = this.oldThoughts
-          this.oldThoughts = []
         }
       },
       removeRandomThought: function () {
         for (var i = 0; i < this.randomThoughts.length; i++) {
           if (this.randomThoughts[i].active) {
-            this.randomThoughts[i].timer--
             if (this.randomThoughts[i].timer < 0) {
               // this.thoughts.push(this.randomThoughts[i])
               this.oldThoughts.push(this.randomThoughts[i])
               this.randomThoughts.splice(i, 1)
               i--
+            } else {
+              this.randomThoughts[i].timer--
             }
           }
         }
@@ -118,11 +114,10 @@
                 var status = true
                 // Setting to be rendered element properties
                 var top = this.randomThoughts[i].raw.top
-                var bottom = top + 15
+                var bottom = top + this.randomThoughts[i].raw.fontSize * this.randomThoughts[i].thought.length / this.randomThoughts[i].raw.width * 10
                 var left = this.randomThoughts[i].raw.left
                 var right = left + this.randomThoughts[i].raw.width
                 var area = (right - left) * (bottom - top)
-
                 // Comparing against rendered elements
                 for (var j = 0; j < this.$refs.renderedThoughts.length; j++) {
                   // Setting rendered element properties
@@ -131,7 +126,6 @@
                   var elemLeft = this.$refs.renderedThoughts[j].offsetLeft / this.$refs.renderedThoughts[j].offsetParent.clientWidth * 100
                   var elemRight = (this.$refs.renderedThoughts[j].offsetLeft + this.$refs.renderedThoughts[j].clientWidth) / this.$refs.renderedThoughts[j].offsetParent.clientWidth * 100
                   var elemArea = (elemRight - elemLeft) * (elemBottom - elemTop)
-
                   // Comparing for overlap
                   var interHeight = Math.min(bottom, elemBottom) - Math.max(top, elemTop)
                   var interWidth = Math.min(right, elemRight) - Math.max(left, elemLeft)
@@ -144,6 +138,7 @@
                 }
                 this.randomThoughts[i].active = status
               }
+              if (status) break
             }
         }
       },
@@ -192,7 +187,6 @@
     background-image: url('https://lh3.googleusercontent.com/1pSCTlG7Dj1gM1Obj1QXsLgnPE8MKmkAIX1r4QRml5XjirksSgk-gkh0mzy5m6SqCMHLfzKzYsFTMsS_MDoG-S0YhL5KGKMr_grzn6MPD9XsFQZIuEzmCRQkRge5zFZplCEqr2YnqahoGiUFANUlbHBvV0qbsEQM24wkmTCb2GiA5pdjoWfoDSlh-m-daTvvrPVvb3oJPSxMUI9wEZmLb3UbjdPh5OCJPLjiZj2e_ButTLhCQ9NOTsQxVf33f3GaDkGv6nWVIVtLuA9tVql02lLc4u3LbCXmZucgp5W3wdC3Z0jgwS7aRmA_GM0A6qpiR3Q-VnzUSKxRGC8J1tl-z2vVMfWCHb76a1ihCDE5bI1B9IAEK6czZcIXNRHXvuLRxCvslblnuLFaswwpkMgfnXkDaZEQD5BraQftOR1uaRvoqkciKKforB7d3JrrCDPq6iwMNx6IkGW-4tZ6VHnu9I_PjzTWb63jCYn1wUlm7zMdjxF-uJxtQXzTQ1g7x9pkvJXDWOzNVEOCEohfDYPCY0cGX9iroxRypmRNftigYFGHdLsfTHwovkOBjo6jvfUYpZmCeMKZj_ZJ57036z7xniX2XdCCxuP3Ios8c3e_-iBOMH-5d_s_FxpwpR3vdIioDATmVRoUlp2jwR5AV6uDSn2m3KELnsIdaHJ8jLbOvdpRdw=w1980-h1320-no?.jpg');
     overflow-y: hidden;
   }
-
   .overlay {
     position: absolute;
     left: 0;
@@ -201,47 +195,38 @@
     height: 100%;
     flex-wrap: wrap;
   }
-
   .opacity-0 {
     background: rgba(0, 0, 0, .9);
     z-index: -1;
   }
-
   .opacity-1 {
     background: rgba(0, 0, 0, .1);
     z-index: -1;
   }
-
   .opacity-2 {
     background: rgba(0, 0, 0, .25);
     z-index: -1;
   }
-
   .opacity-3 {
     background: rgba(0, 0, 0, .35);
     z-index: -1;
   }
-
   .opacity-4 {
     background: rgba(0, 0, 0, .45);
     z-index: -1;
   }
-
   .opacity-5 {
     background: rgba(0, 0, 0, .65);
     z-index: -1;
   }
-
   .opacity-6 {
     background: rgba(0, 0, 0, .7);
     z-index: -1;
   }
-
   .opacity-7 {
     background: rgba(0, 0, 0, .8);
     z-index: -1;
   }
-
   #home-button {
     bottom: 0;
     right: 0;
@@ -261,30 +246,22 @@
     cursor: pointer;
     z-index: 2;
   }
-
   #home-button:hover {
     border-bottom-width: 2px;
     outline: none;
   }
-
   #thought-bubble {
     z-index: 3;
     position: absolute;
     overflow: hidden;
     margin: 0px 0px;
-    /*background-color: white;*/
+    background-color: white;
   }
-
-  #visible {
-    opacity: 1;
-  }
-
   h1 {
     font-size: inherit;
     line-height: inherit;
     margin: 0px 0px;
   }
-
   span {
     float: left;
     width: 12.5vw;
