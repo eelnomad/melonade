@@ -8,7 +8,7 @@
       <span v-for="i in grid" :class="['opacity-' + i.toString()]"></span>
     </div>
     <transition-group name="fade" :style="{'background': 'transparent'}">
-      <div id="thought-bubble" v-for="thought in activeRandomThoughts" :key="thought.key" :style="thought.style" ref="renderedThoughts">
+      <div id="thought-bubble" v-for="thought in activeRandomThoughts" :key="thought.key" :style="thought.style">
         <h1 :class="{ 'visible' : thought.active }">{{thought.thought}}</h1>
       </div>
     </transition-group>
@@ -65,10 +65,12 @@
             var width = Math.random() * 60 + 20
             var left = Math.floor(Math.random() * (100 - width))
             var top = Math.floor(Math.random() * (100 - (Math.random() * 20 + (20 * document.documentElement.clientWidth / document.documentElement.clientHeight))))
-            var fontSize = width / Math.max(temp.thought.length, 30) * (Math.random() * 1.5 + 3)
+            var fontSize = width / temp.thought.length * (Math.random() * 1.5 + 3)
             var lineHeight = width / temp.thought.length * (Math.random() * 0.5 + 5)
+            var height = fontSize * Math.min(fontSize, 4) * Math.max(temp.thought.length, 30) / width + lineHeight
             temp.raw = {
               'width': width,
+              'height': height,
               'left': left,
               'top': top,
               'fontSize': fontSize,
@@ -100,8 +102,6 @@
             }
           }
         }
-      },
-      activateThought: function () {
         switch (this.randomThoughts.length) {
           case 0:
             break
@@ -109,38 +109,45 @@
             this.randomThoughts[0].active = true
             break
           default:
-            for (var i = 0; i < this.randomThoughts.length; i++) {
+            for (i = 0; i < this.randomThoughts.length; i++) {
               if (!this.randomThoughts[i].active) {
                 var status = true
                 // Setting to be rendered element properties
                 var top = this.randomThoughts[i].raw.top
-                var bottom = top + this.randomThoughts[i].raw.fontSize * this.randomThoughts[i].thought.length / this.randomThoughts[i].raw.width * 10
+                var bottom = top + this.randomThoughts[i].raw.height
                 var left = this.randomThoughts[i].raw.left
                 var right = left + this.randomThoughts[i].raw.width
                 var area = (right - left) * (bottom - top)
                 // Comparing against rendered elements
-                for (var j = 0; j < this.$refs.renderedThoughts.length; j++) {
-                  // Setting rendered element properties
-                  var elemTop = this.$refs.renderedThoughts[j].offsetTop / this.$refs.renderedThoughts[j].offsetParent.clientHeight * 100
-                  var elemBottom = (this.$refs.renderedThoughts[j].offsetTop + this.$refs.renderedThoughts[j].clientHeight) / this.$refs.renderedThoughts[j].offsetParent.clientHeight * 100
-                  var elemLeft = this.$refs.renderedThoughts[j].offsetLeft / this.$refs.renderedThoughts[j].offsetParent.clientWidth * 100
-                  var elemRight = (this.$refs.renderedThoughts[j].offsetLeft + this.$refs.renderedThoughts[j].clientWidth) / this.$refs.renderedThoughts[j].offsetParent.clientWidth * 100
-                  var elemArea = (elemRight - elemLeft) * (elemBottom - elemTop)
-                  // Comparing for overlap
-                  var interHeight = Math.min(bottom, elemBottom) - Math.max(top, elemTop)
-                  var interWidth = Math.min(right, elemRight) - Math.max(left, elemLeft)
-                  if (interHeight > 0 && interWidth > 0) {
+                for (var j = 0; j < this.randomThoughts.length; j++) {
+                  if (i !== j && this.randomThoughts[j].active) {
+                    // Setting rendered element properties
+                    var elemTop = this.randomThoughts[j].raw.top
+                    var elemBottom = top + this.randomThoughts[j].raw.height
+                    var elemLeft = this.randomThoughts[j].raw.left
+                    var elemRight = left + this.randomThoughts[j].raw.width
+                    var elemArea = (elemRight - elemLeft) * (elemBottom - elemTop)
+                    // Comparing for overlap
+                    var interHeight = Math.min(bottom, elemBottom) - Math.max(top, elemTop)
+                    var interWidth = Math.min(right, elemRight) - Math.max(left, elemLeft)
                     var interArea = interHeight * interWidth
-                    if (interArea / area > 0.1 || interArea / elemArea > 0.1) {
-                      status = false
+                    // console.log(this.randomThoughts[i].thought)
+                    // console.log(interHeight > 0 && interWidth > 0)
+                    // console.log(interArea / area)
+                    // console.log(interArea / elemArea)
+                    if (interHeight > 0 && interWidth > 0) {
+                      if (interArea / area > 0 || interArea / elemArea > 0) {
+                        status = false
+                      }
                     }
                   }
                 }
                 this.randomThoughts[i].active = status
               }
-              if (status) break
             }
         }
+      },
+      activateThought: function () {
       },
       getGrid: function () {
         var grids = Math.floor(document.documentElement.clientHeight * 8 / document.documentElement.clientWidth * 9)
@@ -162,6 +169,7 @@
         var alignments = ['left', 'right', 'center']
         return {
           'width': raw.width + '%',
+          // 'height': raw.height + '%',
           'left': raw.left + '%',
           'top': raw.top + '%',
           'font-size': raw.fontSize + 'vw',
@@ -251,11 +259,10 @@
     outline: none;
   }
   #thought-bubble {
-    z-index: 3;
     position: absolute;
     overflow: hidden;
     margin: 0px 0px;
-    background-color: white;
+    /*background-color: white;*/
   }
   h1 {
     font-size: inherit;
