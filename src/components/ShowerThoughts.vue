@@ -34,10 +34,9 @@
       this.fadeInterval = setInterval(function () {
         this.randomizeFade()
       }.bind(this), 3000)
-      this.addRandomThought()
       this.thoughtInterval = setInterval(function () {
-        this.removeRandomThought()
         this.addRandomThought()
+        this.removeRandomThought()
       }.bind(this), 1000)
     },
     mounted () {

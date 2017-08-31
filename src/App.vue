@@ -8,7 +8,7 @@
 
 <script>
   import 'normalize.css/normalize.css'
-  import '../src/css/custom.css'
+  import './assets/css/custom.css'
 
   export default {
     name: 'app',
