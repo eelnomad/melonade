@@ -4,25 +4,26 @@
       <div id="sky">
         <div v-for="i in stars" :style="i"></div>
         <div id="star-effect"></div>
+        <div id="sky-color"></div>
         <div id="moon">
           <div id="crater"></div>
         </div>
       </div>
-      <div id="third-layer"></div>
-      <div id="second-layer"></div>
-      <div id="first-layer">
-        <div v-for="i in boxes" id="small-one" :class="[location, 'first']"></div>
+      <div id="layer-three"></div>
+      <div id="layer-two"></div>
+      <div id="layer-one">
+        <objects-one v-for="i in layerOne"></objects-one>
         <div id="person-layer"></div>
         <div id="ground"></div>
       </div>
     </div>
-    <h1>About me</h1>
-    <h2>Just a dreamer :) ... wow this is hideous </h2>
+<!--     <h1>About me</h1>
+    <h2>Just a dreamer :) ... wow this is hideous </h2> -->
   </div>
 </template>
 
 <script>
-  import '../assets/css/newyork.css'
+  import ObjectsOne from './ObjectsOne'
 
   export default {
     name: 'about',
@@ -30,14 +31,14 @@
       return {
         stars: [],
         location: 'newyork',
-        boxes: []
+        layerOne: []
       }
     },
     created () {
       this.setStars()
-      this.boxes.push(0)
+      this.layerOne.push(0)
       this.building = setInterval(function () {
-        this.boxes.push(0)
+        this.layerOne.push(0)
       }.bind(this), 10000)
     },
     methods: {
@@ -52,10 +53,14 @@
             'left': (Math.random() * 100) + '%',
             'top': (Math.random() * 100) + '%',
             'background': 'white',
-            'z-index': '-4'
+            'z-index': '-4',
+            'border-radius': '50%'
           })
         }
       }
+    },
+    components: {
+      ObjectsOne
     }
   }
 </script>
@@ -84,15 +89,15 @@
     z-index: -5;
   }
 
-  #third-layer {
+  #layer-three {
     z-index: -3;
   }
 
-  #second-layer {
+  #layer-two {
     z-index: -2;
   }
 
-  #first-layer {
+  #layer-one {
     z-index: -1;
   }
 
@@ -103,7 +108,7 @@
     width: 200vw;
     height: 10vh;
     background: #000026;
-    z-index: 1;
+    z-index: -1;
   }
 
   .first {
@@ -112,7 +117,7 @@
     width: 25%;
     left: 100vw;
     bottom: 10vh;
-    z-index: 2;
+    z-index: -1;
     -webkit-animation: slide 15s linear infinite;
     -moz-animation: slide 15s linear infinite;
     animation: slide 15s linear infinite;
@@ -126,6 +131,7 @@
     height: 15vw;
     border-radius: 50%;
     background: #EEE;
+    box-shadow: 0 0 150px -20px #EEE;
   }
 
   #crater {
@@ -150,17 +156,19 @@
     width: 100%;
     background:transparent url('/static/images/star_effect.png') repeat top center;
     z-index:-4;
-    -moz-animation:move-twink-back 500s linear infinite;
-    -webkit-animation:move-twink-back 500s linear infinite;
-    animation:move-twink-back 500s linear infinite;
+    -moz-animation: star-effect 500s linear infinite;
+    -webkit-animation: star-effect 500s linear infinite;
+    animation: star-effect 500s linear infinite;
   }
 
-  #twinkling::before {
-    opacity: 0;
-  }
-
-  #twinkling::after {
-    opacity: 0;
+  #sky-color {
+    height: 100%;
+    width: 100%;
+    opacity: .5;
+    background: #0F002E; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(left top, black, #0F001C, #1F084C); /* For Safari 5.1 to 6.0 */
+    background: -moz-linear-gradient(bottom right, black, #0F001C, #1F084C); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to bottom right, black, #0F001C, #1F084C); /* Standard syntax */
   }
 
   @-webkit-keyframes slide
@@ -178,17 +186,17 @@
     100% { transform: translate3d(-200vw,0,0) }
   }
 
-  @-webkit-keyframes move-twink-back {
+  @-webkit-keyframes star-effect {
     from {background-position:0 0;}
     to {background-position:-10000px 5000px;}
   }
 
-  @-moz-keyframes move-twink-back {
+  @-moz-keyframes star-effect {
     from {background-position:0 0;}
     to {background-position:-10000px 5000px;}
   }
 
-  @keyframes move-twink-back {
+  @keyframes star-effect {
     from {background-position:0 0;}
     to {background-position:-10000px 5000px;}
   }

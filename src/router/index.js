@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/components/Home'
-import Blog from '@/components/Blog'
-import BlogPost from '@/components/BlogPost'
-import ShowerThoughts from '@/components/ShowerThoughts'
+import Home from '@/components/home/Home'
+import Blog from '@/components/blog/Blog'
+import BlogPost from '@/components/blog/BlogPost'
+import ShowerThoughts from '@/components/showerThoughts/ShowerThoughts'
 // import League from '@/components/League'
-import About from '@/components/About'
+import About from '@/components/about/About'
 import WIP from '@/components/WIP'
 
 Vue.use(Router)
