@@ -12,7 +12,7 @@
       <div id="layer-three"></div>
       <div id="layer-two"></div>
       <div id="layer-one">
-        <objects-one v-for="i in layerOne"></objects-one>
+        <objects-one v-for="i in layerOne" :key="i"></objects-one>
         <div id="person-layer"></div>
         <div id="ground"></div>
       </div>
@@ -36,9 +36,9 @@
     },
     created () {
       this.setStars()
-      this.layerOne.push(0)
+      this.layerOne.push(Math.random())
       this.building = setInterval(function () {
-        this.layerOne.push(0)
+        this.layerOne.push(Math.random())
       }.bind(this), 10000)
     },
     methods: {
