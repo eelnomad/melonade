@@ -4,6 +4,7 @@ import Home from '@/components/home/Home'
 import Blog from '@/components/blog/Blog'
 import BlogPost from '@/components/blog/BlogPost'
 import ShowerThoughts from '@/components/showerThoughts/ShowerThoughts'
+import SmallProjects from '@/components/smallProjects/SmallProjects'
 // import League from '@/components/League'
 import Sudoku from '@/components/sudoku/Sudoku'
 import About from '@/components/about/About'
@@ -48,12 +49,28 @@ export default new Router({
       background_image: 'https://lh3.googleusercontent.com/kZZ3Em_o77SevGgkc3kk20uwcI9bXSnJ8k8wFFbn8o0Sjojx8WwbywNKH90Q-8C39qXhXXSMvcJJx-SAKmasI4Yg69MVe0qVW2L6IFS5UxvCJ8O5hlBye__8BA0u0ghNNpy7TACdP_O3fC8-l2EZID4nnUa-gFt4WN9cPq8Q4Z5Sc7iZJNTjeCe8oxDumA5HX4KErXne20wPXEJa3zOyt0-1SaZy36sRFkE0jlhZa7wrXGzAnh92dWydExUBQhGM9ej4xCZxYecy40XZhoz2t964IbaYt3CLjK0k-2iqUMhMCPlUPCCqw2i5vPXYao4adqijtYyHhcd2rrVrGrQPEAOzCOhkzQWv-rfcks9f0UrfAeXqCpdaoI97TtggNgpJp-R_QsEDNDpKFvC7R8LqwzUsQQH0GOUk8MUISktZwIr1g2sKmVoZuKi-yNL6lWl7zQrwlQKJo9SMPqzwRIBiIlzfxNXkz645zFDWriJ56ae-R-rf_RHw2lefAB4wL9tjOX2esKIKEFoCp3XBM5frTf35s7oPsiwIONvM-bTNCrUs9XgCHFLNSohq-U8cfL0JcMEiHKHR1OkfpLZqtQ2v1RJpHYxnC38RoKlO6pUe3DaO9SFa2MZpEGp68NUwxPqNws4Nyw932I_u3vhwlEu5_UyvpwitaXJ_HFhoNKF4c2AxgA=w1425-h950-no?.jpg'
     },
     {
-      path: '/league',
-      name: 'league',
-      component: Sudoku,
-      display_name: 'League of Legends Analysis',
+      path: '/smallprojects',
+      name: 'smallprojects',
+      component: SmallProjects,
+      display_name: 'Small Projects',
       level: 'home',
       background_image: 'https://lh3.googleusercontent.com/N5imive56r3ZdacQC-lWcKX7yXN32IaJRpbFkLQN3jkI4vAO1aG3yvn3qLSj9b8fgjVpHatOZY1I7KxOa3Alt2Dot3K3XijSQ2WSLqVCbslxKJi4zYVBzs40Blv-OsTHyl-3MwaTPGHPJ3DpAsPtXpJ0D7MkAGEb7prwGEhD7s5W6DvjfpIUvt_hoS3uh25rsDF8dOWQUlCMtV5yuqmNWhuyLEVF-tpOny4x_n_ztxLc31ysvnOt0L73BlvybI2FLco-tymeDz-fSv7UBZ8nPSUF4ySUSJjMO59AtFSjVhezyTw6oXC1p2k-Lc-0kioaoToCajxp74rTSR1ApVdMVyN6w1HuhfVDQGDBF2oN2rTcdQTnMCwaCxfiEOzdG8J53l2at3zhimmZYqW0YBrqriOT1V8NCKGVAAksBbUdXsglt37pvKIFfKAGyVm-EdgKhXrllCi4wqtqcDi8qnFk4sEyWlYDc3dGNlYgAcJh1RgdZP3sJ6-ZsFilFneJffRk-4lYQ2YwZqrkYAcjSYpRmf11hxjHv1mrPXYt0k__l9o3UVHFVS9moSjJZ2Tlf9D59ALDGNS4TVe9BPGM4lYrq2y2Sc01xE33_w7fxm1K4WCH5TrltqCchO-v3lGQZqRs6I4c9sQ0OC_53lc95zvPmuNAD5Zb2iIHcCWkPJz4agSbfA=w1425-h950-no?.jpg'
+    },
+    {
+      path: '/sudoku',
+      name: 'sudoku',
+      component: Sudoku,
+      display_name: 'Sudoku Solver',
+      level: 'smallProjects',
+      background_image: 'https://lh3.googleusercontent.com/WQm-pdhZW3d2-Xa7y_9PR8O2zo95PuUa3-b89GMB30jOd5BfYIccNy-FsfwtozkqVYwOlaX0Zgn1I2_EQbDHc9T5jcIrNfCQwEvgx2k4b5_lyAHN7F1ZGoXsPjFXdpAhfyKzUkazpU5iGPQSvB-J3WJQlh5g7Gz9zn1nqVuQzs5TbMYsenPQbcTyr0pXCws5My3DdMCpnO2iug8MfCikwqzq_KRXBrq7Q0Dpj6JhdwRZXlKvd8xJukF-igT4Wd6XgLlqjdqVNIx2VOuSjh6ovyNMnc7HSCxdl40o7OQ3nWXgpFx1prjSPz0fIef6WK1OQrBLJJmxXhDOQC1_MjYdrVWW72dCVsnraLu_QrRj5febmmdiBGDUKPhgkzprVZcvFksRgcWfANcX-QmEykPclqZ4hwNhQM8lTakO4i8abi_C0_5eivgohSYyUz3mD_ag5SOxgv8i_6G81yqrx0GX0MYe-RIn_pvv3diPwoWrJ-QPhhK-L-Uswq1TbvyrrsU7QwHEuucMnTisqbOlo6WBRN91Bk1tD6g3Z7_8ub1x2P8Vqo6PE4R473gYKel18jmB2-Nn_h6ODr6jGzBADnTenL8BkVsesfltDKDzJRmpBUcc-LGK613xS22z9tFABzJeQUatHzVN3PK4RaEadR1jo4QTkCJTsMsIaA8uIy291HVxXg=w1980-h1320-no?.jpg'
+    },
+    {
+      path: '/league',
+      name: 'league',
+      component: WIP,
+      display_name: 'League of Legends Analysis',
+      level: 'smallProjects',
+      background_image: 'https://lh3.googleusercontent.com/P1PXPK7xqcsrYr8zwD9p3J6b52p9eHfG6IHAe4MukaPochLA-DFjsbineCTyEQBeB5s7KfJLAqasPwXmSTUZ1HIUCY-s_SlR6T-aLpFTkxeu34rqFii69YDd6dryIvxQjgOVk3mwIH_vIUb9Cugt0ANIwf9fz-Oku5u6S1SmpbuMj10CEylhUWvvgs2XmCjeogzchZW8PiG-SCQfTD5w71CMR8czwIiGbRe76OgCNZhwc1prQwVVyHihzZllLsqR_Bd3uCnzHXXb_IzNdEwpecaVvsTl_C5G4qVtpSbpDH5uOiKvtSXiSOQLpqr3_tE0xY2HSNlHGecyDOAwYNSljWh0LWUlmH2KF-JlgH1yh0mJE42nTef_2Jmn8zTDg-ZBxt5KQ-uJCLdlYQESPtuq4WOuxJ5YZ5jRRqNZuUivE15CPATih-Cxjpti10ETDIKcGO6RtALo_ehJnnNLgDY4l0kCws98YqO9PtLmYZEg2hLo2UfFkvsC29ZFoQYmKsgY8F5gY-iX0ltNrHhFLhqLui76ZpFJKJ8tTFSy2KkST56bkXvWCuzoWyM67MVEC5NCsVVMZboA9cxini-8cupuS6Ayx82rw2QeKlCaysy4zltnwDyrGcGZzdZBQwM4oyToLqscEzDLrvhhhOmlyvrao_H9BCKcXWR5YbU=w1980-h1320-no?.jpg'
     },
     {
       path: '/about',

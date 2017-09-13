@@ -1,5 +1,6 @@
 <template>
   <div id="about">
+    <router-link id="home-button" :to="{name: 'home'}">Home</router-link>
     <div id="animation">
       <div id="sky">
         <div v-for="i in stars" :style="i"></div>
@@ -199,5 +200,28 @@
   @keyframes star-effect {
     from {background-position:0 0;}
     to {background-position:-10000px 5000px;}
+  }
+  #home-button {
+    bottom: 0;
+    right: 0;
+    margin: 20px 50px;
+    padding: 10px 20px;
+    position: absolute;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border-style: solid;
+    border-width: 1px;
+    border-bottom-width: 3px;
+    border-color: white;
+    color: white;
+    float: right;
+    outline-width: 1px;
+    outline-color: white;
+    cursor: pointer;
+    z-index: 2;
+  }
+  #home-button:hover {
+    border-bottom-width: 2px;
+    outline: none;
   }
 </style>
