@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import head from './head'
+import http from './http'
 
 Vue.config.productionTip = false
 
@@ -12,6 +13,7 @@ new Vue({
   el: '#app',
   router,
   head,
+  http,
   template: '<App/>',
   components: { App }
 })

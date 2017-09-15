@@ -8,7 +8,7 @@
       <span v-for="i in grid" :class="['opacity-' + i.toString()]"></span>
     </div>
     <transition-group name="fade" :style="{'background': 'transparent'}">
-      <div id="thought-bubble" v-for="thought in activeRandomThoughts" :key="thought.key" :style="thought.style">
+      <div id="thought-bubble" v-for="thought in activeRandomThoughts" :key="thought.key" :style="thought.style" @click="this.window.location = thought.url">
         <h1 :class="{ 'visible' : thought.active }">{{thought.thought}}</h1>
       </div>
     </transition-group>
@@ -16,7 +16,6 @@
 </template>
 
 <script>
-  // Replace with rest call that returns details of specific post id
   import showa from '@/../static/data/showerdata.json'
   export default {
     name: 'shower-thoughts',
@@ -25,11 +24,13 @@
         thoughts: [],
         oldThoughts: [],
         grid: [],
-        randomThoughts: []
+        randomThoughts: [],
+        access_token: ''
       }
     },
     created () {
-      this.thoughts = showa
+      this.getToken()
+      this.getShowerThoughts()
       this.getGrid()
       this.fadeInterval = setInterval(function () {
         this.randomizeFade()
@@ -55,6 +56,48 @@
       }
     },
     methods: {
+      getToken: function () {
+        if (localStorage.getItem('reddit_refresh') <= Math.floor(Date.now() / 1000)) {
+          this.newRedditToken()
+        }
+        this.access_token = localStorage.getItem('reddit_access_token')
+      },
+      newRedditToken: function () {
+        var data = new URLSearchParams()
+        data.append('grant_type', 'https://oauth.reddit.com/grants/installed_client')
+        data.append('device_id', localStorage.get('melonade_device_id'))
+        this.$http.post('https://www.reddit.com/api/v1/access_token', data, {
+          auth: {
+            username: 'TOF_jt6LhZBi1w',
+            password: ''
+          }
+        }).then(response => {
+          localStorage.setItem('reddit_access_token', 'Bearer ' + response.data.access_token)
+          localStorage.setItem('reddit_refresh', Math.floor(Date.now() / 1000) + 3600)
+          this.access_token = localStorage.getItem('reddit_access_token')
+          console.log('refreshed token')
+        }).catch(error => {
+          console.log(error)
+          localStorage.removeItem('reddit_access_token')
+        })
+      },
+      getShowerThoughts: function () {
+        this.$http.get('https://oauth.reddit.com/r/showerthoughts/rising', {
+          headers: {
+            Authorization: this.access_token
+          }
+        }).then(response => {
+          for (var thought in response['data']['data']['children']) {
+            this.thoughts.push({
+              'thought': response['data']['data']['children'][thought]['data']['title'],
+              'url': response['data']['data']['children'][thought]['data']['url']
+            })
+          }
+        }).catch(error => {
+          console.log(error)
+          this.thoughts = showa
+        })
+      },
       addRandomThought: function () {
         if (Math.random() < 0.5 - this.randomThoughts.length * 0.1) {
         // if (Math.random() < 1) {
@@ -260,6 +303,7 @@
     position: absolute;
     overflow: hidden;
     margin: 0px 0px;
+    cursor: pointer;
     /*background-color: white;*/
   }
   h1 {
