@@ -65,7 +65,7 @@
       newRedditToken: function () {
         var data = new URLSearchParams()
         data.append('grant_type', 'https://oauth.reddit.com/grants/installed_client')
-        data.append('device_id', localStorage.get('melonade_device_id'))
+        data.append('device_id', localStorage.getItem('melonade_device_id'))
         this.$http.post('https://www.reddit.com/api/v1/access_token', data, {
           auth: {
             username: 'TOF_jt6LhZBi1w',
