@@ -8,9 +8,9 @@
       <span v-for="i in grid" :class="['opacity-' + i.toString()]"></span>
     </div>
     <transition-group name="fade" :style="{'background': 'transparent'}">
-      <div id="thought-bubble" v-for="thought in activeRandomThoughts" :key="thought.key" :style="thought.style" @click="this.window.location = thought.url">
+      <a id="thought-bubble" v-for="thought in activeRandomThoughts" :key="thought.key" :style="thought.style" :href="thought.url">
         <h1 :class="{ 'visible' : thought.active }">{{thought.thought}}</h1>
-      </div>
+      </a>
     </transition-group>
   </div>
 </template>
@@ -113,6 +113,7 @@
             var left = Math.floor(Math.random() * (100 - width))
             var top = Math.floor(Math.random() * (100 - height - 10))
             var lineHeight = fontSize * (Math.random() * 0.6 + 1.2)
+            if (!temp.url) temp.url = 'https://www.reddit.com/r/Showerthoughts'
             temp.raw = {
               'width': width,
               'height': height,
@@ -304,7 +305,6 @@
     overflow: hidden;
     margin: 0px 0px;
     cursor: pointer;
-    /*background-color: white;*/
   }
   h1 {
     font-size: inherit;
@@ -321,5 +321,8 @@
     background: #111;
     z-index: -1;
     transition: background 4s linear;
+  }
+  a {
+    color: white;
   }
 </style>
