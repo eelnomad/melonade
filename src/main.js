@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import head from './head'
 import http from './http'
+import highcharts from './highcharts'
 
 Vue.config.productionTip = false
 
@@ -14,6 +15,7 @@ new Vue({
   router,
   head,
   http,
+  highcharts,
   template: '<App/>',
   components: { App }
 })

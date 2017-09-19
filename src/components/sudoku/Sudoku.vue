@@ -3,16 +3,23 @@
 
 <template>
   <div class="flex-row" id="sudoku">
-    <router-link id="home-button" :to="{name: 'home'}">Home</router-link>
     <span></span>
     <div id="sudoku-grid">
-      <input id="sudoku-box" v-for="i in grid" maxlength="1" v-model="i.value">
-      <button id="solve-button" @click="clear()">Clear</button>
-      <button id="solve-button" @click="solve()">Solve</button>
-      <button id="solve-button" @click="currentState()">Get State</button>
-      <input v-model="state">
+      <input id="sudoku-box" v-for="i in grid" maxlength="1" v-model="i.value" :disabled="solving">
     </div>
     <span></span>
+    <button @click="toggleOptions()">Show/Hide</button>
+    <div id="sudoku-controls" v-show="showOptions">
+      <button @click="clear()" :disabled="solving">Clear</button>
+      <button @click="recursiveSolve()" :disabled="solving">Solve with Recurssion</button>
+      <button @click="mcSolve()" :disabled="solving">Solve with MonteCarlo </button>
+      <button @click="currentState()">Get State</button>
+      <button @click="stop()" :disabled="!solving">Stop</button>
+      <button @click="togglePause()" :disabled="!solving">{{ pause ? 'Resume' : 'Pause' }}</button>
+      <input type="number" v-model="displayInterval" min="0" max="10">
+      <input v-model="state">
+      <highstock :options="mcChartOptions" ref="highstock"></highstock>
+    </div>
   </div>
 </template>
 
@@ -22,30 +29,147 @@ export default {
   data () {
     return {
       grid: {},
-      invalid: false,
-      state: ''
+      solving: false,
+      saveState: '',
+      state: '',
+      displayInterval: 0,
+      recursiveStack: [],
+      recursiveInProgress: false,
+      pause: false,
+      mcVariableSquares: [],
+      mcIndex: 0,
+      mcInProgress: false,
+      mcChartOptions: {},
+      showOptions: false
     }
   },
   methods: {
-    recursiveSolve: function (key) {
-      if (key === '') return true
-      while (this.grid[key].possible.length !== 0) {
-        this.grid[key].value = this.grid[key].possible[Math.floor(Math.random() * this.grid[key].possible.length)]
-        this.grid[key].possible = this.grid[key].possible.replace(this.grid[key].value, '')
-        this.possibilitiesGrid()
-        if (this.recursiveSolve(this.unassignedFewestPossibilities())) return true
-      }
-      this.grid[key].value = ''
-      return false
+    toggleOptions: function () {
+      this.showOptions = !this.showOptions
     },
-    solve: function () {
-      if (this.isValidGrid()) {
-        this.possibilitiesGrid()
-        if (!this.recursiveSolve(this.unassignedFewestPossibilities())) {
-          alert('No solution found')
+    mcChangeCost: function (key, oldVal, newVal) {
+      for (var i = 0; i < 3; i++) {
+        for (var j = 0; j < 9; j++) {
+          if (key !== this.grid[key].related[i][j]) {
+            if (oldVal === this.grid[this.grid[key].related[i][j]].value) {
+              this.grid[key].cost--
+              this.grid[this.grid[key].related[i][j]].cost--
+            } else if (newVal === this.grid[this.grid[key].related[i][j]].value) {
+              this.grid[key].cost++
+              this.grid[this.grid[key].related[i][j]].cost++
+            }
+          }
         }
       }
-      this.$forceUpdate()
+      this.$set(this.grid[key], 'value', newVal)
+    },
+    mcStep: function () {
+      this.mcInProgress = true
+      var key = this.mcVariableSquares[this.mcIndex]
+      var newVal = this.mcRandomValue()
+      // If value didn't change, skip logic
+      if (newVal !== this.grid[key].value) {
+        // If new cost is less than old cost, keep changes
+        var newCost = this.mcIndividualCost(key, newVal)
+        if (newCost <= this.grid[key].cost) {
+          this.mcChangeCost(key, this.grid[key].value, newVal)
+        } else {
+          var randomtest = Math.random()
+          var exptest = Math.exp((this.grid[key].cost - newCost) / 0.1)
+          console.log(randomtest + ' vs ' + exptest)
+          if (randomtest < exptest) {
+          // if (Math.random() < Math.exp((this.grid[key].cost - newCost) / 0.1)) {
+            this.mcChangeCost(key, this.grid[key].value, newVal)
+          }
+        }
+      }
+      // Push new cost to end of list and check if === 0
+      var cost = this.mcTotalCost()
+      this.$refs.highstock.chart.series[0].addPoint([Date.now(), cost], false)
+      if (cost === 0) this.stop()
+      // Increment Index for next run and implement loopback
+      this.mcIndex++
+      if (this.mcIndex === this.mcVariableSquares.length) {
+        this.mcIndex = 0
+      }
+      this.mcInProgress = false
+    },
+    mcSolve: function () {
+      if (!this.start()) return
+      // Reinit MonteCarlo Setup
+      this.$refs.highstock.chart.series[0].setData([])
+      this.mcVariableSquares = []
+      this.mcIndex = 0
+      // Collect all squares that need to be filled in and fill them in
+      for (var key in this.grid) {
+        if (this.grid[key].value === '') {
+          this.mcVariableSquares.push(key)
+          this.$set(this.grid[key], 'value', this.mcRandomValue())
+        }
+      }
+      if (this.mcVariableSquares.length === 0) return this.stop()
+      // Calculate cost for all squares
+      for (key in this.grid) {
+        this.$set(this.grid[key], 'cost', this.mcIndividualCost(key, this.grid[key].value))
+      }
+      this.mcInterval = setInterval(function () {
+        if (!this.pause && !this.mcInProgress) this.mcStep()
+      }.bind(this), this.displayInterval)
+      this.mcGraphInterval = setInterval(function () {
+        this.$refs.highstock.chart.redraw()
+      }.bind(this), 2000)
+    },
+    mcTotalCost: function () {
+      var cost = 0
+      for (var key in this.grid) {
+        cost += this.grid[key].cost
+      }
+      return cost
+    },
+    mcRandomValue: function () {
+      return '123456789'[Math.floor(Math.random() * 9)]
+    },
+    mcIndividualCost: function (key, value) {
+      var cost = 0
+      for (var i = 0; i < 3; i++) {
+        for (var j = 0; j < 9; j++) {
+          if (value === this.grid[this.grid[key].related[i][j]].value && key !== this.grid[key].related[i][j]) cost++
+        }
+      }
+      return cost
+    },
+    togglePause: function () {
+      this.pause = !this.pause
+    },
+    recursiveImmitation: function () {
+      this.recursiveInProgress = true
+      if (this.recursiveStack.length === 0) {
+        alert('No solution found')
+        this.stop()
+      } else {
+        var key = this.recursiveStack[this.recursiveStack.length - 1]
+        if (key === '') {
+          this.stop()
+        } else if (this.grid[key].possible.length === 0) {
+          this.$set(this.grid[key], 'value', '')
+          this.recursiveStack.pop()
+        } else {
+          this.$set(this.grid[key], 'value', this.grid[key].possible[Math.floor(Math.random() * this.grid[key].possible.length)])
+          this.$set(this.grid[key], 'possible', this.grid[key].possible.replace(this.grid[key].value, ''))
+          this.possibilitiesGrid()
+          this.recursiveStack.push(this.unassignedFewestPossibilities())
+        }
+      }
+      this.recursiveInProgress = false
+    },
+    recursiveSolve: function () {
+      if (!this.start) return
+      this.solving = true
+      this.possibilitiesGrid()
+      this.recursiveStack = [this.unassignedFewestPossibilities()]
+      this.recursiveInterval = setInterval(function () {
+        if (!this.pause && !this.recursiveInProgress) this.recursiveImmitation()
+      }.bind(this), this.displayInterval)
     },
     unassignedFewestPossibilities: function () {
       var min = 10
@@ -71,18 +195,18 @@ export default {
             possible = possible.replace(this.grid[this.grid[key].related[i][j]].value.toString(), '')
           }
         }
-        this.grid[key].possible = possible
+        this.$set(this.grid[key], 'possible', possible)
       }
     },
     isValidGrid: function () {
-      var values = {}
+      // var values = {}
       for (var key in this.grid) {
         if (this.grid[key].value !== '') {
           if (!this.isValid(key)) {
             alert('Invalid Grid: ' + key)
             return false
           }
-          values[this.grid[key].value] = true
+          // values[this.grid[key].value] = true
         }
       }
       // if (Object.keys(values).length < 8) {
@@ -95,7 +219,9 @@ export default {
       var validValues = '123456789'
       for (var i = 0; i < 3; i++) {
         for (var j = 0; j < 9; j++) {
+          // To check that the value is actually a number between 1-9
           if (validValues.indexOf(this.grid[key].value) === -1) return false
+          // To check that the value doesn't conflict with any other related squares
           if (this.grid[key].value === this.grid[this.grid[key].related[i][j]].value && key !== this.grid[key].related[i][j]) return false
         }
       }
@@ -116,10 +242,21 @@ export default {
     },
     clear: function () {
       for (var key in this.grid) {
-        this.grid[key].value = ''
+        this.$set(this.grid[key], 'value', '')
       }
-      this.state = ''
-      this.$forceUpdate()
+    },
+    start: function () {
+      if (!this.isValidGrid()) {
+        return false
+      }
+      this.solving = true
+      return true
+    },
+    stop: function () {
+      clearInterval(this.mcGraphInterval)
+      clearInterval(this.recursiveInterval)
+      clearInterval(this.mcInterval)
+      this.solving = false
     }
   },
   watch: {
@@ -127,13 +264,13 @@ export default {
       var i = 0
       for (var key in this.grid) {
         if (isNaN(parseInt(newState[i]))) {
-          this.grid[key].value = ''
+          this.$set(this.grid[key], 'value', '')
           i++
         } else if (newState[i] === '0') {
-          this.grid[key].value = ''
+          this.$set(this.grid[key], 'value', '')
           i++
         } else {
-          this.grid[key].value = newState[i]
+          this.$set(this.grid[key], 'value', newState[i])
           i++
         }
       }
@@ -145,10 +282,11 @@ export default {
     // Setting up grid
     for (var i = 0; i < rows.length; i++) {
       for (var j = 0; j < cols.length; j++) {
-        this.grid[cols[i].concat(rows[j])] = {
+        this.$set(this.grid, cols[i].concat(rows[j]), {
           value: '',
-          possible: []
-        }
+          possible: [],
+          cost: 0
+        })
       }
     }
     // Setting up related squares for each square
@@ -169,8 +307,44 @@ export default {
           set3.push(cols[i].concat(rows[j]))
         }
       }
-      this.grid[key].related = [set1, set2, set3]
+      this.$set(this.grid[key], 'related', [set1, set2, set3])
     }
+    this.mcChartOptions = {
+      chart: {
+      },
+      rangeSelector: {
+        buttons: [
+          {
+            count: 10,
+            type: 'second',
+            text: '10S'
+          }, {
+            count: 1,
+            type: 'minute',
+            text: '1M'
+          }, {
+            type: 'all',
+            text: 'All'
+          }
+        ],
+        inputEnabled: false,
+        selected: 2
+      },
+      title: {
+        text: 'MonteCarlo Cost History'
+      },
+      exporting: {
+        enabled: false
+      },
+      series: [{
+        name: 'Cost',
+        data: []
+      }]
+    }
+  },
+  beforeDestroy () {
+    clearInterval(this.recursiveInterval)
+    clearInterval(this.mcInterval)
   }
 }
 </script>
@@ -181,21 +355,28 @@ export default {
   width: 100%;
   height: 100%;
   position: absolute;
+  text-align: center;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-image: url('https://lh3.googleusercontent.com/UqrZHJ0MVurefzgefF9zCzR3cUGkOQY97ZSx6yiZJycfSLNAy9fpK0VzfmPXZiib9JA459-cPcxke699A8Ovy3Nh4bM8xVv5NsatsBL4gyF6Q3Gp0Xn1ZZshnz4MzSmmCRP4vI2g8dqys0jqOUIDzz2B28ia1AYKPd4NN7_gu2e5sLyD-0X2Pbb_Zi6LNIt20nl15dJjuLI-QaMnYH9EjtBp1qPMLwJFG5q5l3tTbOFgA-Tws1rRJ6sfLNYfywnEKtwzt6_C-uqSfdPlzu_0btVpI3aRZz2zfSr13tkJ3mYAVSnRuG_23laoaG4fhOEIaZGqOUPzNVtDyWojZ2ORWu48YoOM_EpxGAWQ_1S2AH51eiqB-wJaPSZVpkdy_RqBz0_oRePLAfkIVNF-DzNg0qfmYfjn1wMkRXkwRwp0xny0oMh6FCpYbfbC1D4rnSWW_nfCE9CbwhOM-oQfDPzqv4Bwwf3DVqCltLROzgjOa_j9bW_23kop1wK80QeXnFCd506eXKqb_GtHmViQ1Z_KU1lSjF36wbsRsA0Dql5YojNBEnMR_ZsJHNNXYM8mwRSEBOxfgzDEEEwE9rKwNem3oerhJfF8WY6vwDCum23B7aPqZckO8jmq1b7dCxGWNUwsJhqjRKX53De50Gun_NxMQqgnf7OV0JQ-5OA=w1980-h1320-no?.jpg');
+  /*background-image: url('https://lh3.googleusercontent.com/UqrZHJ0MVurefzgefF9zCzR3cUGkOQY97ZSx6yiZJycfSLNAy9fpK0VzfmPXZiib9JA459-cPcxke699A8Ovy3Nh4bM8xVv5NsatsBL4gyF6Q3Gp0Xn1ZZshnz4MzSmmCRP4vI2g8dqys0jqOUIDzz2B28ia1AYKPd4NN7_gu2e5sLyD-0X2Pbb_Zi6LNIt20nl15dJjuLI-QaMnYH9EjtBp1qPMLwJFG5q5l3tTbOFgA-Tws1rRJ6sfLNYfywnEKtwzt6_C-uqSfdPlzu_0btVpI3aRZz2zfSr13tkJ3mYAVSnRuG_23laoaG4fhOEIaZGqOUPzNVtDyWojZ2ORWu48YoOM_EpxGAWQ_1S2AH51eiqB-wJaPSZVpkdy_RqBz0_oRePLAfkIVNF-DzNg0qfmYfjn1wMkRXkwRwp0xny0oMh6FCpYbfbC1D4rnSWW_nfCE9CbwhOM-oQfDPzqv4Bwwf3DVqCltLROzgjOa_j9bW_23kop1wK80QeXnFCd506eXKqb_GtHmViQ1Z_KU1lSjF36wbsRsA0Dql5YojNBEnMR_ZsJHNNXYM8mwRSEBOxfgzDEEEwE9rKwNem3oerhJfF8WY6vwDCum23B7aPqZckO8jmq1b7dCxGWNUwsJhqjRKX53De50Gun_NxMQqgnf7OV0JQ-5OA=w1980-h1320-no?.jpg');*/
 }
 #sudoku-grid {
-  text-align: center;
-  height: 100vmin;
-  width: 100vmin;
-  margin-top: 10px;
+  height: 90vmin;
+  width: 90vmin;
+  margin-top: 10vmin;
 }
-
+#sudoku-controls {
+  top: 0;
+  left: 0;
+  position: fixed;
+}
 #sudoku-box {
-  height: 10vmin;
-  width: 10vmin;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  height: 9.5vmin;
+  width: 9.5vmin;
   text-align: center;
   color: white;
   font-size: 4vmin;
@@ -214,11 +395,11 @@ export default {
 }
 #sudoku-box:nth-child(3n) {
   border-right-width: 1.5px;
-  margin-right: 1px;
+  padding-right: 1px;
 }
 #sudoku-box:nth-child(3n + 1) {
   border-left-width: 1.5px;
-  margin-left: 1px;
+  padding-left: 1px;
 }
 #sudoku-box:nth-child(n) {
   border-top-width: 1.5px;
@@ -228,56 +409,33 @@ export default {
 }
 #sudoku-box:nth-child(n + 19) {
   border-bottom-width: 1.5px;
-  margin-bottom: 1px;
+  padding-bottom: 1px;
 }
 #sudoku-box:nth-child(n + 28) {
   border-bottom-width: 1px;
   border-top-width: 1.5px;
-  margin-bottom: 0px;
-  margin-top: 1px;
+  padding-bottom: 0px;
+  padding-top: 1px;
 }
 #sudoku-box:nth-child(n + 37) {
   border-top-width: 1px;
-  margin-top: 0px;
+  padding-top: 0px;
 }
 #sudoku-box:nth-child(n + 46) {
   border-bottom-width: 1.5px;
-  margin-bottom: 1px;
+  padding-bottom: 1px;
 }
 #sudoku-box:nth-child(n + 55) {
   border-bottom-width: 1px;
   border-top-width: 1.5px;
-  margin-bottom: 0px;
-  margin-top: 1px;
+  padding-bottom: 0px;
+  padding-top: 1px;
 }
 #sudoku-box:nth-child(n + 64) {
   border-top-width: 1px;
-  margin-top: 0px;
+  padding-top: 0px;
 }
 #sudoku-box:nth-child(n + 73) {
   border-bottom-width: 1.5px;
-}
-#home-button {
-  bottom: 0;
-  right: 0;
-  margin: 20px 50px;
-  padding: 10px 20px;
-  position: absolute;
-  background-color: transparent;
-  background-repeat: no-repeat;
-  border-style: solid;
-  border-width: 1px;
-  border-bottom-width: 3px;
-  border-color: white;
-  color: white;
-  float: right;
-  outline-width: 1px;
-  outline-color: white;
-  cursor: pointer;
-  z-index: 2;
-}
-#home-button:hover {
-  border-bottom-width: 2px;
-  outline: none;
 }
 </style>
