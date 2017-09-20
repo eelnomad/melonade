@@ -75,7 +75,7 @@ export default {
           this.mcChangeCost(key, this.grid[key].value, newVal)
         } else {
           var randomtest = Math.random()
-          var exptest = Math.exp((this.grid[key].cost - newCost) / 0.1)
+          var exptest = Math.exp((this.grid[key].cost - newCost) / 0.6)
           console.log(randomtest + ' vs ' + exptest)
           if (randomtest < exptest) {
           // if (Math.random() < Math.exp((this.grid[key].cost - newCost) / 0.1)) {
@@ -370,6 +370,7 @@ export default {
   top: 0;
   left: 0;
   position: fixed;
+  width: 90%;
 }
 #sudoku-box {
   box-sizing: border-box;
