@@ -10,17 +10,21 @@
     </div>
     <span></span>
     <button id="sudoku-options-toggle" @click="toggleOptions()">Show/Hide</button>
-    <div id="sudoku-controls" v-show="showOptions">
-      <button @click="clear()" :disabled="solving">Clear Grid</button>
-      <button @click="toggleChart()">{{ showChart ? 'Hide' : 'Show' }} Chart</button>
-      <button @click="recursiveSolve()" :disabled="solving">Solve with Recurssion</button>
-      <button @click="mcSolve()" :disabled="solving">Solve with MonteCarlo</button>
-      <button @click="currentState()">Get State</button>
-      <button @click="togglePause()" :disabled="!solving">{{ pause ? 'Resume' : 'Pause' }}</button>
-      <button @click="stop()" :disabled="!solving">Stop</button>
-      <input type="number" v-model.number="displayInterval" min="0" max="10">
-      <input v-model="state">
-    </div>
+    <transition name="fade">
+      <div class="flex-column" id="sudoku-controls" v-show="showOptions">
+        <label>Grid Controls</label>
+        <button @click="toggleChart()">{{ showChart ? 'Hide' : 'Show' }} Chart</button>
+        <button @click="clear()" :disabled="solving">Clear Grid</button>
+        <button @click="togglePause()" :disabled="!solving">{{ pause ? 'Resume' : 'Pause' }}</button>
+        <button @click="stop()" :disabled="!solving">Stop</button>
+        <button @click="currentState()">Get State</button>
+        <input v-model="state" placeholder="Load Custom State Here">
+        <label>Solve</label>
+        <input type="number" v-model.number="displayInterval" min="0" max="10">
+        <button @click="recursiveSolve()" :disabled="solving">Recurssion</button>
+        <button @click="mcSolve()" :disabled="solving">MonteCarlo</button>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -111,9 +115,10 @@ export default {
       if (this.mcTemperature <= 0.3) this.mcTemperature = 0.6 * Math.pow(0.8, this.mcLoop / 4000)
       if (this.mcTemperature <= 0.3) this.mcLoop = 0
       this.mcInProgress = false
+      return false
     },
     mcSolve: function () {
-      if (!this.start()) return
+      if (!this.start()) return false
       // Reinit MonteCarlo Setup
       this.$refs.highstock.chart.series[0].setData([])
       this.$refs.highstock.chart.series[1].setData([])
@@ -133,7 +138,7 @@ export default {
         this.$set(this.grid[key], 'cost', this.mcIndividualCost(key, this.grid[key].value))
       }
       this.mcInterval = setInterval(function () {
-        if (!this.pause && !this.mcInProgress) this.mcStep()
+        if (!this.pause && !this.mcInProgress) this.solving = !this.mcStep()
       }.bind(this), this.displayInterval)
       this.mcGraphInterval = setInterval(function () {
         this.$refs.highstock.chart.redraw()
@@ -170,7 +175,7 @@ export default {
       } else {
         var key = this.recursiveStack[this.recursiveStack.length - 1]
         if (key === '') {
-          this.stop()
+          return this.stop()
         } else if (this.grid[key].possible.length === 0) {
           this.$set(this.grid[key], 'value', '')
           this.recursiveStack.pop()
@@ -182,12 +187,13 @@ export default {
         }
       }
       this.recursiveInProgress = false
+      return false
     },
     recursiveSolve: function () {
-      if (!this.start()) return
+      if (!this.start()) return false
       this.recursiveStack = [this.unassignedFewestPossibilities()]
       this.recursiveInterval = setInterval(function () {
-        if (!this.pause && !this.recursiveInProgress) this.recursiveImmitation()
+        if (!this.pause && !this.recursiveInProgress) this.solving = !this.recursiveImmitation()
       }.bind(this), this.displayInterval)
     },
     unassignedFewestPossibilities: function () {
@@ -279,7 +285,7 @@ export default {
       this.pause = false
       this.recursiveInProgress = false
       this.mcInProgress = false
-      this.solving = false
+      return true
     }
   },
   watch: {
@@ -334,6 +340,14 @@ export default {
     }
     this.mcChartOptions = {
       chart: {
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        shadow: {
+          color: 'rgba(0, 0, 0, 0.5)',
+          opacity: 0.2,
+          width: 10
+        },
+        marginRight: 40,
+        spacingTop: 20
       },
       rangeSelector: {
         buttons: [
@@ -358,7 +372,11 @@ export default {
         selected: 3
       },
       title: {
-        text: 'MonteCarlo Cost History'
+        text: 'MonteCarlo Cost History',
+        style: {
+          color: 'white',
+          'margin-top': '20px'
+        }
       },
       exporting: {
         enabled: false
@@ -371,12 +389,33 @@ export default {
         name: 'Temperature',
         data: [],
         dashStyle: 'shortdash',
-        yAxis: 1
+        yAxis: 1,
+        color: 'orange'
+      }],
+      xAxis: [{
+        labels: {
+          style: {
+            color: 'white'
+          }
+        }
       }],
       yAxis: [{
-        opposite: true
+        opposite: true,
+        labels: {
+          style: {
+            color: 'white'
+          }
+        },
+        offset: 25
       }, {
-        opposite: false
+        opposite: false,
+        inside: true,
+        labels: {
+          style: {
+            color: 'white'
+          }
+        },
+        offset: -10
       }]
     }
   },
@@ -415,14 +454,17 @@ export default {
   transition: all 0.5s ease;
 }
 #sudoku-options-toggle {
-  position: fixed;
+  position: absolute;
+  height: 50px;
+  z-index: 1;
 }
 #sudoku-controls {
-  display: block;
-  top: 0;
-  left: 0;
-  position: fixed;
-  width: 90%;
+  box-sizing: border-box;
+  padding-top: 50px;
+  position: absolute;
+  height: 100%;
+  width: 300px;
+  background: rgba(0,0,0,.5);
 }
 #sudoku-box {
   box-sizing: border-box;
@@ -482,6 +524,8 @@ export default {
   border-bottom-width: 1.5px;
 }
 button {
-  display: block;
+  position: relative;
+  width: 300px;
+  flex: 1 1 auto;
 }
 </style>
