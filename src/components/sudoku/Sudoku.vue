@@ -3,16 +3,12 @@
 
 <template>
   <div class="flex-row" id="sudoku">
-    <router-link id="home-button" :to="{name: 'home'}">Home</router-link>
-    <span></span>
-    <highstock v-cloak id="sudoku-chart" v-show="showChart" :options="mcChartOptions" ref="highstock"></highstock>
-    <div id="sudoku-grid" v-show="!showChart">
-      <input id="sudoku-box" v-for="i in grid" maxlength="1" v-model="i.value" :disabled="solving">
+    <div id="sudoku-options-toggle" @click="toggleOptions()">
+      <icon name="angle-right" scale="3" color="white" spin v-if="!showOptions"></icon>
+      <icon name="angle-right" scale="3" color="white" flip="horizontal" v-else></icon>
     </div>
-    <span></span>
-    <button id="sudoku-options-toggle" @click="toggleOptions()">Show/Hide</button>
     <transition name="fade">
-      <div class="flex-column" id="sudoku-options" v-show="!showOptions">
+      <div class="flex-column" id="sudoku-options" v-show="showOptions">
         <label>
           <h1>
             Controls
@@ -35,6 +31,13 @@
         <button @click="gaSolve()" :disabled="solving">Genetic Algorithm</button>
       </div>
     </transition>
+    <router-link id="home-button" :to="{name: 'home'}">Home</router-link>
+    <span></span>
+    <highstock v-cloak id="sudoku-chart" v-show="showChart" :options="mcChartOptions" ref="highstock"></highstock>
+    <div id="sudoku-grid" v-show="!showChart">
+      <input id="sudoku-box" v-for="i in grid" maxlength="1" v-model="i.value" :disabled="solving">
+    </div>
+    <span></span>
   </div>
 </template>
 
@@ -441,7 +444,7 @@ export default {
     }
   },
   mounted () {
-    this.showChart = true
+    this.showChart = false
   },
   beforeDestroy () {
     clearInterval(this.recursiveInterval)
@@ -475,6 +478,7 @@ export default {
   transition: all 0.5s ease;
 }
 #sudoku-options-toggle {
+  margin: 10px;
   position: absolute;
   height: 50px;
   z-index: 1;
