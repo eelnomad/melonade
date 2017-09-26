@@ -16,7 +16,6 @@
 </template>
 
 <script>
-  import showa from '@/../static/data/showerdata.json'
   export default {
     name: 'shower-thoughts',
     data () {
@@ -95,7 +94,10 @@
           }
         }).catch(error => {
           console.log(error)
-          this.thoughts = showa
+          setInterval(function () {
+            this.getToken()
+            this.getShowerThoughts()
+          }, 1000)
         })
       },
       addRandomThought: function () {
@@ -130,7 +132,8 @@
             this.thoughts.splice(randomIndex, 1)
           } else {
             // Repopulate thoughts after all thoughts have been shown
-            this.thoughts = this.oldThoughts
+            // this.thoughts = this.oldThoughts
+            this.getShowerThoughts()
             this.oldThoughts = []
           }
         }

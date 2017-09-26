@@ -3,6 +3,7 @@
 
 <template>
   <div class="flex-row" id="sudoku">
+    <router-link id="home-button" :to="{name: 'home'}">Home</router-link>
     <span></span>
     <highstock v-cloak id="sudoku-chart" v-show="showChart" :options="mcChartOptions" ref="highstock"></highstock>
     <div id="sudoku-grid" v-show="!showChart">
@@ -11,18 +12,27 @@
     <span></span>
     <button id="sudoku-options-toggle" @click="toggleOptions()">Show/Hide</button>
     <transition name="fade">
-      <div class="flex-column" id="sudoku-controls" v-show="showOptions">
-        <label>Grid Controls</label>
+      <div class="flex-column" id="sudoku-options" v-show="!showOptions">
+        <label>
+          <h1>
+            Controls
+          </h1>
+        </label>
         <button @click="toggleChart()">{{ showChart ? 'Hide' : 'Show' }} Chart</button>
         <button @click="clear()" :disabled="solving">Clear Grid</button>
         <button @click="togglePause()" :disabled="!solving">{{ pause ? 'Resume' : 'Pause' }}</button>
         <button @click="stop()" :disabled="!solving">Stop</button>
         <button @click="currentState()">Get State</button>
-        <input v-model="state" placeholder="Load Custom State Here">
-        <label>Solve</label>
-        <input type="number" v-model.number="displayInterval" min="0" max="10">
+        <input v-model="state" placeholder="Load Custom State Here" :disabled="solving">
+        <label>
+          <h1>
+            Solve
+          </h1>
+        </label>
+        <input type="number" v-model.number="displayInterval" min="0" max="10" placeholder="Delay between iterations (ms)">
         <button @click="recursiveSolve()" :disabled="solving">Recurssion</button>
         <button @click="mcSolve()" :disabled="solving">MonteCarlo</button>
+        <button @click="gaSolve()" :disabled="solving">Genetic Algorithm</button>
       </div>
     </transition>
   </div>
@@ -45,7 +55,9 @@ export default {
       mcIndex: 0,
       mcInProgress: false,
       mcChartOptions: {},
-      mcTemperature: 0.6,
+      mcTemperature: 0,
+      mcTemperatureThreshold: 0.25,
+      mcTemperatureMax: 0.6,
       mcLoop: 0,
       showOptions: false,
       showChart: true
@@ -57,6 +69,12 @@ export default {
     },
     toggleChart: function () {
       this.showChart = !this.showChart
+    },
+    togglePause: function () {
+      this.pause = !this.pause
+    },
+    gaSolve: function () {
+      alert('hahaha, you wish this were ready :P')
     },
     mcChangeCost: function (key, oldVal, newVal) {
       for (var i = 0; i < 3; i++) {
@@ -95,10 +113,10 @@ export default {
           }
           // Push new cost to end of list and check if === 0
           var cost = this.mcTotalCost()
-          if (cost === 0) {
-            this.$refs.highstock.chart.redraw()
+          if (cost <= 0) {
             this.$refs.highstock.chart.series[0].addPoint([Date.now(), cost], false)
             this.$refs.highstock.chart.series[1].addPoint([Date.now(), this.mcTemperature], false)
+            this.$refs.highstock.chart.redraw()
             return this.stop()
           }
           // Increment Index for next run and implement loopback
@@ -110,10 +128,10 @@ export default {
         this.mcLoop++
       }
       if (this.mcLoop % 100 === 0) {
-        this.mcTemperature *= 0.98
+        this.mcTemperature *= 0.999
       }
-      if (this.mcTemperature <= 0.3) this.mcTemperature = 0.6 * Math.pow(0.8, this.mcLoop / 4000)
-      if (this.mcTemperature <= 0.3) this.mcLoop = 0
+      if (this.mcTemperature <= this.mcTemperatureThreshold) this.mcTemperature = this.mcTemperatureMax * Math.pow(0.8, this.mcLoop / 12000)
+      if (this.mcTemperature <= this.mcTemperatureThreshold) this.mcLoop = 0
       this.mcInProgress = false
       return false
     },
@@ -152,8 +170,8 @@ export default {
       return cost
     },
     mcRandomValue: function (key) {
-      return this.grid[key].possible[Math.floor(Math.random() * this.grid[key].possible.length)]
-      // return '123456789'[Math.floor(Math.random() * 9)]
+      // return this.grid[key].possible[Math.floor(Math.random() * this.grid[key].possible.length)]
+      return '123456789'[Math.floor(Math.random() * 9)]
     },
     mcIndividualCost: function (key, value) {
       var cost = 0
@@ -163,9 +181,6 @@ export default {
         }
       }
       return cost
-    },
-    togglePause: function () {
-      this.pause = !this.pause
     },
     recursiveImmitation: function () {
       this.recursiveInProgress = true
@@ -285,6 +300,7 @@ export default {
       this.pause = false
       this.recursiveInProgress = false
       this.mcInProgress = false
+      this.solving = false
       return true
     }
   },
@@ -306,6 +322,7 @@ export default {
     }
   },
   created () {
+    this.mcTemperature = this.mcTemperatureMax
     var rows = '012345678'
     var cols = 'ABCDEFGHI'
     // Setting up grid
@@ -346,6 +363,9 @@ export default {
           opacity: 0.2,
           width: 10
         },
+        style: {
+          fontFamily: 'Quicksand, sans-serif'
+        },
         marginRight: 40,
         spacingTop: 20
       },
@@ -375,7 +395,8 @@ export default {
         text: 'MonteCarlo Cost History',
         style: {
           color: 'white',
-          'margin-top': '20px'
+          marginTop: '20px',
+          fontSize: '24px'
         }
       },
       exporting: {
@@ -420,7 +441,7 @@ export default {
     }
   },
   mounted () {
-    this.showChart = false
+    this.showChart = true
   },
   beforeDestroy () {
     clearInterval(this.recursiveInterval)
@@ -458,13 +479,17 @@ export default {
   height: 50px;
   z-index: 1;
 }
-#sudoku-controls {
+#sudoku-options {
   box-sizing: border-box;
   padding-top: 50px;
   position: absolute;
   height: 100%;
   width: 300px;
   background: rgba(0,0,0,.5);
+}
+#sudoku-options button {
+  width: 100%;
+  flex: 1 1 auto;
 }
 #sudoku-box {
   box-sizing: border-box;
@@ -523,9 +548,40 @@ export default {
 #sudoku-box:nth-child(n + 73) {
   border-bottom-width: 1.5px;
 }
-button {
-  position: relative;
-  width: 300px;
-  flex: 1 1 auto;
+h1 {
+  color: white;
+  margin-left: 10px;
+}
+input {
+  background: transparent;
+  color: white;
+}
+input::placeholder {
+  color: white;
+}
+
+#home-button {
+  bottom: 0;
+  right: 0;
+  margin: 20px 50px;
+  padding: 10px 20px;
+  position: absolute;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border-style: solid;
+  border-width: 1px;
+  border-bottom-width: 3px;
+  border-color: white;
+  color: white;
+  float: right;
+  outline-width: 1px;
+  outline-color: white;
+  cursor: pointer;
+  z-index: 2;
+}
+
+#home-button:hover {
+  border-bottom-width: 2px;
+  outline: none;
 }
 </style>
