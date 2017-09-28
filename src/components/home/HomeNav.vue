@@ -2,13 +2,11 @@
      This is the landing page of the website with four quadrants to select what category of routes to look at.-->
 
 <template>
-  <router-link id="home-nav" :to="route.name" :style="{ 'background-image': 'url(' + route.background_image + ')' }">
+  <router-link class="dim" id="home-nav" :to="route.name" :style="{ 'background-image': 'url(' + route.background_image + ')' }">
     <div class="flex-column" id="home-preview">
       <span></span>
       <h1>{{route.display_name}}</h1>
       <span></span>
-    </div>
-    <div class="background dim">
     </div>
   </router-link>
 </template>
