@@ -481,10 +481,11 @@ export default {
   margin: 10px;
   position: absolute;
   height: 50px;
-  z-index: 1;
+  z-index: 2;
 }
 #sudoku-options {
   box-sizing: border-box;
+  z-index: 1;
   padding-top: 50px;
   position: absolute;
   height: 100%;

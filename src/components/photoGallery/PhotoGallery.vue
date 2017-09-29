@@ -3,6 +3,11 @@
 
 <template>
   <div id="photo-gallery">
+    <div id="logo">
+      <router-link :to="'/'" id="logo">
+      Melonade
+      </router-link>
+    </div>
     <div id="photo-nav-toggle" @click="toggleNav()">
       <icon name="angle-up" height="50px" scale=10 v-if="!showNav"></icon>
       <icon name="angle-down" height="50px" scale=10 v-else></icon>
@@ -15,7 +20,7 @@
     </div>
     <transition name="slide-up">
       <div class="flex-row" v-show="showNav" id="photo-nav">
-        <div :class="{ 'active' : index == currentId }" id="photo-nav-button" v-for="(photo, index) in photos" @click="selectImage(index)" :style="{ 'background-image': 'url(' + photo.background_url + ')' }">
+        <div :class="{ 'active' : index == currentId }" id="photo-nav-button" v-for="(photo, index) in photos" @click="selectImage(index)" :style="{ 'background-image': 'url(' + photo.preview_url + ')' }">
           <h1>{{ photo.title }}</h1>
         </div>
       </div>
@@ -45,7 +50,7 @@
     created () {
       this.photos = photodata
       for (var i = 0; i < this.photos.length; i++) {
-        this.photos[i]['preview_url'] = this.photos[i]['base_url'] + 'h275-w350-no?.jpg'
+        this.photos[i]['preview_url'] = this.photos[i]['base_url'] + 'h400-w500-no?.jpg'
         this.photos[i]['background_url'] = this.photos[i]['base_url'] + 'h1450-w1920-no?.jpg'
       }
       this.photoInterval = setInterval(function () {
@@ -97,7 +102,7 @@
     position: fixed;
     text-align: center;
     bottom: 0;
-    z-index: 2;
+    z-index: 4;
     height: 50px;
     width: 100%;
     display:flex;
@@ -118,7 +123,6 @@
     align-items: center;
     justify-content: center;
     transition: all 1s ease;
-    padding-left: 10%;
   }
 
   #photo-nav-prev {
@@ -132,7 +136,6 @@
     align-items: center;
     justify-content: center;
     transition: all 1s ease;
-    padding-right: 10%;
   }
 
   #photo-nav-toggle:hover, #photo-nav-prev:hover, #photo-nav-next:hover {
@@ -157,7 +160,7 @@
 
   #photo-nav {
     position: fixed;
-    z-index: 1;
+    z-index: 3;
     width: 100%;
     height: 100%;
     flex-wrap: wrap;
@@ -209,20 +212,43 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    transition: all 3s ease;
+    transition: all 1.5s ease;
   }
 
   #photo-details {
+    z-index: 2;
     position: absolute;
-    bottom: 5vh;
-    right: 10vw;
+    bottom: 5%;
+    right: 10%;
     color: white;
     transition: opacity .5s;
     text-shadow: 0 0 5px black;
+    width: 40%;
+    height: 30%;
+    text-align: right;
+    vertical-align: bottom;
   }
 
   #photo-details:hover {
     opacity: 0;
+    transition: opacity 1s;
+  }
+
+  #logo {
+    position: absolute;
+    z-index: 2;
+    font-family: 'Sacramento', cursive;
+    font-size: 9vmin;
+    text-align: center;
+    margin-top: 5%;
+    margin-left: 5%;
+    opacity: 0;
+    transition: opacity 1s;
+  }
+
+  #logo:hover {
+    opacity: 1;
+    z-index: 2;
     transition: opacity 1s;
   }
 
@@ -236,9 +262,10 @@
 
   h2 {
     font-size: 80px;
-  }
-
-  h2:hover {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    cursor: default;
   }
 
   .slide-up-enter-active, .slide-up-leave-active {
