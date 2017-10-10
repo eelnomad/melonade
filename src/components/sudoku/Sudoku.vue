@@ -4,34 +4,48 @@
 <template>
   <div class="flex-row" id="sudoku">
     <div id="sudoku-options-toggle" @click="toggleOptions()">
-      <icon name="angle-right" scale="3" color="white" spin v-if="!showOptions"></icon>
-      <icon name="angle-right" scale="3" color="white" flip="horizontal" v-else></icon>
+      <icon name="angle-right" scale="2" color="white" v-if="!showOptions"></icon>
+      <icon name="angle-right" scale="2" color="white" flip="horizontal" v-else></icon>
     </div>
     <transition name="fade">
       <div class="flex-column" id="sudoku-options" v-show="showOptions">
+        <span></span>
+        <div id="logo">
+          <router-link :to="'/'" id="logo">
+          Melonade
+          </router-link>
+        </div>
+        <span></span>
         <label>
           <h1>
             Controls
           </h1>
         </label>
-        <button @click="toggleChart()">{{ showChart ? 'Hide' : 'Show' }} Chart</button>
-        <button @click="clear()" :disabled="solving">Clear Grid</button>
-        <button @click="togglePause()" :disabled="!solving">{{ pause ? 'Resume' : 'Pause' }}</button>
-        <button @click="stop()" :disabled="!solving">Stop</button>
-        <button @click="currentState()">Get State</button>
-        <input v-model="state" placeholder="Load Custom State Here" :disabled="solving">
+        <div id="sudoku-options-button" @click="toggleChart()">{{ showChart ? 'Hide' : 'Show' }} Chart</div>
+        <div id="sudoku-options-button" @click="clear()" :disabled="solving">Clear Grid</div>
+        <div id="sudoku-options-button" @click="togglePause()" :disabled="!solving">{{ pause ? 'Resume' : 'Pause' }}</div>
+        <div id="sudoku-options-button" @click="stop()" :disabled="!solving">Stop</div>
+        <span></span>
         <label>
           <h1>
             Solve
           </h1>
         </label>
-        <input type="number" v-model.number="displayInterval" min="0" max="10" placeholder="Delay between iterations (ms)">
-        <button @click="recursiveSolve()" :disabled="solving">Recurssion</button>
-        <button @click="mcSolve()" :disabled="solving">MonteCarlo</button>
-        <button @click="gaSolve()" :disabled="solving">Genetic Algorithm</button>
+        <div id="sudoku-options-button" @click="recursiveSolve()" :disabled="solving">Recurssion</div>
+        <div id="sudoku-options-button" @click="mcSolve()" :disabled="solving">MonteCarlo</div>
+        <div id="sudoku-options-button" @click="gaSolve()" :disabled="solving">Genetic Algorithm</div>
+        <span></span>
+        <label>
+          <h1>
+            Configuration
+          </h1>
+        </label>
+        <div id="sudoku-options-button" @click="currentState()">Get State</div>
+        <input id="sudoku-options-button" v-model="state" placeholder="Load Custom State Here" :disabled="solving">
+        <input id="sudoku-options-button" type="number" v-model.number="displayInterval" min="0" max="10" placeholder="Delay between iterations (ms)" :disabled="solving">
+        <span></span>
       </div>
     </transition>
-    <router-link id="home-button" :to="{name: 'home'}">Home</router-link>
     <span></span>
     <highstock v-cloak id="sudoku-chart" v-show="showChart" :options="mcChartOptions" ref="highstock"></highstock>
     <div id="sudoku-grid" v-show="!showChart">
@@ -50,7 +64,7 @@ export default {
       solving: false,
       saveState: '',
       state: '',
-      displayInterval: 0,
+      displayInterval: '',
       recursiveStack: [],
       recursiveInProgress: false,
       pause: false,
@@ -60,7 +74,7 @@ export default {
       mcChartOptions: {},
       mcTemperature: 0,
       mcTemperatureThreshold: 0.25,
-      mcTemperatureMax: 0.6,
+      mcTemperatureMax: 0.4,
       mcLoop: 0,
       showOptions: false,
       showChart: true
@@ -74,7 +88,10 @@ export default {
       this.showChart = !this.showChart
     },
     togglePause: function () {
-      this.pause = !this.pause
+      if (this.solving) {
+        this.pause = !this.pause
+        this.currentState()
+      }
     },
     gaSolve: function () {
       alert('hahaha, you wish this were ready :P')
@@ -131,7 +148,7 @@ export default {
         this.mcLoop++
       }
       if (this.mcLoop % 100 === 0) {
-        this.mcTemperature *= 0.999
+        this.mcTemperature *= 0.99
       }
       if (this.mcTemperature <= this.mcTemperatureThreshold) this.mcTemperature = this.mcTemperatureMax * Math.pow(0.8, this.mcLoop / 12000)
       if (this.mcTemperature <= this.mcTemperatureThreshold) this.mcLoop = 0
@@ -292,6 +309,7 @@ export default {
       if (!this.isValidGrid()) {
         return false
       }
+      if (this.displayInterval === '') this.displayInterval = 0
       this.solving = true
       this.possibilitiesGrid()
       return true
@@ -300,6 +318,8 @@ export default {
       clearInterval(this.mcGraphInterval)
       clearInterval(this.recursiveInterval)
       clearInterval(this.mcInterval)
+      this.currentState()
+      this.displayInterval = ''
       this.pause = false
       this.recursiveInProgress = false
       this.mcInProgress = false
@@ -392,7 +412,7 @@ export default {
           }
         ],
         inputEnabled: false,
-        selected: 3
+        selected: 1
       },
       title: {
         text: 'MonteCarlo Cost History',
@@ -447,8 +467,7 @@ export default {
     this.showChart = false
   },
   beforeDestroy () {
-    clearInterval(this.recursiveInterval)
-    clearInterval(this.mcInterval)
+    this.stop()
   }
 }
 </script>
@@ -481,6 +500,7 @@ export default {
   margin: 10px;
   position: absolute;
   height: 50px;
+  width: 50px;
   z-index: 2;
 }
 #sudoku-options {
@@ -490,11 +510,34 @@ export default {
   position: absolute;
   height: 100%;
   width: 300px;
-  background: rgba(0,0,0,.5);
+  background: rgba(0,0,0,.65);
 }
-#sudoku-options button {
+#sudoku-options div {
   width: 100%;
   flex: 1 1 auto;
+}
+#sudoku-options-button {
+  font-family: 'Quicksand', sans-serif;
+  height: 40px;
+  display:flex;
+  color: grey;
+  align-items: center;
+  justify-content: center;
+}
+#sudoku-options-button[disabled] {
+  color: black;
+}
+#sudoku-options-button[disabled]:hover {
+  color: black;
+  background: rgba(0,0,0,0);
+  height: 40px;
+}
+#sudoku-options-button:hover, #sudoku-options-button:focus {
+  outline: none;
+  height: 50px;
+  color: white;
+  background: rgba(0,0,0,.75);
+  transition: all 0.25s ease;
 }
 #sudoku-box {
   box-sizing: border-box;
@@ -553,40 +596,48 @@ export default {
 #sudoku-box:nth-child(n + 73) {
   border-bottom-width: 1.5px;
 }
+
 h1 {
   color: white;
   margin-left: 10px;
+  font-size: 25px;
 }
 input {
   background: transparent;
   color: white;
+  border-style: none;
+}
+input#sudoku-options-button, 
+input#sudoku-options-button:focus, 
+input#sudoku-options-button[disabled], 
+input#sudoku-options-button[disabled]:focus {
+  color: grey;
+  height: 30px;
+  text-align: center;
+}
+input#sudoku-options-button:hover, 
+input#sudoku-options-button[disabled]:hover {
+  color: grey;
+  height: 30px;
 }
 input::placeholder {
-  color: white;
+  color: grey;
+  text-align: center;
 }
 
-#home-button {
-  bottom: 0;
-  right: 0;
-  margin: 20px 50px;
-  padding: 10px 20px;
-  position: absolute;
-  background-color: transparent;
-  background-repeat: no-repeat;
-  border-style: solid;
-  border-width: 1px;
-  border-bottom-width: 3px;
-  border-color: white;
-  color: white;
-  float: right;
-  outline-width: 1px;
-  outline-color: white;
-  cursor: pointer;
-  z-index: 2;
+label {
+  display:flex;
+  align-items: center;
+  justify-content: center;
 }
 
-#home-button:hover {
-  border-bottom-width: 2px;
-  outline: none;
+#logo a {
+  font-family: 'Sacramento', cursive;
+  color: white;
+  font-size: 9vmin;
+  text-align: center;
+  margin-top: 5%;
+  margin-left: 5%;
+  transition: opacity 1s;
 }
 </style>

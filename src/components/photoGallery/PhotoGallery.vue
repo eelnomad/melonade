@@ -68,6 +68,9 @@
         return [this.photos[this.currentId]]
       }
     },
+    beforeDestroy () {
+      clearInterval(this.photoInterval)
+    },
     methods: {
       toggleNav: function () {
         this.showNav = !this.showNav
@@ -105,7 +108,7 @@
     z-index: 4;
     height: 50px;
     width: 100%;
-    display:flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     transition: all 1s ease;
@@ -139,7 +142,7 @@
   }
 
   #photo-nav-toggle:hover, #photo-nav-prev:hover, #photo-nav-next:hover {
-    opacity: 0.5;
+    opacity: 0.75;
     transition: all 1s ease;
   }
 
@@ -266,6 +269,27 @@
     bottom: 0;
     right: 0;
     cursor: default;
+  }
+
+  @keyframes pulse {
+    0%   { opacity:1; }
+    50%  { opacity:0; }
+    100% { opacity:1; }
+  }
+  @-o-keyframes pulse{
+    0%   { opacity:1; }
+    50%  { opacity:0; }
+    100% { opacity:1; }
+  }
+  @-moz-keyframes pulse{
+    0%   { opacity:1; }
+    50%  { opacity:0; }
+    100% { opacity:1; }
+  }
+  @-webkit-keyframes pulse{
+    0%   { opacity:1; }
+    50%  { opacity:0; }
+    100% { opacity:1; }
   }
 
   .slide-up-enter-active, .slide-up-leave-active {
