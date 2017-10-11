@@ -65,6 +65,8 @@ export default {
       saveState: '',
       state: '',
       displayInterval: '',
+      showOptions: false,
+      showChart: true,
       recursiveStack: [],
       recursiveInProgress: false,
       pause: false,
@@ -75,9 +77,7 @@ export default {
       mcTemperature: 0,
       mcTemperatureThreshold: 0.25,
       mcTemperatureMax: 0.4,
-      mcLoop: 0,
-      showOptions: false,
-      showChart: true
+      mcLoop: 0
     }
   },
   methods: {
@@ -634,10 +634,10 @@ label {
 #logo a {
   font-family: 'Sacramento', cursive;
   color: white;
-  font-size: 9vmin;
+  font-size: 75px;
   text-align: center;
   margin-top: 5%;
-  margin-left: 5%;
+  padding-left: 5%;
   transition: opacity 1s;
 }
 </style>

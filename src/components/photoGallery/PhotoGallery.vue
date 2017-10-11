@@ -1,5 +1,5 @@
 <!-- PhotoGallery.vue
-     This is the page that shows the Photo Gallery.-->
+     This is the page that shows the Photo Gallery. Yes, I know the css here is awful.-->
 
 <template>
   <div id="photo-gallery">
@@ -101,44 +101,36 @@
     background-repeat: no-repeat;
   }
 
-  #photo-nav-toggle {
+  #photo-nav-toggle, #photo-nav-next, #photo-nav-prev {
     position: fixed;
-    text-align: center;
-    bottom: 0;
-    z-index: 4;
-    height: 50px;
-    width: 100%;
+    opacity: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 1s ease;
-    opacity: 0;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  #photo-nav-toggle {
+    bottom: 0;
+    z-index: 4;
+    height: 50px;
+    width: 100%;
   }
 
   #photo-nav-next {
     z-index: 1;
-    position: fixed;
     height: 100%;
     width: 10%;
     right: 0;
-    opacity: 0;
-    display:flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 1s ease;
   }
 
   #photo-nav-prev {
     z-index: 1;
-    position: fixed;
     height: 100%;
     width: 10%;
     left: 0;
-    opacity: 0;
-    display:flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 1s ease;
   }
 
   #photo-nav-toggle:hover, #photo-nav-prev:hover, #photo-nav-next:hover {
@@ -182,6 +174,7 @@
     transition: all 1s ease;
     background-size: 200%;
     filter: grayscale(100%);
+    cursor: pointer;
   }
 
   #photo-nav-button:hover {
