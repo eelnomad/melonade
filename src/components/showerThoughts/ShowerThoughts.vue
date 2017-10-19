@@ -81,7 +81,7 @@
         })
       },
       getShowerThoughts: function () {
-        this.$http.get('https://oauth.reddit.com/r/showerthoughts/rising', {
+        this.$http.get('https://oauth.reddit.com/r/showerthoughts/rising?limit=100', {
           headers: {
             Authorization: this.access_token
           }
