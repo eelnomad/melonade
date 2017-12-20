@@ -54,6 +54,7 @@
     -moz-transition: height .5s ease;
     -o-transition: height .5s ease;
     transition: height .5s ease;
+    transition-delay: .3s;
   }
 
   .main-nav-inactive {
@@ -81,13 +82,14 @@
   }
 
   #main-nav-bar {
-    flex: 1 0 auto;
+    flex: 1 0 50px;
     width: 100%;
     position: relative;
   }
 
   #main-nav-item {
     display: flex;
+    flex-align: center;
     flex: 1 1 auto;
     font-size: inherit;
     color: inherit;
@@ -113,7 +115,7 @@
     text-align: center;
     vertical-align: center;
     background-position: center;
-    background-size: 100vw;
+    background-size: 100vmax;
     box-shadow: inset 0 20px 30px -20px black;
   }
 
