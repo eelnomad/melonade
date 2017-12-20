@@ -46,7 +46,7 @@ export default new Router({
       name: 'showerthoughts',
       component: ShowerThoughts,
       display_name: 'Shower Thoughts',
-      level: 'home',
+      level: 'smallProjects',
       background_image: 'https://lh3.googleusercontent.com/kZZ3Em_o77SevGgkc3kk20uwcI9bXSnJ8k8wFFbn8o0Sjojx8WwbywNKH90Q-8C39qXhXXSMvcJJx-SAKmasI4Yg69MVe0qVW2L6IFS5UxvCJ8O5hlBye__8BA0u0ghNNpy7TACdP_O3fC8-l2EZID4nnUa-gFt4WN9cPq8Q4Z5Sc7iZJNTjeCe8oxDumA5HX4KErXne20wPXEJa3zOyt0-1SaZy36sRFkE0jlhZa7wrXGzAnh92dWydExUBQhGM9ej4xCZxYecy40XZhoz2t964IbaYt3CLjK0k-2iqUMhMCPlUPCCqw2i5vPXYao4adqijtYyHhcd2rrVrGrQPEAOzCOhkzQWv-rfcks9f0UrfAeXqCpdaoI97TtggNgpJp-R_QsEDNDpKFvC7R8LqwzUsQQH0GOUk8MUISktZwIr1g2sKmVoZuKi-yNL6lWl7zQrwlQKJo9SMPqzwRIBiIlzfxNXkz645zFDWriJ56ae-R-rf_RHw2lefAB4wL9tjOX2esKIKEFoCp3XBM5frTf35s7oPsiwIONvM-bTNCrUs9XgCHFLNSohq-U8cfL0JcMEiHKHR1OkfpLZqtQ2v1RJpHYxnC38RoKlO6pUe3DaO9SFa2MZpEGp68NUwxPqNws4Nyw932I_u3vhwlEu5_UyvpwitaXJ_HFhoNKF4c2AxgA=w1425-h950-no?.jpg'
     },
     {
@@ -77,7 +77,7 @@ export default new Router({
       path: '/about',
       name: 'about',
       component: About,
-      display_name: 'About me!',
+      display_name: 'About me',
       level: 'home',
       background_image: 'https://lh3.googleusercontent.com/0WM9gJhSWFEJcxNpfB-vzUVlN9IjnFpKLKfOvdvHRXWSV9jNcHpLa0vuERLHl5gKFA3_V-MDN06BIIjcR9mIvyCFQXAuXlx6_5hH902JwrR7IaSNkgk4-eCbjN_UuVgWs8_Kksz-WycM2MNjSPACkdk78ruwJEmAQ7s2swKDiEpLvLQTIAOVOIQm2tEG6Q5ssjxRHuc97mt2PXl3YOhtmePN3PMVA0E3sOaztQibC3deMudGYa7NZFzOQ7UP8BHnVgb2DSvKZxp_BdNmVaFAYD-w3Wy-_i6Cqyq8DKbiQswIhfj7flvu5TaVsqujFDDRy6xVHTXkHiK9kifcSc4AzCk5ymrfIBrKcfhtfCEmKAQlW3Rec8hooRVXcp6sIlB9eT9rpvY2Fmj2Gk2Wjbe3MBs2sWMcghh2fng2Os4uYoOpq1ysbAX2v5FZG8YidBD087FGm0niKTP7SFUH-tuAzY_2vrGdtWYNOlbvQQjlGH06RfvB3623d-Y17-yzKYUCGB0wy102A2OWI6rBNh0OaEX4u0efT4sHDm6RZidcd8f5r-0UhU1c-3Voy3wBsKslCdxrhlUUOLWOEuRBVvIAc9PJj_lODmyqlwN8ZW6rC7VXE7At3MzhRqEIK70wBBkFu4nY8VZ92tUUssWAqED8OQ7urHg7Ev_eWyBiz1_AXXyOoA=w1425-h950-no?.jpg'
     },

@@ -1,5 +1,7 @@
 <template>
   <div id="app">
+    <main-nav v-show="active || $route.name === 'home'"></main-nav>
+    <nav-toggle></nav-toggle>
     <transition name="fade">
       <router-view></router-view>
     </transition>
@@ -7,11 +9,17 @@
 </template>
 
 <script>
+  import MainNav from './components/navigation/MainNav'
   import 'normalize.css/normalize.css'
   import './assets/css/custom.css'
 
   export default {
     name: 'app',
+    data () {
+      return {
+        active: false
+      }
+    },
     head: {
       title: {
         inner: 'Melonade'
@@ -35,8 +43,8 @@
         localStorage.setItem('melonade_device_id', uuid)
       }
     },
-    methods: {
-
+    components: {
+      MainNav
     }
   }
 </script>
