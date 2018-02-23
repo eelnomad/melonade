@@ -47,13 +47,11 @@
   }
 
   #home-text {  
-    margin: 60px;
+    margin: 3% 6% 5% 15%;
     width: 60%;
   }
 
   #update-text {
-    margin: 60px;
+    margin: 3% 15% 5% 6%;
   }
-
-
 </style>

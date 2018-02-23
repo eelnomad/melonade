@@ -49,17 +49,23 @@
     <span></span>
     <highstock v-cloak id="sudoku-chart" v-show="showChart" :options="mcChartOptions" ref="highstock"></highstock>
     <div id="sudoku-grid" v-show="!showChart">
-      <input id="sudoku-box" v-for="i in grid" maxlength="1" v-model="i.value" :disabled="solving">
+      <input id="sudoku-box" v-for="(i, index) in grid" maxlength="1" v-model="i.value" v-on:keyup="validateInput(i, index)" :disabled="solving">
     </div>
     <span></span>
   </div>
 </template>
 
 <script>
+import sudokuMonteCarlo from './SudokuMonteCarlo.js'
+import sudokuRecursive from './SudokuRecursive.js'
+import sudokuGenetic from './SudokuGenetic.js'
+
 export default {
   name: 'sudoku',
+  mixins: [sudokuMonteCarlo, sudokuRecursive, sudokuGenetic],
   data () {
     return {
+      // General Variables
       grid: {},
       solving: false,
       saveState: '',
@@ -67,180 +73,52 @@ export default {
       displayInterval: '',
       showOptions: false,
       showChart: true,
+      pause: false,
+      // Recursive Variables
       recursiveStack: [],
       recursiveInProgress: false,
-      pause: false,
       mcVariableSquares: [],
-      mcIndex: 0,
+      // MonteCarlo Variables
+      mcLoop: 0,
       mcInProgress: false,
       mcChartOptions: {},
       mcTemperature: 0,
+      // MonteCarlo Options
       mcTemperatureThreshold: 0.25,
-      mcTemperatureMax: 0.4,
-      mcLoop: 0
+      mcTemperatureMax: 0.4
     }
   },
   methods: {
-    toggleOptions: function () {
-      this.showOptions = !this.showOptions
-    },
-    toggleChart: function () {
-      this.showChart = !this.showChart
-    },
-    togglePause: function () {
-      if (this.solving) {
-        this.pause = !this.pause
-        this.currentState()
+    start: function () {
+      if (!this.isValidGrid()) {
+        return false
       }
+      if (this.displayInterval === '') this.displayInterval = 0
+      this.solving = true
+      this.possibilitiesGrid()
+      return true
     },
-    gaSolve: function () {
-      alert('hahaha, you wish this were ready :P')
-    },
-    mcChangeCost: function (key, oldVal, newVal) {
-      for (var i = 0; i < 3; i++) {
-        for (var j = 0; j < 9; j++) {
-          if (key !== this.grid[key].related[i][j]) {
-            if (oldVal === this.grid[this.grid[key].related[i][j]].value) {
-              this.grid[key].cost--
-              this.grid[this.grid[key].related[i][j]].cost--
-            } else if (newVal === this.grid[this.grid[key].related[i][j]].value) {
-              this.grid[key].cost++
-              this.grid[this.grid[key].related[i][j]].cost++
-            }
-          }
-        }
-      }
-      this.$set(this.grid[key], 'value', newVal)
-    },
-    mcStep: function () {
-      this.mcInProgress = true
-      this.mcLoop++
-      while (this.mcLoop % 25 !== 0) {
-        while (this.mcIndex !== this.mcVariableSquares.length) {
-          var key = this.mcVariableSquares[this.mcIndex]
-          var newVal = this.mcRandomValue(key)
-          // If value didn't change, skip logic
-          if (newVal !== this.grid[key].value) {
-            // If new cost is less than old cost, keep changes
-            var newCost = this.mcIndividualCost(key, newVal)
-            if (newCost <= this.grid[key].cost) {
-              this.mcChangeCost(key, this.grid[key].value, newVal)
-            } else {
-              if (Math.random() < Math.exp((this.grid[key].cost - newCost) / this.mcTemperature)) {
-                this.mcChangeCost(key, this.grid[key].value, newVal)
-              }
-            }
-          }
-          // Push new cost to end of list and check if === 0
-          var cost = this.mcTotalCost()
-          if (cost <= 0) {
-            this.$refs.highstock.chart.series[0].addPoint([Date.now(), cost], false)
-            this.$refs.highstock.chart.series[1].addPoint([Date.now(), this.mcTemperature], false)
-            this.$refs.highstock.chart.redraw()
-            return this.stop()
-          }
-          // Increment Index for next run and implement loopback
-          this.mcIndex++
-        }
-        this.$refs.highstock.chart.series[0].addPoint([Date.now(), cost], false)
-        this.$refs.highstock.chart.series[1].addPoint([Date.now(), this.mcTemperature], false)
-        this.mcIndex = 0
-        this.mcLoop++
-      }
-      if (this.mcLoop % 100 === 0) {
-        this.mcTemperature *= 0.99
-      }
-      if (this.mcTemperature <= this.mcTemperatureThreshold) this.mcTemperature = this.mcTemperatureMax * Math.pow(0.8, this.mcLoop / 12000)
-      if (this.mcTemperature <= this.mcTemperatureThreshold) this.mcLoop = 0
-      this.mcInProgress = false
-      return false
-    },
-    mcSolve: function () {
-      if (!this.start()) return false
-      // Reinit MonteCarlo Setup
-      this.$refs.highstock.chart.series[0].setData([])
-      this.$refs.highstock.chart.series[1].setData([])
-      this.mcVariableSquares = []
-      this.mcIndex = 0
-      this.mcLoop = 0
-      // Collect all squares that need to be filled in and fill them in
-      for (var key in this.grid) {
-        if (this.grid[key].value === '') {
-          this.mcVariableSquares.push(key)
-          this.$set(this.grid[key], 'value', this.mcRandomValue(key))
-        }
-      }
-      if (this.mcVariableSquares.length === 0) return this.stop()
-      // Calculate cost for all squares
-      for (key in this.grid) {
-        this.$set(this.grid[key], 'cost', this.mcIndividualCost(key, this.grid[key].value))
-      }
-      this.mcInterval = setInterval(function () {
-        if (!this.pause && !this.mcInProgress) this.solving = !this.mcStep()
-      }.bind(this), this.displayInterval)
-      this.mcGraphInterval = setInterval(function () {
-        this.$refs.highstock.chart.redraw()
-      }.bind(this), 3000)
-    },
-    mcTotalCost: function () {
-      var cost = 0
-      for (var key in this.grid) {
-        cost += this.grid[key].cost
-      }
-      return cost
-    },
-    mcRandomValue: function (key) {
-      // return this.grid[key].possible[Math.floor(Math.random() * this.grid[key].possible.length)]
-      return '123456789'[Math.floor(Math.random() * 9)]
-    },
-    mcIndividualCost: function (key, value) {
-      var cost = 0
-      for (var i = 0; i < 3; i++) {
-        for (var j = 0; j < 9; j++) {
-          if (value === this.grid[this.grid[key].related[i][j]].value && key !== this.grid[key].related[i][j]) cost++
-        }
-      }
-      return cost
-    },
-    recursiveImmitation: function () {
-      this.recursiveInProgress = true
-      if (this.recursiveStack.length === 0) {
-        alert('No solution found')
-        this.stop()
-      } else {
-        var key = this.recursiveStack[this.recursiveStack.length - 1]
-        if (key === '') {
-          return this.stop()
-        } else if (this.grid[key].possible.length === 0) {
-          this.$set(this.grid[key], 'value', '')
-          this.recursiveStack.pop()
-        } else {
-          this.$set(this.grid[key], 'value', this.grid[key].possible[Math.floor(Math.random() * this.grid[key].possible.length)])
-          this.$set(this.grid[key], 'possible', this.grid[key].possible.replace(this.grid[key].value, ''))
-          this.possibilitiesGrid()
-          this.recursiveStack.push(this.unassignedFewestPossibilities())
-        }
-      }
+    stop: function () {
+      clearInterval(this.mcGraphInterval)
+      clearInterval(this.recursiveInterval)
+      clearInterval(this.mcInterval)
+      this.currentState()
+      this.displayInterval = ''
+      this.pause = false
       this.recursiveInProgress = false
-      return false
+      this.mcInProgress = false
+      this.solving = false
+      return true
     },
-    recursiveSolve: function () {
-      if (!this.start()) return false
-      this.recursiveStack = [this.unassignedFewestPossibilities()]
-      this.recursiveInterval = setInterval(function () {
-        if (!this.pause && !this.recursiveInProgress) this.solving = !this.recursiveImmitation()
-      }.bind(this), this.displayInterval)
-    },
-    unassignedFewestPossibilities: function () {
-      var min = 10
-      var minKey = ''
-      for (var key in this.grid) {
-        if (this.grid[key].value === '' && this.grid[key].possible.length < min) {
-          min = this.grid[key].possible.length
-          minKey = key
+    validateInput: function (input, index) {
+      var valid = '123456789'
+      if (valid.indexOf(input.value) === -1) {
+        input.value = ''
+      } else {
+        if (document.activeElement.nextSibling) {
+          document.activeElement.nextSibling.focus()
         }
       }
-      return minKey
     },
     possibilitiesGrid: function () {
       for (var key in this.grid) {
@@ -305,26 +183,17 @@ export default {
         this.$set(this.grid[key], 'value', '')
       }
     },
-    start: function () {
-      if (!this.isValidGrid()) {
-        return false
-      }
-      if (this.displayInterval === '') this.displayInterval = 0
-      this.solving = true
-      this.possibilitiesGrid()
-      return true
+    toggleOptions: function () {
+      this.showOptions = !this.showOptions
     },
-    stop: function () {
-      clearInterval(this.mcGraphInterval)
-      clearInterval(this.recursiveInterval)
-      clearInterval(this.mcInterval)
-      this.currentState()
-      this.displayInterval = ''
-      this.pause = false
-      this.recursiveInProgress = false
-      this.mcInProgress = false
-      this.solving = false
-      return true
+    toggleChart: function () {
+      this.showChart = !this.showChart
+    },
+    togglePause: function () {
+      if (this.solving) {
+        this.pause = !this.pause
+        this.currentState()
+      }
     }
   },
   watch: {
@@ -333,134 +202,36 @@ export default {
       for (var key in this.grid) {
         if (isNaN(parseInt(newState[i]))) {
           this.$set(this.grid[key], 'value', '')
-          i++
         } else if (newState[i] === '0') {
           this.$set(this.grid[key], 'value', '')
-          i++
         } else {
           this.$set(this.grid[key], 'value', newState[i])
-          i++
         }
+        i++
       }
     }
   },
   created () {
-    this.mcTemperature = this.mcTemperatureMax
-    var rows = '012345678'
-    var cols = 'ABCDEFGHI'
     // Setting up grid
-    for (var i = 0; i < rows.length; i++) {
-      for (var j = 0; j < cols.length; j++) {
-        this.$set(this.grid, cols[i].concat(rows[j]), {
-          value: '',
-          possible: [],
-          cost: 0
-        })
+    for (var i = 0; i < 81; i++) {
+      var row = []
+      var col = []
+      var box = []
+
+      for (var j = 0; j < 9; j++) {
+        row.push((Math.floor(i / 9) * 9) + j)
       }
-    }
-    // Setting up related squares for each square
-    for (var key in this.grid) {
-      var set1 = []
-      for (i = 0; i < rows.length; i++) {
-        set1.push(key[0].concat(rows[i]))
+      for (var k = 0; k < 9; k++) {
+        col.push((i % 9) + 9 * k)
       }
-      var set2 = []
-      for (i = 0; i < cols.length; i++) {
-        set2.push(cols[i].concat(key[1]))
+      for (var l = 0; l < 9; l++) {
+        box.push((Math.floor(i / 27) * 27 + Math.floor((i % 9) / 3) * 3) + (Math.floor(l / 3) * 9) + (l % 3))
       }
-      var set3 = []
-      var xquad = Math.floor(cols.indexOf(key[0]) / 3)
-      var yquad = Math.floor(rows.indexOf(key[1]) / 3)
-      for (i = xquad * 3; i < xquad * 3 + 3; i++) {
-        for (j = yquad * 3; j < yquad * 3 + 3; j++) {
-          set3.push(cols[i].concat(rows[j]))
-        }
-      }
-      this.$set(this.grid[key], 'related', [set1, set2, set3])
-    }
-    this.mcChartOptions = {
-      chart: {
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        shadow: {
-          color: 'rgba(0, 0, 0, 0.5)',
-          opacity: 0.2,
-          width: 10
-        },
-        style: {
-          fontFamily: 'Quicksand, sans-serif'
-        },
-        marginRight: 40,
-        spacingTop: 20
-      },
-      rangeSelector: {
-        buttons: [
-          {
-            count: 10,
-            type: 'second',
-            text: '10S'
-          }, {
-            count: 1,
-            type: 'minute',
-            text: '1M'
-          }, {
-            count: 5,
-            type: 'minute',
-            text: '5M'
-          }, {
-            type: 'all',
-            text: 'All'
-          }
-        ],
-        inputEnabled: false,
-        selected: 1
-      },
-      title: {
-        text: 'MonteCarlo Cost History',
-        style: {
-          color: 'white',
-          marginTop: '20px',
-          fontSize: '24px'
-        }
-      },
-      exporting: {
-        enabled: false
-      },
-      series: [{
-        name: 'Cost',
-        data: [],
-        yAxis: 0
-      }, {
-        name: 'Temperature',
-        data: [],
-        dashStyle: 'shortdash',
-        yAxis: 1,
-        color: 'orange'
-      }],
-      xAxis: [{
-        labels: {
-          style: {
-            color: 'white'
-          }
-        }
-      }],
-      yAxis: [{
-        opposite: true,
-        labels: {
-          style: {
-            color: 'white'
-          }
-        },
-        offset: 25
-      }, {
-        opposite: false,
-        inside: true,
-        labels: {
-          style: {
-            color: 'white'
-          }
-        },
-        offset: -10
-      }]
+
+      this.$set(this.grid, i, {
+        value: '',
+        possible: [row, col, box]
+      })
     }
   },
   mounted () {
