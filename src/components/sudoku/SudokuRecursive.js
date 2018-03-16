@@ -1,12 +1,12 @@
 export default {
   methods: {
-    recursiveImmitation: function () {
+    recursive: function (stack) {
       this.recursiveInProgress = true
-      if (this.recursiveStack.length === 0) {
+      if (stack.length === 0) {
         alert('No solution found')
         this.stop()
       } else {
-        var key = this.recursiveStack[this.recursiveStack.length - 1]
+        var key = stack[stack.length - 1]
         if (key === '') {
           return this.stop()
         } else if (this.grid[key].possible.length === 0) {
@@ -39,6 +39,12 @@ export default {
         }
       }
       return minKey
+    },
+    recursiveStart: function () {
+      if (!this.isValidGrid()) return false
+      this.solving = true
+      var stack = ['hi']
+      console.log('stack: ' + stack)
     }
   }
 }

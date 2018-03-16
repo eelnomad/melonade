@@ -31,7 +31,7 @@
             Solve
           </h1>
         </label>
-        <div id="sudoku-options-button" @click="recursiveSolve()" :disabled="solving">Recurssion</div>
+        <div id="sudoku-options-button" @click="recursiveStart()" :disabled="solving">Recurssion</div>
         <div id="sudoku-options-button" @click="mcSolve()" :disabled="solving">MonteCarlo</div>
         <div id="sudoku-options-button" @click="gaSolve()" :disabled="solving">Genetic Algorithm</div>
         <span></span>
@@ -42,7 +42,6 @@
         </label>
         <div id="sudoku-options-button" @click="currentState()">Get State</div>
         <input id="sudoku-options-button" v-model="state" placeholder="Load Custom State Here" :disabled="solving">
-        <input id="sudoku-options-button" type="number" v-model.number="displayInterval" min="0" max="10" placeholder="Delay between iterations (ms)" :disabled="solving">
         <span></span>
       </div>
     </transition>
@@ -67,10 +66,10 @@ export default {
     return {
       // General Variables
       grid: {},
+      gridBackup: {},
       solving: false,
       saveState: '',
       state: '',
-      displayInterval: '',
       showOptions: false,
       showChart: true,
       pause: false,
@@ -90,50 +89,40 @@ export default {
   },
   methods: {
     start: function () {
-      if (!this.isValidGrid()) {
-        return false
-      }
-      if (this.displayInterval === '') this.displayInterval = 0
+      if (!this.isValidGrid) return false
+      this.gridBackup = Object.assign({}, this.grid)
       this.solving = true
-      this.possibilitiesGrid()
       return true
     },
-    stop: function () {
-      clearInterval(this.mcGraphInterval)
-      clearInterval(this.recursiveInterval)
-      clearInterval(this.mcInterval)
-      this.currentState()
-      this.displayInterval = ''
-      this.pause = false
-      this.recursiveInProgress = false
-      this.mcInProgress = false
-      this.solving = false
-      return true
+    stop: function (solved) {
+      if (!solved) {
+        this.grid = Object.assign({}, this.gridBackup)
+        return true
+      }
+      return false
     },
     validateInput: function (input, index) {
-      var valid = '123456789'
-      if (valid.indexOf(input.value) === -1) {
-        input.value = ''
-      } else {
+      if (parseInt(input.value) > 0 && parseInt(input.value) < 10) {
         if (document.activeElement.nextSibling) {
           document.activeElement.nextSibling.focus()
         }
+      } else {
+        input.value = ''
       }
     },
-    possibilitiesGrid: function () {
+    possibilities: function () {
       for (var key in this.grid) {
-        this.possibilities(key)
-      }
-    },
-    possibilities: function (key) {
-      if (this.grid[key].value === '') {
         var possible = '123456789'
-        for (var i = 0; i < 3; i++) {
-          for (var j = 0; j < 9; j++) {
-            possible = possible.replace(this.grid[this.grid[key].related[i][j]].value.toString(), '')
+        if (this.grid[key].value === '') {
+          for (var relatedSet in this.grid[key].related) {
+            for (var relatedKey in relatedSet) {
+              possible = possible.replace(this.grid[relatedKey].value.toString(), '')
+            }
           }
+          this.$set(this.grid[key], 'possible', possible)
+        } else {
+          this.$set(this.grid[key], 'possible', '')
         }
-        this.$set(this.grid[key], 'possible', possible)
       }
     },
     isValidGrid: function () {
@@ -154,22 +143,22 @@ export default {
       return true
     },
     isValid: function (key) {
+      console.log('valid check')
       var validValues = '123456789'
-      for (var i = 0; i < 3; i++) {
-        for (var j = 0; j < 9; j++) {
+      if (validValues.indexOf(this.grid[key].value) === -1) {
+        return false
+      }
+      for (var relatedSet in this.grid[key].related) {
+        for (var i = 0; i < this.grid[key].related[relatedSet].length; i++) {
           // To check that the value is actually a number between 1-9
-          if (validValues.indexOf(this.grid[key].value) === -1) return false
           // To check that the value doesn't conflict with any other related squares
-          if (this.grid[key].value === this.grid[this.grid[key].related[i][j]].value && key !== this.grid[key].related[i][j]) return false
+          if (this.grid[key].value === this.grid[this.grid[key].related[relatedSet][i]].value) {
+            return false
+          }
         }
       }
+      console.log('yay')
       return true
-    },
-    containsBlanks: function () {
-      for (var key in this.grid) {
-        if (this.grid[key].value === '') return true
-      }
-      return false
     },
     currentState: function () {
       var state = ''
@@ -217,20 +206,29 @@ export default {
       var row = []
       var col = []
       var box = []
-
+      var val
       for (var j = 0; j < 9; j++) {
-        row.push((Math.floor(i / 9) * 9) + j)
+        val = (Math.floor(i / 9) * 9) + j
+        if (val !== i) {
+          row.push(val)
+        }
       }
       for (var k = 0; k < 9; k++) {
-        col.push((i % 9) + 9 * k)
+        val = (i % 9) + 9 * k
+        if (val !== i) {
+          col.push(val)
+        }
       }
       for (var l = 0; l < 9; l++) {
-        box.push((Math.floor(i / 27) * 27 + Math.floor((i % 9) / 3) * 3) + (Math.floor(l / 3) * 9) + (l % 3))
+        val = (Math.floor(i / 27) * 27 + Math.floor((i % 9) / 3) * 3) + (Math.floor(l / 3) * 9) + (l % 3)
+        if (val !== i) {
+          box.push(val)
+        }
       }
 
       this.$set(this.grid, i, {
         value: '',
-        possible: [row, col, box]
+        related: {row, col, box}
       })
     }
   },
