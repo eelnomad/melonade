@@ -21,27 +21,27 @@
             Controls
           </h1>
         </label>
-        <div id="sudoku-options-button" @click="toggleChart()">{{ showChart ? 'Hide' : 'Show' }} Chart</div>
-        <div id="sudoku-options-button" @click="clear()" :disabled="solving">Clear Grid</div>
-        <div id="sudoku-options-button" @click="togglePause()" :disabled="!solving">{{ pause ? 'Resume' : 'Pause' }}</div>
-        <div id="sudoku-options-button" @click="stop()" :disabled="!solving">Stop</div>
+        <div class="sudoku-options-button" @click="toggleChart()">{{ showChart ? 'Hide' : 'Show' }} Chart</div>
+        <div class="sudoku-options-button" @click="clear()" :disabled="solving">Clear Grid</div>
+        <div class="sudoku-options-button" @click="togglePause()" :disabled="!solving">{{ pause ? 'Resume' : 'Pause' }}</div>
+        <div class="sudoku-options-button" @click="stop()" :disabled="!solving">Stop</div>
         <span></span>
         <label>
           <h1>
             Solve
           </h1>
         </label>
-        <div id="sudoku-options-button" @click="recursiveStart()" :disabled="solving">Recurssion</div>
-        <div id="sudoku-options-button" @click="mcSolve()" :disabled="solving">MonteCarlo</div>
-        <div id="sudoku-options-button" @click="gaSolve()" :disabled="solving">Genetic Algorithm</div>
+        <div class="sudoku-options-button" @click="recursiveStart()" :disabled="solving">Recurssion</div>
+        <div class="sudoku-options-button" @click="mcSolve()" :disabled="solving">MonteCarlo</div>
+        <div class="sudoku-options-button" @click="gaSolve()" :disabled="solving">Genetic Algorithm</div>
         <span></span>
         <label>
           <h1>
             Configuration
           </h1>
         </label>
-        <div id="sudoku-options-button" @click="currentState()">Get State</div>
-        <input id="sudoku-options-button" v-model="state" placeholder="Load Custom State Here" :disabled="solving">
+        <div class="sudoku-options-button" @click="currentState()">Get State</div>
+        <input class="sudoku-options-button" v-model="state" placeholder="Load Custom State Here" :disabled="solving">
         <span></span>
       </div>
     </transition>
@@ -201,6 +201,9 @@ export default {
     }
   },
   created () {
+    this.$store.dispatch('hideHeader')
+    console.log('010020300002003040050000006004700050000100003070068000300004090000600104006000000')
+
     // Setting up grid
     for (var i = 0; i < 81; i++) {
       var row = []
@@ -285,7 +288,7 @@ export default {
   width: 100%;
   flex: 1 1 auto;
 }
-#sudoku-options-button {
+.sudoku-options-button {
   font-family: 'Quicksand', sans-serif;
   height: 40px;
   display:flex;
@@ -293,15 +296,15 @@ export default {
   align-items: center;
   justify-content: center;
 }
-#sudoku-options-button[disabled] {
+.sudoku-options-button[disabled] {
   color: black;
 }
-#sudoku-options-button[disabled]:hover {
+.sudoku-options-button[disabled]:hover {
   color: black;
   background: rgba(0,0,0,0);
   height: 40px;
 }
-#sudoku-options-button:hover, #sudoku-options-button:focus {
+.sudoku-options-button:hover, .sudoku-options-button:focus {
   outline: none;
   height: 50px;
   color: white;
@@ -376,15 +379,15 @@ input {
   color: white;
   border-style: none;
 }
-input#sudoku-options-button, 
-input#sudoku-options-button:focus, 
-input#sudoku-options-button[disabled], 
+input#sudoku-options-button,
+input#sudoku-options-button:focus,
+input#sudoku-options-button[disabled],
 input#sudoku-options-button[disabled]:focus {
   color: grey;
   height: 30px;
   text-align: center;
 }
-input#sudoku-options-button:hover, 
+input#sudoku-options-button:hover,
 input#sudoku-options-button[disabled]:hover {
   color: grey;
   height: 30px;

@@ -7,6 +7,7 @@ import head from './head'
 import http from './http'
 import highcharts from './highcharts'
 import icon from './icon'
+import store from './vuex'
 
 Vue.config.productionTip = false
 
@@ -18,6 +19,7 @@ new Vue({
   http,
   highcharts,
   icon,
+  store,
   template: '<App/>',
   components: { App }
 })

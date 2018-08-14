@@ -2,13 +2,15 @@
      Contains main-nav to appear in all pages-->
 
 <template>
-  <div id="main-nav" class="flex-column" v-bind:class="active ? 'main-nav-active' : 'main-nav-inactive'">
-    <div id="logo">
-      <h1>Melonade</h1>
-    </div>
-    <div class="flex-row" @mouseenter="toggleActive()" @mouseleave="toggleActive()" id="main-nav-bar">
-      <div id="main-nav-item" v-for="route in routes">
-        <router-link class="flex-column" :to="route.name" :style="{ 'background-image': 'url(' + route.background_image + ')' }">
+  <div id="main-nav" class="flex-column" v-bind:class="active === -1 ? 'main-nav-inactive' : 'main-nav-active'">
+    <router-link :to="'home'">
+      <div id="logo">
+        <h1>Melonade</h1>
+      </div>
+    </router-link>
+    <div class="flex-row" @mouseleave="set_active(-1)" @click="set_active(-1)" id="main-nav-bar">
+      <div id="main-nav-item" v-for="route, index in routes" @mouseenter="set_active(index)" v-bind:class="active === index ? 'main-nav-item-active' : 'main-nav-item-inactive'">
+        <router-link class="flex-column nav-item" :to="route.name" :style="{ 'background-image': 'url(' + route.background_image + ')' }">
           <span></span>
           <h2>{{route.display_name}}</h2>
           <span></span>
@@ -23,21 +25,18 @@
     name: 'main-nav',
     data () {
       return {
-        active: false,
+        active: -1,
         routes: []
       }
     },
     created () {
-      this.routes = this.getRoutes()
+      this.routes = this.$router.options.routes.filter(function (route) {
+        return route.level === 'home'
+      })
     },
     methods: {
-      getRoutes: function () {
-        return this.$router.options.routes.filter(function (route) {
-          return route.level === 'home'
-        })
-      },
-      toggleActive: function () {
-        this.active = !this.active
+      set_active: function (value) {
+        this.active = value
       }
     }
   }
@@ -59,13 +58,13 @@
 
   .main-nav-inactive {
     min-height: 140px;
-    height: 15%;
+    height: 75px;
     font-size: 25px;
     color: white;
   }
 
   .main-nav-active {
-    height: 85%;  
+    height: 50vmin;
     font-size: 0;
     color: transparent;
   }
@@ -78,7 +77,7 @@
     color: black;
     text-align: center;
     font-size: 50px;
-    background-color: white;
+    background-color: transparent;
   }
 
   #main-nav-bar {
@@ -89,10 +88,7 @@
 
   #main-nav-item {
     display: flex;
-    flex-align: center;
-    flex: 1 1 auto;
-    font-size: inherit;
-    color: inherit;
+    background-color: dimgrey;
 
     -webkit-transition: all .5s ease;
     -moz-transition: all .5s ease;
@@ -100,13 +96,19 @@
     transition: all .5s ease;
   }
 
-  #main-nav-item:hover {
-    flex: 99 0 auto;
+  .main-nav-item-inactive {
+    flex: 1 1 0;
+    font-size: inherit;
+    color: inherit;
+  }
+
+  .main-nav-item-active {
+    flex: 8 0 0;
     font-size: 40px;
     color: white;
   }
 
-  a {
+  .nav-item {
     padding: 0 20px;
     width: 100%;
     height: 100%;
@@ -122,8 +124,13 @@
   h1, h2 {
     color: inherit;
     font-size: inherit;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
   }
   h2 {
     margin: 10px 0;
   }
+
 </style>

@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    <main-nav v-show="active || $route.name === 'home'"></main-nav>
-    <nav-toggle></nav-toggle>
+    <main-nav v-show="active"></main-nav>
     <transition name="fade">
       <router-view></router-view>
     </transition>
@@ -17,7 +16,6 @@
     name: 'app',
     data () {
       return {
-        active: false
       }
     },
     head: {
@@ -45,6 +43,11 @@
     },
     components: {
       MainNav
+    },
+    computed: {
+      active () {
+        return this.$store.getters.getHeader
+      }
     }
   }
 </script>

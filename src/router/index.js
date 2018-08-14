@@ -25,7 +25,6 @@ export default new Router({
       name: 'blog',
       component: Blog,
       display_name: 'My Blog',
-      level: 'home',
       background_image: 'https://lh3.googleusercontent.com/9sPGU35bYAUlVVS7awmiJ3ye9QJ74T0E_SyTqKAP6NI0cLmMwq3XfZHhE5XwXzAWxIAFLNGNdpFR5oR1nVOX7eTNZ7Ssx-44CX0GDsDHw_yOZjAhGCb3cHdPj8Vw4x614z52wkObt5gJwqRe8hT58CkYSnF0hzre4RcpSgfcC7IQ5Gw7Y67bkYtX5nejlkw0EAIKbGkPIiwBy9lYPvUxcnDWv7Muto_wAGd_g-zuux8aMCCihvY44l9ph-gxymyscMG5KuxfNeo_usRUQYbB2pI6gtDp6pnt_mODKmMSv18ozVjHFmNvkw-9_D0F_Bq9_VRN8kbNyYUV8TnlAQLa4kbvMFK4G9QN01Eq3tHqyyBW_ipGfzR3t68q_RXpGT283DLxSYvs1fPP_2BdGaZpAOfGbUsijMPSRYJAo1TWRLvWaWd1fn_6yFeJPIVSykpioCuoKlkZmxNFyfg967MF5wp9RwbYUuLGHcSJ76LEQKitRUm7p5iPLn5vbtfLAtc-7iOF6ex3NH1g7WGGu6Cr52VzvViCc0QQ-1609kIZ2PMoRdxTMOkt-GgMQS_QeSLI9UYXMkkRfALO6iykcqN2TE6evbMFNJOALwLb1s8Xy683k7w8ashPsMuiITZq0ClW2a8lFisvWQyLCdUZ7xAP6E9NPLNREceSzSxUEhAfqgW4zg=w1425-h950-no?.jpg'
     },
     {

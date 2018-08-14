@@ -26,6 +26,9 @@
       }
     },
     created () {
+      this.$store.dispatch('showHeader')
+    },
+    destroyed () {
     },
     methods: {
     },
@@ -46,7 +49,7 @@
     height: 20%;
   }
 
-  #home-text {  
+  #home-text {
     margin: 3% 6% 5% 15%;
     width: 60%;
   }

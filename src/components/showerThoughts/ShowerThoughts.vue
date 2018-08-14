@@ -28,6 +28,7 @@
       }
     },
     created () {
+      this.$store.dispatch('hideHeader')
       this.getToken()
       this.getShowerThoughts()
       this.getGrid()
@@ -94,10 +95,8 @@
           }
         }).catch(error => {
           console.log(error)
-          setInterval(function () {
-            this.getToken()
-            this.getShowerThoughts()
-          }, 1000)
+          this.getToken()
+          this.getShowerThoughts()
         })
       },
       addRandomThought: function () {
@@ -194,7 +193,8 @@
         // console.log('status: ' + status)
       },
       getGrid: function () {
-        var grids = Math.floor(document.documentElement.clientHeight * 8 / document.documentElement.clientWidth * 9)
+        console.log(document.documentElement)
+        var grids = Math.ceil(document.documentElement.clientHeight * 8 / document.documentElement.clientWidth * 9)
         while (this.grid.length > grids) {
           this.grid.pop()
         }

@@ -2,12 +2,8 @@
      This is the landing page of the website with four quadrants to select what category of routes to look at.-->
 
 <template>
-  <router-link id="small-projects-nav" :to="route.name" :style="{ 'background-image': 'url(' + route.background_image + ')' }">
-    <div class="flex-column" id="home-preview">
-      <span></span>
-      <h1>{{route.display_name}}</h1>
-      <span></span>
-    </div>
+  <router-link id="small-projects-nav" :to="route.name">
+    <h1>{{route.display_name}}</h1>
   </router-link>
 </template>
 
@@ -27,30 +23,33 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   #small-projects-nav {
-    transition: all .5s ease;
-    transition-delay: .1s;
-    display: flex;
-    flex: 1 0 auto;
-    position: relative;
-    color: white;
-    vertical-align: center;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    font-size: 2.5vw;
+    margin: 0 10px 30px 10px;
+    padding: 0 2vw;
+    flex: 1 0 300px;
+    border-radius: 10px;
+    background-color: white;
+    border-color: lightgray;
+    border-style: solid;
+    border-width: 1px;
+    /*transition: all .5s ease;*/
+    /*transition-delay: .1s;*/
+    /*display: flex;*/
+    /*flex: 1 0 auto;*/
+    /*position: relative;*/
+    /*color: white;*/
+    /*background-size: cover;*/
+    /*background-position: center;*/
+    /*background-repeat: no-repeat;*/
+    font-size: 30px;
+    text-align: center;
   }
 
   #small-projects-nav:hover, #small-projects-nav:focus {
-    outline: none;
-    display: flex;
-    flex: 99 0 auto;
-    font-size: 4vw;
-  }
-
-  #small-projects-preview {
-    width: 100%;
-    padding: 10px 60px;
-    z-index: 1;
+    /*outline: none;*/
+    /*display: flex;*/
+    /*flex: 99 0 auto;*/
+    /*font-size: 4vw;*/
+    background-color: whitesmoke;
   }
 
   h1 {
