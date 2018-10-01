@@ -194,7 +194,7 @@
       },
       getGrid: function () {
         console.log(document.documentElement)
-        var grids = Math.ceil(document.documentElement.clientHeight * 8 / document.documentElement.clientWidth * 9)
+        var grids = Math.ceil(document.documentElement.clientHeight * 8 / document.documentElement.clientWidth) * 8
         while (this.grid.length > grids) {
           this.grid.pop()
         }

@@ -21,7 +21,7 @@
       }
     },
     created () {
-      this.$store.dispatch('showHeader')
+      this.$store.dispatch('hideHeader')
       this.routes = this.$router.options.routes.filter(function (route) {
         return route.level === 'smallProjects'
       })
@@ -54,6 +54,7 @@
   }
 
   #small-projects-wrapper {
+    padding-top: 10px;
     margin: 0 50px;
     height: 150px;
     flex-wrap: wrap;
