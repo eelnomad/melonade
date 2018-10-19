@@ -25,6 +25,7 @@
       return {}
     },
     created () {
+      this.$store.dispatch('hideHeader')
     },
     methods: {}
   }

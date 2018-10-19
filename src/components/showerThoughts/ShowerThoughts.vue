@@ -230,9 +230,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   #shower-thoughts {
-    width: 100%;
     height: 100%;
-    position: absolute;
     color: white;
     background-size: cover;
     background-position: center;
@@ -241,11 +239,6 @@
     overflow-y: hidden;
   }
   .overlay {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
     flex-wrap: wrap;
   }
   .opacity-0 {

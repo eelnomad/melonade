@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <main-nav v-show="active"></main-nav>
-    <transition name="fade">
+      <main-nav v-show="active"></main-nav>
+    <transition name="fade" mode="out-in">
       <router-view></router-view>
     </transition>
   </div>
@@ -59,11 +59,22 @@
   }
 
   .fade-enter-active, .fade-leave-active {
-    transition: opacity .5s;
+    transition: opacity .75s ease-out;
     overflow-x: hidden;
   }
 
   .fade-enter, .fade-leave-to {
     opacity: 0;
   }
+  .slide-fade-enter-active {
+    transition: all 2s;
+  }
+  .slide-fade-leave-active {
+    transition: all 2s;
+  }
+  .slide-fade-enter, .slide-fade-leave-to
+  /* .slide-fade-leave-active below version 2.1.8 */ {
+    transform: translateY(50px);
+}
+
 </style>

@@ -21,7 +21,7 @@
       }
     },
     created () {
-      this.$store.dispatch('hideHeader')
+      this.$store.dispatch('showHeader')
       this.routes = this.$router.options.routes.filter(function (route) {
         return route.level === 'smallProjects'
       })
