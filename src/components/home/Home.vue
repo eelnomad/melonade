@@ -2,51 +2,51 @@
      This is the landing page of the website with four quadrants to select what category of posts to look at.-->
 
 <template>
-  <div id="home" v-cloak>
-    <transition-group name="fade" mode="in-out" :key="newImage.base_url">
-      <img class="photos" :src="newImage.base_url" @load="toggleActive">
-    </transition-group>
-    <div id="side-nav">
-
+  <div id="home">
+    <div id="home-container" class="flex-row">
+      <div id="side-nav">
+        <h1>Melonade</h1>
+        <ul>
+          <li>
+            <router-link to="/">Home</router-link>
+          </li>
+          <li>
+            <router-link to="/smallprojects">Small Projects</router-link>
+          </li>
+          <li>
+            <router-link to="/about">About</router-link>
+          </li>
+        </ul>
+        <span></span>
+      </div>
+      <router-view></router-view>
     </div>
-    <router-view></router-view>
+    <div id="background" class="darken">
+      <transition-group name="image-fade" mode="in-out">
+        <img v-if="background.base_url !== ''" class="photos" :src="background.base_url" :key="background.base_url" @load="">
+      </transition-group>
+    </div>
   </div>
 </template>
 
 <script>
-  import photodata from '@/../static/data/photodata.json'
-
   export default {
     name: 'home',
     data () {
       return {
-        loading: false,
-        currentImage: {
-          base_url: ''
-        },
-        newImage: {}
       }
     },
     created () {
-      this.getNewImage()
-      this.imageInterval = setInterval(function () {
-        this.getNewImage()
-      }.bind(this), 5000)
     },
     beforeDestroy () {
     },
     destroyed () {
     },
     methods: {
-      getNewImage: function () {
-        this.loading = true
-        var tempImage = photodata[Math.floor(Math.random() * photodata.length)]
-        tempImage.base_url += 'w1980-h1320-no?.jpg'
-        this.newImage = tempImage
-      },
-      toggleActive: function () {
-        this.currentImage = this.newImage
-        this.loading = false
+    },
+    computed: {
+      background () {
+        return this.$store.getters.getBackgroundDetails
       }
     },
     components: {
@@ -60,29 +60,66 @@
     width: 100%;
     height: 100%;
     background-color: gray;
+    z-index: -1;
+  }
+
+  #home-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 2;
   }
 
   #side-nav {
-    width: 20%;
-    min-width: 300px;
     height: 100%;
-    background-color: black;
-    filter: opacity(50%);
+    flex: 1 0 300px;
+    background: rgba(0,0,0,0.5);
     z-index: 99;
+    text-align: right;
+    padding: 30vh 20px 0 0;
+    box-sizing: border-box;
+  }
+
+  #side-nav > h1, #side-nav > ul > li > a {
+    color: whitesmoke;
+  }
+
+  #side-nav > ul {
+    list-style-type: none;
+  }
+
+  router-view {
+    flex: 1 0 auto;
+  }
+
+  #background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+
+  .darken {
+    filter: brightness(40%) grayscale(80%);
   }
 
   .photos {
+    position: absolute;
     height: 100%;
     width: 100%;
-    position: absolute;
     object-fit: cover;
+    top: 0;
+    left: 0;
   }
 
-  .fade-enter-active, .fade-leave-active {
-    transition: opacity 3s;
+  .image-fade-enter-active, .image-fade-leave-active {
+    transition: opacity 1s linear;
   }
-  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-    transition: opacity 3s;
+  .image-fade-enter, .image-fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    transition: opacity 1s;
     opacity: 0;
   }
 </style>

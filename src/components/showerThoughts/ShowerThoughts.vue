@@ -28,25 +28,21 @@
       }
     },
     created () {
-      this.$store.dispatch('hideHeader')
       this.getToken()
       this.getShowerThoughts()
       this.getGrid()
-      this.fadeInterval = setInterval(function () {
-        this.randomizeFade()
-      }.bind(this), 3000)
-      this.thoughtInterval = setInterval(function () {
-        this.addRandomThought()
-        this.removeRandomThought()
-      }.bind(this), 1000)
+      this.startMagic()
     },
     mounted () {
       window.addEventListener('resize', this.getGrid)
+      window.addEventListener('focus', this.startMagic)
+      window.addEventListener('blur', this.stopMagic)
     },
     beforeDestroy () {
       window.removeEventListener('resize', this.getGrid)
-      clearInterval(this.fadeInterval)
-      clearInterval(this.thoughtInterval)
+      window.removeEventListener('focus', this.startMagic)
+      window.removeEventListener('blur', this.stopMagic)
+      this.stopMagic()
     },
     computed: {
       activeRandomThoughts () {
@@ -56,6 +52,19 @@
       }
     },
     methods: {
+      startMagic: function () {
+        this.fadeInterval = setInterval(function () {
+          this.randomizeFade()
+        }.bind(this), 3000)
+        this.thoughtInterval = setInterval(function () {
+          this.addRandomThought()
+          this.removeRandomThought()
+        }.bind(this), 1000)
+      },
+      stopMagic: function () {
+        clearInterval(this.fadeInterval)
+        clearInterval(this.thoughtInterval)
+      },
       getToken: function () {
         if (localStorage.getItem('reddit_refresh') <= Math.floor(Date.now() / 1000)) {
           this.newRedditToken()
@@ -237,6 +246,7 @@
     background-repeat: no-repeat;
     background-image: url('https://lh3.googleusercontent.com/PRZt9UFlJ3EVyk1S-kC7gwbBHEkG06sjG2aVlCiabI_hNqncSI4fnHLFcaAFBoJHceoB6hZwQZYOD8kyHqxWBNf3Zkuk-qf8q6Kv6zgNwsBQouo-1xlKS5BT6uN-jBEB9K3ARzktZNTeRGqBJwzk8OikCdlk2qAm0jSbKSwXw_4zmMqGQQG-GKw1WDDmXmF7gJ4aCbjBJ4_WQqjssh66jQoZ6hga0kyAul4eF_I3oCRZFOeQDs3YtPvvKEvEmgPO374VcwBl_AIzkyTZTUVVZAB8_AHu8uJ8pYsENSRNSeBuv8Pea_d11wI3ySZtwBx7n_jh7r7B6VqfknPJhWrIynpKjtvvivaoSxnJXiCFxm99cuSe_7Wr8sNZ3qRHjCs8GPW81POCcEpRpkWT2Tf86AXaPwTfolSPAxspLtxwMg4RYM412lrUkQwafsO9M5jpewanID-wfxFwUgidEMx_oXap4rqb5RuK-bHkdgxaBDB_MLyF1TCog2BSany4Q9q2QT0DaQ307L2x_J4uc2X8H2OaU8esEOiFRhJN3rHYi6xh54PLcjipIJQXHoDnIiS9A1c8EjVBekjBqr9GsGBlfbRAUN_hMkWmEs80yBt368Lalz5W_uPHE9A3AE4v5bfLIB0HSXjewlFuUii3UEg4NwCQRYr6WgqTT8c=w1980-h1320-no?.jpg');
     overflow-y: hidden;
+    transition: opacity 3s;
   }
   .overlay {
     flex-wrap: wrap;

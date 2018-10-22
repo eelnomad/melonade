@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Home from '@/components/home/Home'
 import Blog from '@/components/home/blog/Blog'
 import BlogPost from '@/components/home/blog/BlogPost'
-// import PhotoGallery from '@/components/home/photoGallery/PhotoGallery'
+import PhotoGallery from '@/components/home/photoGallery/PhotoGallery'
 import About from '@/components/home/about/About'
 import SmallProjects from '@/components/home/smallProjects/SmallProjects'
 // import League from '@/components/League'
@@ -17,14 +17,13 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
       component: Home,
       children: [
-        // {
-        //   path: '',
-        //   name: 'home',
-        //   component: PhotoGallery
-        // },
+        {
+          path: '',
+          name: 'home',
+          component: PhotoGallery
+        },
         {
           path: 'blog',
           name: 'blog',

@@ -21,10 +21,7 @@
       }
     },
     created () {
-      this.$store.dispatch('showHeader')
-      this.routes = this.$router.options.routes.filter(function (route) {
-        return route.level === 'smallProjects'
-      })
+      this.routes = this.$router.options.routes
     },
     methods: {
     },
@@ -41,11 +38,6 @@
   #small-projects {
     width: 100%;
     height: 100%;
-    position: absolute;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: white;
   }
 
   #header-block {

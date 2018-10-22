@@ -4,30 +4,26 @@ import Vuex from 'vuex/dist/vuex.js'
 Vue.use(Vuex)
 
 const state = {
-  header: false
+  backgroundDetails: {
+    base_url: ''
+  }
 }
 
 const getters = {
-  getHeader (state) {
-    return state.header
+  getBackgroundDetails (state) {
+    return state.backgroundDetails
   }
 }
 
 const mutations = {
-  showHeader (state) {
-    state.header = true
-  },
-  hideHeader (state) {
-    state.header = false
+  setBackgroundDetails (state, payload) {
+    state.backgroundDetails = payload
   }
 }
 
 const actions = {
-  showHeader (context) {
-    context.commit('showHeader')
-  },
-  hideHeader (context) {
-    context.commit('hideHeader')
+  setBackgroundDetails (context, payload) {
+    context.commit('setBackgroundDetails', payload)
   }
 }
 
