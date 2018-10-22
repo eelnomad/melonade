@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-      <main-nav v-show="active"></main-nav>
     <transition name="fade" mode="out-in">
       <router-view></router-view>
     </transition>
@@ -8,7 +7,6 @@
 </template>
 
 <script>
-  import MainNav from './components/navigation/MainNav'
   import 'normalize.css/normalize.css'
   import './assets/css/custom.css'
 
@@ -42,12 +40,8 @@
       }
     },
     components: {
-      MainNav
     },
     computed: {
-      active () {
-        return this.$store.getters.getHeader
-      }
     }
   }
 </script>
@@ -62,15 +56,8 @@
     transition: opacity .75s ease-out;
     overflow-x: hidden;
   }
-
   .fade-enter, .fade-leave-to {
     opacity: 0;
-  }
-  .slide-fade-enter-active {
-    transition: all 2s;
-  }
-  .slide-fade-leave-active {
-    transition: all 2s;
   }
   .slide-fade-enter, .slide-fade-leave-to
   /* .slide-fade-leave-active below version 2.1.8 */ {

@@ -2,35 +2,52 @@
      This is the landing page of the website with four quadrants to select what category of posts to look at.-->
 
 <template>
-  <div class="flex-column" id="home">
-    <div id="header-block"></div>
-    <div class="flex-row">
-      <div id="home-text">
-        <h1>About this Site</h1>
-        <h3>So this is an attempt at being creative while learning something new. The entire webpage is built off of Vue. There is a montecarlo sudoku solver somewhere in here as well as relaxing showerthoughts to look at. Enjoy!</h3>
-      </div>
-      <div id="update-text">
-        <h1>Update Tracker</h1>
-        <h3>This may be an update tracker in the future.</h3>
-      </div>
+  <div id="home" v-cloak>
+    <transition-group name="fade" mode="in-out" :key="newImage.base_url">
+      <img class="photos" :src="newImage.base_url" @load="toggleActive">
+    </transition-group>
+    <div id="side-nav">
+
     </div>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
+  import photodata from '@/../static/data/photodata.json'
+
   export default {
     name: 'home',
     data () {
       return {
-        routes: []
+        loading: false,
+        currentImage: {
+          base_url: ''
+        },
+        newImage: {}
       }
     },
     created () {
-      this.$store.dispatch('showHeader')
+      this.getNewImage()
+      this.imageInterval = setInterval(function () {
+        this.getNewImage()
+      }.bind(this), 5000)
+    },
+    beforeDestroy () {
     },
     destroyed () {
     },
     methods: {
+      getNewImage: function () {
+        this.loading = true
+        var tempImage = photodata[Math.floor(Math.random() * photodata.length)]
+        tempImage.base_url += 'w1980-h1320-no?.jpg'
+        this.newImage = tempImage
+      },
+      toggleActive: function () {
+        this.currentImage = this.newImage
+        this.loading = false
+      }
     },
     components: {
     }
@@ -41,20 +58,31 @@
 <style scoped>
   #home {
     width: 100%;
+    height: 100%;
+    background-color: gray;
+  }
+
+  #side-nav {
+    width: 20%;
+    min-width: 300px;
+    height: 100%;
+    background-color: black;
+    filter: opacity(50%);
+    z-index: 99;
+  }
+
+  .photos {
+    height: 100%;
+    width: 100%;
     position: absolute;
+    object-fit: cover;
   }
 
-  #header-block {
-    min-height: 140px;
-    height: 20%;
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity 3s;
   }
-
-  #home-text {
-    margin: 3% 6% 5% 15%;
-    width: 60%;
-  }
-
-  #update-text {
-    margin: 3% 15% 5% 6%;
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    transition: opacity 3s;
+    opacity: 0;
   }
 </style>
