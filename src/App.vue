@@ -59,9 +59,5 @@
   .fade-enter, .fade-leave-to {
     opacity: 0;
   }
-  .slide-fade-enter, .slide-fade-leave-to
-  /* .slide-fade-leave-active below version 2.1.8 */ {
-    transform: translateY(50px);
-}
 
 </style>

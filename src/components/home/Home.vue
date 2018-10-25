@@ -23,7 +23,7 @@
     </div>
     <div id="background" class="darken">
       <transition-group name="image-fade" mode="in-out">
-        <img v-if="background.base_url !== ''" class="photos" :src="background.base_url" :key="background.base_url" @load="">
+        <img v-for="(image, index) in background" class="photos" :src="image.base_url" :key="image.base_url" @load="showNew">
       </transition-group>
     </div>
   </div>
@@ -43,6 +43,13 @@
     destroyed () {
     },
     methods: {
+      showNew: function () {
+        if (this.background.length !== 1) {
+          this.$store.dispatch('shiftBackgroundDetails')
+          console.log('home')
+          console.log(this.background)
+        }
+      }
     },
     computed: {
       background () {
@@ -115,11 +122,18 @@
     left: 0;
   }
 
-  .image-fade-enter-active, .image-fade-leave-active {
-    transition: opacity 1s linear;
+  .image-fade-leave-active {
+    transition: opacity 10s linear;
   }
-  .image-fade-enter, .image-fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  .image-fade-enter {
+    z-index: -1;
+  }
+  .image-fade-enter-to, .image-fade-leave {
+    opacity: 1;
+  }
+  .image-fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     transition: opacity 1s;
     opacity: 0;
+    z-index: 1;
   }
 </style>

@@ -48,7 +48,7 @@
     },
     computed: {
       background () {
-        return this.$store.getters.getBackgroundDetails
+        return this.$store.getters.getBackgroundDetails[0]
       }
     },
     components: {
