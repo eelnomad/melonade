@@ -23,7 +23,7 @@
     </div>
     <div id="background" class="darken">
       <transition-group name="image-fade" mode="in-out">
-        <img v-for="(image, index) in background" class="photos" :src="image.base_url" :key="image.base_url" @load="showNew">
+        <img v-for="(image, index) in backgroundQueue" class="photos" :class="{ active : index === 0 }" :src="image.base_url" :key="image.base_url" @load="showNew">
       </transition-group>
     </div>
   </div>
@@ -34,9 +34,12 @@
     name: 'home',
     data () {
       return {
+        backgroundQueue: []
       }
     },
     created () {
+      this.backgroundQueue.push(this.$store.getters.getBackgroundDetails)
+      console.log(this.backgroundQueue)
     },
     beforeDestroy () {
     },
@@ -44,15 +47,21 @@
     },
     methods: {
       showNew: function () {
-        if (this.background.length !== 1) {
-          this.$store.dispatch('shiftBackgroundDetails')
-          console.log('home')
-          console.log(this.background)
+        if (this.backgroundQueue.length >= 2) {
+          this.backgroundQueue.shift()
+        }
+      }
+    },
+    watch: {
+      newBackground: function (newBackground) {
+        if (this.backgroundQueue.length <= 1 || this.backgroundQueue[0].base_url !== this.newBackground.base_url) {
+          this.backgroundQueue.push(this.newBackground)
+          console.log(this.backgroundQueue)
         }
       }
     },
     computed: {
-      background () {
+      newBackground () {
         return this.$store.getters.getBackgroundDetails
       }
     },
@@ -81,7 +90,7 @@
 
   #side-nav {
     height: 100%;
-    flex: 1 0 300px;
+    flex: 0 0 300px;
     background: rgba(0,0,0,0.5);
     z-index: 99;
     text-align: right;
@@ -110,7 +119,7 @@
   }
 
   .darken {
-    filter: brightness(40%) grayscale(80%);
+    filter: brightness(60%) grayscale(80%);
   }
 
   .photos {
@@ -122,18 +131,23 @@
     left: 0;
   }
 
-  .image-fade-leave-active {
-    transition: opacity 10s linear;
-  }
-  .image-fade-enter {
-    z-index: -1;
-  }
-  .image-fade-enter-to, .image-fade-leave {
-    opacity: 1;
-  }
-  .image-fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-    transition: opacity 1s;
-    opacity: 0;
+  .active {
     z-index: 1;
   }
+
+  .image-fade-leave-active {
+    transition: opacity 2s ease;
+    z-index: 2;
+  }
+  .image-fade-enter, .image-fade-enter-to, .image-fade-leave {
+    opacity: 1;
+  }
+  .image-fade-leave {
+    z-index: 2;
+  }
+  .image-fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
+    z-index: 2;
+  }
+
 </style>

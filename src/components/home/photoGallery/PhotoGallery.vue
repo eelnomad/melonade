@@ -29,7 +29,6 @@
     methods: {
       startBackgroundInterval: function () {
         this.stopBackgroundInterval()
-        this.newBackground()
         this.backgroundInterval = setInterval(function () {
           this.newBackground()
         }.bind(this), 8000)
@@ -48,7 +47,7 @@
     },
     computed: {
       background () {
-        return this.$store.getters.getBackgroundDetails[0]
+        return this.$store.getters.getBackgroundDetails
       }
     },
     components: {
