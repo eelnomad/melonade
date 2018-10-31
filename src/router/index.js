@@ -18,16 +18,19 @@ export default new Router({
     {
       path: '/',
       component: Home,
+      sideNav: true,
       children: [
         {
           path: '',
-          name: 'home',
-          component: PhotoGallery
+          name: 'photogallery',
+          component: PhotoGallery,
+          displayName: 'Home'
         },
         {
           path: 'blog',
           name: 'blog',
           component: Blog,
+          displayName: 'Blog',
           children: [
             {
               path: ':id',
@@ -38,29 +41,37 @@ export default new Router({
         {
           path: 'smallprojects',
           name: 'smallprojects',
-          component: SmallProjects
+          component: SmallProjects,
+          displayName: 'Small Projects'
         },
         {
           path: 'about',
           name: 'about',
-          component: About
+          component: About,
+          displayName: 'About'
         }
       ]
     },
     {
       path: '/showerthoughts',
       name: 'showerthoughts',
-      component: ShowerThoughts
+      component: ShowerThoughts,
+      smallProjects: true,
+      displayName: 'Shower Thoughts'
     },
     {
       path: '/sudoku',
       name: 'sudoku',
-      component: Sudoku
+      component: Sudoku,
+      smallProjects: true,
+      displayName: 'Sudoku Solver'
     },
     {
       path: '/league',
       name: 'league',
-      component: WIP
+      component: WIP,
+      smallProjects: true,
+      displayName: 'League of Legends Analysis'
     },
     {
       path: '*',

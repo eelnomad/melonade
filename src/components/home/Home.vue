@@ -7,14 +7,8 @@
       <div id="side-nav">
         <h1>Melonade</h1>
         <ul>
-          <li>
-            <router-link to="/">Home</router-link>
-          </li>
-          <li>
-            <router-link to="/smallprojects">Small Projects</router-link>
-          </li>
-          <li>
-            <router-link to="/about">About</router-link>
+          <li v-for="route in routes">
+            <router-link :to="route.name">{{ route.displayName }}</router-link>
           </li>
         </ul>
         <span></span>
@@ -23,7 +17,7 @@
     </div>
     <div id="background" class="darken">
       <transition-group name="image-fade" mode="in-out">
-        <img v-for="(image, index) in backgroundQueue" class="photos" :class="{ active : index === 0 }" :src="image.base_url" :key="image.base_url" @load="showNew">
+        <img v-for="(image, index) in backgroundQueue" class="photos" :class="{ active : index === 0 }" :src="image.base_url" :key="image.base_url" @load="shiftBackground">
       </transition-group>
     </div>
   </div>
@@ -34,35 +28,29 @@
     name: 'home',
     data () {
       return {
-        backgroundQueue: []
       }
     },
     created () {
-      this.backgroundQueue.push(this.$store.getters.getBackgroundDetails)
-      console.log(this.backgroundQueue)
     },
     beforeDestroy () {
     },
     destroyed () {
     },
     methods: {
-      showNew: function () {
-        if (this.backgroundQueue.length >= 2) {
-          this.backgroundQueue.shift()
-        }
+      shiftBackground: function () {
+        this.$store.dispatch('shiftBackgroundQueue')
       }
     },
     watch: {
-      newBackground: function (newBackground) {
-        if (this.backgroundQueue.length <= 1 || this.backgroundQueue[0].base_url !== this.newBackground.base_url) {
-          this.backgroundQueue.push(this.newBackground)
-          console.log(this.backgroundQueue)
-        }
-      }
     },
     computed: {
-      newBackground () {
-        return this.$store.getters.getBackgroundDetails
+      backgroundQueue () {
+        return this.$store.getters.getBackgroundQueue
+      },
+      routes () {
+        return this.$router.options.routes.find((route) => {
+          return route.sideNav
+        }).children
       }
     },
     components: {
@@ -86,6 +74,7 @@
     top: 0;
     left: 0;
     z-index: 2;
+    overflow-x: hidden;
   }
 
   #side-nav {

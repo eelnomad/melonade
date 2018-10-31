@@ -3,7 +3,7 @@
 
 <template>
   <div class="flex-row dim" id="wip">
-    <router-link id="home-button" :to="{name: 'home'}">Home</router-link>
+    <router-link id="home-button" to="/">Home</router-link>
     <span></span>
     <div class="flex-column" id="wip-text">
       <span></span>

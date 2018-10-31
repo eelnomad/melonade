@@ -2,10 +2,9 @@
      A hub for routing to smaller projects.-->
 
 <template>
-  <div id="small-projects">
-    <div id="header-block"></div>
-    <div class="flex-row" id="small-projects-wrapper">
-      <small-projects-nav v-for="route in routes" :key="route.path" :route="route"></small-projects-nav>
+  <div id="small-projects" class="flex-row">
+    <div v-for="col in columns" class="small-project-col flex-column">
+      <small-projects-nav v-for="route in routes" :key="route.path" :route="route" :ref="route.name"></small-projects-nav>
     </div>
   </div>
 </template>
@@ -17,15 +16,27 @@
     name: 'small-projects',
     data () {
       return {
-        routes: []
+        columns: 0
       }
     },
     created () {
-      this.routes = this.$router.options.routes
+      window.addEventListener('resize', this.setColumns)
+    },
+    mounted () {
+      this.setColumns()
+      console.log(this.$refs)
     },
     methods: {
+      setColumns: function () {
+        this.columns = Math.max(Math.floor(this.$el.clientWidth / 400), 1)
+      }
     },
     computed: {
+      routes () {
+        return this.$router.options.routes.filter((route) => {
+          return route.smallProjects
+        })
+      }
     },
     components: {
       SmallProjectsNav
@@ -38,17 +49,11 @@
   #small-projects {
     width: 100%;
     height: 100%;
+    justify-content: center;
   }
 
-  #header-block {
-    min-height: 140px;
-    height: 20%;
-  }
-
-  #small-projects-wrapper {
-    padding-top: 10px;
-    margin: 0 50px;
-    height: 150px;
-    flex-wrap: wrap;
+  .small-project-col {
+    flex: 0 0 370px;
+    align-items: center;
   }
 </style>

@@ -30,24 +30,24 @@
       startBackgroundInterval: function () {
         this.stopBackgroundInterval()
         this.backgroundInterval = setInterval(function () {
-          this.newBackground()
-        }.bind(this), 8000)
+          this.pushBackground()
+        }.bind(this), 6000)
       },
       stopBackgroundInterval: function () {
         clearInterval(this.backgroundInterval)
       },
-      newBackground: function () {
-        var tempImage = photodata[Math.floor(Math.random() * photodata.length)]
-        tempImage.base_url += 'w1980-h1320-no?.jpg'
+      pushBackground: function () {
+        var newBackground = photodata[Math.floor(Math.random() * photodata.length)]
+        newBackground.base_url += 'w1980-h1320-no?.jpg'
         // Stops redundant mutation of background details
-        if (tempImage.base_url !== this.background.base_url) {
-          this.$store.dispatch('setBackgroundDetails', tempImage)
+        if (newBackground.base_url !== this.background.base_url) {
+          this.$store.dispatch('pushBackgroundQueue', newBackground)
         }
       }
     },
     computed: {
       background () {
-        return this.$store.getters.getBackgroundDetails
+        return this.$store.getters.getBackgroundQueue[0]
       }
     },
     components: {
