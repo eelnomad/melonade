@@ -39,7 +39,7 @@
       pushBackground: function () {
         // Stops redundant mutation of background details
         do {
-          var newBackground = photodata[Math.floor(Math.random() * photodata.length)]
+          var newBackground = Object.assign({}, photodata[Math.floor(Math.random() * photodata.length)])
           newBackground.base_url += 'w1980-h1320-no?.jpg'
         } while (newBackground.base_url === this.background.base_url)
         this.$store.dispatch('pushBackgroundQueue', newBackground)
