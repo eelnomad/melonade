@@ -3,7 +3,7 @@
 
 <template>
   <div id="shower-thoughts">
-    <router-link id="home-button" :to="{name: 'home'}">Home</router-link>
+    <router-link id="home-button" to="/">Home</router-link>
     <div class="overlay">
       <span v-for="i in grid" :class="['opacity-' + i.toString()]"></span>
     </div>

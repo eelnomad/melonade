@@ -31,18 +31,18 @@
         this.stopBackgroundInterval()
         this.backgroundInterval = setInterval(function () {
           this.pushBackground()
-        }.bind(this), 6000)
+        }.bind(this), 8000)
       },
       stopBackgroundInterval: function () {
         clearInterval(this.backgroundInterval)
       },
       pushBackground: function () {
-        var newBackground = photodata[Math.floor(Math.random() * photodata.length)]
-        newBackground.base_url += 'w1980-h1320-no?.jpg'
         // Stops redundant mutation of background details
-        if (newBackground.base_url !== this.background.base_url) {
-          this.$store.dispatch('pushBackgroundQueue', newBackground)
-        }
+        do {
+          var newBackground = photodata[Math.floor(Math.random() * photodata.length)]
+          newBackground.base_url += 'w1980-h1320-no?.jpg'
+        } while (newBackground.base_url === this.background.base_url)
+        this.$store.dispatch('pushBackgroundQueue', newBackground)
       }
     },
     computed: {

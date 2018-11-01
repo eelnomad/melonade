@@ -13,10 +13,12 @@
         </ul>
         <span></span>
       </div>
-      <router-view></router-view>
+      <transition name="fade" mode="out-in">
+        <router-view></router-view>
+      </transition>
     </div>
     <div id="background" class="darken">
-      <transition-group name="image-fade" mode="in-out">
+      <transition-group name="image-fade">
         <img v-for="(image, index) in backgroundQueue" class="photos" :class="{ active : index === 0 }" :src="image.base_url" :key="image.base_url" @load="shiftBackground">
       </transition-group>
     </div>
@@ -64,7 +66,7 @@
     width: 100%;
     height: 100%;
     background-color: gray;
-    z-index: -1;
+    position: absolute;
   }
 
   #home-container {
@@ -125,7 +127,7 @@
   }
 
   .image-fade-leave-active {
-    transition: opacity 2s ease;
+    transition: opacity 3s ease-in-out;
     z-index: 2;
   }
   .image-fade-enter, .image-fade-enter-to, .image-fade-leave {
@@ -138,5 +140,8 @@
     opacity: 0;
     z-index: 2;
   }
-
+  .fade-enter-active, .fade-leave-active {
+    transition: all .1s ease-in;
+    overflow-x: hidden;
+  }
 </style>

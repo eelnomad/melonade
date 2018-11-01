@@ -11,7 +11,7 @@
       <div class="flex-column" id="sudoku-options" v-show="showOptions">
         <span></span>
         <div id="logo">
-          <router-link :to="'/'" id="logo">
+          <router-link to="/" id="logo">
           Melonade
           </router-link>
         </div>
