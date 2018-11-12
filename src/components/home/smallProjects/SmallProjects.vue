@@ -2,33 +2,63 @@
      A hub for routing to smaller projects.-->
 
 <template>
-  <div id="small-projects" class="flex-row">
-    <div v-for="col in columns" class="small-project-col flex-column">
-      <small-projects-nav v-for="route in routes" :key="route.path" :route="route" :ref="route.name"></small-projects-nav>
+  <div id="small-projects">
+    <div id="small-projects-filter">
+      <input v-model="searchQuery" placeholder="Search Here">
+    </div>
+    <div id="small-projects-content">
+      <transition-group 
+        name="staggered-fade" 
+        v-bind:css="false"
+        tag="ul"
+        v-on:before-enter="beforeEnter"
+        v-on:enter="enter"
+        v-on:leave="leave" 
+        class="flex-row">
+        <small-projects-nav v-for="route in filteredRoutes" :key="route.path" :route="route" :ref="route.name"></small-projects-nav>
+      </transition-group>
     </div>
   </div>
 </template>
 
 <script>
   import SmallProjectsNav from './SmallProjectsNav'
-
+  import Velocity from 'velocity-animate'
   export default {
     name: 'small-projects',
     data () {
       return {
-        columns: 0
+        searchQuery: ''
       }
     },
     created () {
-      window.addEventListener('resize', this.setColumns)
     },
     mounted () {
-      this.setColumns()
-      console.log(this.$refs)
     },
     methods: {
-      setColumns: function () {
-        this.columns = Math.max(Math.floor(this.$el.clientWidth / 400), 1)
+      beforeEnter: function (el) {
+        el.style.opacity = 0
+        el.style.height = 0
+      },
+      enter: function (el, done) {
+        var delay = el.dataset.index * 150
+        setTimeout(function () {
+          Velocity(
+            el,
+            { opacity: 1, height: '500px' },
+            { complete: done }
+          )
+        }, delay)
+      },
+      leave: function (el, done) {
+        var delay = el.dataset.index * 150
+        setTimeout(function () {
+          Velocity(
+            el,
+            { opacity: 0, height: 0 },
+            { complete: done }
+          )
+        }, delay)
       }
     },
     computed: {
@@ -36,6 +66,21 @@
         return this.$router.options.routes.filter((route) => {
           return route.smallProjects
         })
+      },
+      filteredRoutes () {
+        if (this.searchQuery === '') {
+          return this.routes
+        } else {
+          var self = this
+          var result = this.routes.filter(function (route) {
+            return route.displayName.toLowerCase().replace('/\\s/g', '').indexOf(self.searchQuery.toLowerCase().replace('/s/g', '')) >= 0
+          })
+        }
+        if (result.length > 0) {
+          return result
+        } else {
+          return self
+        }
       }
     },
     components: {
@@ -49,11 +94,25 @@
   #small-projects {
     width: 100%;
     height: 100%;
-    justify-content: center;
+    overflow-y: hidden;
   }
 
-  .small-project-col {
-    flex: 0 0 370px;
-    align-items: center;
+  #small-projects-filter {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    margin-top: 10vh;
+  }
+  #small-projects-filter > input {
+    width: 50%;
+    height: 35px;
+    border-radius: 7px;
+    font-size: 20px;
+  }
+
+  #small-projects-content {
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    overflow-y: auto;
   }
 </style>
