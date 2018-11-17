@@ -76,7 +76,7 @@
     top: 0;
     left: 0;
     z-index: 2;
-    overflow-x: hidden;
+    overflow-y: hidden;
   }
 
   #side-nav {

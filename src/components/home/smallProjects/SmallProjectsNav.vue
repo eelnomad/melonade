@@ -36,6 +36,10 @@
     background-color: rgb(200,200,200,.85);
     animation: pulse 2s infinite;
   }
+  h1 {
+    width: inherit;
+    background-color: yellow;
+  }
 
 
   @-webkit-keyframes pulse {

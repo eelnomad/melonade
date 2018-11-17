@@ -7,14 +7,7 @@
       <input v-model="searchQuery" placeholder="Search Here">
     </div>
     <div id="small-projects-content">
-      <transition-group 
-        name="staggered-fade" 
-        v-bind:css="false"
-        tag="ul"
-        v-on:before-enter="beforeEnter"
-        v-on:enter="enter"
-        v-on:leave="leave" 
-        class="flex-row">
+      <transition-group name="staggered-fade" class="flex-row" mode="out-in">
         <small-projects-nav v-for="route in filteredRoutes" :key="route.path" :route="route" :ref="route.name"></small-projects-nav>
       </transition-group>
     </div>
@@ -23,50 +16,28 @@
 
 <script>
   import SmallProjectsNav from './SmallProjectsNav'
-  import Velocity from 'velocity-animate'
+  // import _ from 'lodash'
+  // import Velocity from 'velocity-animate'
   export default {
     name: 'small-projects',
     data () {
       return {
-        searchQuery: ''
+        searchQuery: '',
+        routes: []
       }
     },
     created () {
+      this.routes = this.$router.options.routes.filter((route) => {
+        return route.smallProjects
+      })
     },
     mounted () {
     },
     methods: {
-      beforeEnter: function (el) {
-        el.style.opacity = 0
-        el.style.height = 0
-      },
-      enter: function (el, done) {
-        var delay = el.dataset.index * 150
-        setTimeout(function () {
-          Velocity(
-            el,
-            { opacity: 1, height: '500px' },
-            { complete: done }
-          )
-        }, delay)
-      },
-      leave: function (el, done) {
-        var delay = el.dataset.index * 150
-        setTimeout(function () {
-          Velocity(
-            el,
-            { opacity: 0, height: 0 },
-            { complete: done }
-          )
-        }, delay)
-      }
+    },
+    watch: {
     },
     computed: {
-      routes () {
-        return this.$router.options.routes.filter((route) => {
-          return route.smallProjects
-        })
-      },
       filteredRoutes () {
         if (this.searchQuery === '') {
           return this.routes
@@ -94,7 +65,8 @@
   #small-projects {
     width: 100%;
     height: 100%;
-    overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
   }
 
   #small-projects-filter {
@@ -111,8 +83,39 @@
   }
 
   #small-projects-content {
-    justify-content: space-evenly;
+    display: flex;
+    height: 100%;
+    width: 100%;
+  }
+
+  .flex-row {
     flex-wrap: wrap;
-    overflow-y: auto;
+    justify-content: space-evenly;
+    overflow-y: hidden;
+  }
+
+
+  .staggered-fade-enter {
+    opacity: 0;
+  }
+
+  .staggered-fade-enter-active {
+    transition: all 1s;
+  }
+
+  .staggered-fade-leave {
+  }
+
+  .staggered-fade-leave-active {
+    transition: all .3s;
+    opacity: 0;
+    transform: translate(0, 0, .5);
+    position: absolute;
+  }
+
+  .staggered-fade-move {
+    transition-delay: 1s;
+    transition: all .5s cubic-bezier(0.77, 0, 0.175, 1);
+
   }
 </style>
