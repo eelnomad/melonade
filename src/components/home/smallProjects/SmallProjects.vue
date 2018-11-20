@@ -109,7 +109,7 @@
   .staggered-fade-leave-active {
     transition: all .3s;
     opacity: 0;
-    transform: translate(0, 0, .5);
+    transform: translate(0, 100vh);
     position: absolute;
   }
 
