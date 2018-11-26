@@ -1,5 +1,12 @@
 export default {
+  data () {
+    return {
+      recursiveGrid: {}
+    }
+  },
   methods: {
+    possible: function (index) {
+    },
     recursive: function (stack) {
       this.recursiveInProgress = true
       if (stack.length === 0) {
