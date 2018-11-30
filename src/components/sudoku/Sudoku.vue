@@ -5,7 +5,7 @@
   <div class="flex-row" id="sudoku">
     <table class="grid flex-row">
       <td v-for="key in grid" class="grid-block">
-        <input type="number" v-model="key.value" min="1" max="9">
+        <input type="number" v-model="key.value">
         </td>
       </td>
     </table>
@@ -27,6 +27,19 @@ export default {
   },
   methods: {
     checkValid: function (index) {
+      return this.grid[index].conflicts.length > 0
+    },
+    setValue: function (index, input) {
+      // Check if input is an integer
+      var value = isNaN(input) ? null : parseInt(input)
+
+      // Check if input is a valid value
+      value = (value > 9 || value < 1) ? null : value
+
+      // Set value
+      this.$set(this.grid[index], 'value', value)
+
+      // Update conflicts
       for (var col in this.grid[index].related) {
         if (this.grid[col].value === null) {
           continue
@@ -38,10 +51,6 @@ export default {
           this.grid[col].conflicts.delete(index)
         }
       }
-    },
-    setValue: function (index, value) {
-      this.$set(this.grid[index], 'value', value)
-      this.checkValid(index)
     }
   },
   watch: {
