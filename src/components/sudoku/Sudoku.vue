@@ -4,9 +4,13 @@
 <template>
   <div class="flex-row" id="sudoku">
     <table class="grid flex-row">
-      <td v-for="key in grid" class="grid-block">
-        <input type="number" v-model="key.value">
-        </td>
+      <td v-for="(key, index) in grid" class="grid-block">
+        <input 
+        :class="[ key.conflicts.size > 0 ? 'error' : 'normal']"
+        :value="key.value" 
+        @keyup.delete="setValue(index)" 
+        @keypress="userInput(index, $event)">
+        </input>
       </td>
     </table>
   </div>
@@ -27,29 +31,37 @@ export default {
   },
   methods: {
     checkValid: function (index) {
+      // Check if value is valid
+      // console.log(this.grid[index].conflicts)
       return this.grid[index].conflicts.length > 0
     },
-    setValue: function (index, input) {
-      // Check if input is an integer
-      var value = isNaN(input) ? null : parseInt(input)
-
-      // Check if input is a valid value
-      value = (value > 9 || value < 1) ? null : value
-
+    setValue: function (index, input = null) {
       // Set value
-      this.$set(this.grid[index], 'value', value)
+      this.$set(this.grid[index], 'value', input)
 
       // Update conflicts
-      for (var col in this.grid[index].related) {
+      for (var col of this.grid[index].related) {
         if (this.grid[col].value === null) {
           continue
-        } else if (this.grid[index].value !== '' && this.grid[index].value === this.grid[col].value) {
+        } else if (this.grid[index].value !== null && this.grid[index].value === this.grid[col].value) {
           this.grid[index].conflicts.add(col)
           this.grid[col].conflicts.add(index)
         } else {
           this.grid[index].conflicts.delete(col)
           this.grid[col].conflicts.delete(index)
         }
+      }
+      this.$forceUpdate()
+      console.log('Index: ' + index)
+      console.log(this.grid[index].conflicts)
+    },
+    userInput: function (index, event) {
+      var input = parseInt(event.key)
+      // Check if input is an integer
+      if (input <= 9 && input >= 1) {
+        this.setValue(index, event.key)
+      } else {
+        this.setValue(index)
       }
     }
   },
@@ -62,18 +74,21 @@ export default {
     for (var i = 0; i < 81; i++) {
       var related = new Set()
       var val
+      // Rows
       for (var j = 0; j < 9; j++) {
         val = (Math.floor(i / 9) * 9) + j
         if (val !== i) {
           related.add(val)
         }
       }
+      // Columns
       for (var k = 0; k < 9; k++) {
         val = (i % 9) + 9 * k
         if (val !== i) {
           related.add(val)
         }
       }
+      // 9x9 Grid
       for (var l = 0; l < 9; l++) {
         val = (Math.floor(i / 27) * 27 + Math.floor((i % 9) / 3) * 3) + (Math.floor(l / 3) * 9) + (l % 3)
         if (val !== i) {
@@ -88,9 +103,6 @@ export default {
         locked: false
       })
     }
-    this.setValue(1, 5)
-    console.log(this.grid)
-    console.log(this.grid[1])
   },
   mounted () {
   },
@@ -126,12 +138,14 @@ export default {
   .grid-block > input {
     height: 100%;
     width: 100%;
-    font-size: 2vmin;
+    font-size: 7vmin;
     text-align: center;
   }
-  input[type=number]::-webkit-inner-spin-button, 
-  input[type=number]::-webkit-outer-spin-button { 
-    -webkit-appearance: none; 
-    margin: 0; 
+
+  .error {
+    color: red;
+  }
+  .normal {
+    color: black;
   }
 </style>
