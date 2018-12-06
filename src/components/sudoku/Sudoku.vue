@@ -44,11 +44,13 @@ export default {
         if (this.grid[col].value === null) {
           continue
         } else if (this.grid[index].value !== null && this.grid[index].value === this.grid[col].value) {
-          this.grid[index].conflicts.add(col)
-          this.grid[col].conflicts.add(index)
+          console.log('Adding: ' + col)
+          this.grid[index].conflicts.add(parseInt(col))
+          this.grid[col].conflicts.add(parseInt(index))
         } else {
-          this.grid[index].conflicts.delete(col)
-          this.grid[col].conflicts.delete(index)
+          console.log('Removing: ' + col)
+          this.grid[index].conflicts.delete(parseInt(col))
+          this.grid[col].conflicts.delete(parseInt(index))
         }
       }
       this.$forceUpdate()
