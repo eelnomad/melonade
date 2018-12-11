@@ -3,13 +3,14 @@
 
 <template>
   <div class="flex-row" id="sudoku">
+    <button @click='recursive()'>Yo</button>
     <table class="grid flex-row">
       <td v-for="(key, index) in grid" class="grid-block">
         <input 
-        :class="[ key.conflicts.size > 0 ? 'error' : 'normal']"
+        :class="[ key.conflicts.length > 0 ? 'error' : 'normal']"
         :value="key.value" 
         @keyup.delete="setValue(index)" 
-        @keypress="userInput(index, $event)">
+        @keypress.prevent="userInput(index, $event)">
         </input>
       </td>
     </table>
@@ -29,6 +30,50 @@ export default {
       grid: {}
     }
   },
+  created () {
+    console.log('010020300002003040050000006004700050000100003070068000300004090000600104006000000')
+
+    // Setting up grid
+    for (var i = 0; i < 81; i++) {
+      var related = []
+      var val
+      // Rows
+      for (var j = 0; j < 9; j++) {
+        val = (Math.floor(i / 9) * 9) + j
+        if (val !== i) {
+          if (related.indexOf(val) === -1) {
+            related.push(val)
+          }
+        }
+      }
+      // Columns
+      for (var k = 0; k < 9; k++) {
+        val = (i % 9) + 9 * k
+        if (val !== i) {
+          if (related.indexOf(val) === -1) {
+            related.push(val)
+          }
+        }
+      }
+      // 9x9 Grid
+      for (var l = 0; l < 9; l++) {
+        val = (Math.floor(i / 27) * 27 + Math.floor((i % 9) / 3) * 3) + (Math.floor(l / 3) * 9) + (l % 3)
+        if (val !== i) {
+          if (related.indexOf(val) === -1) {
+            related.push(val)
+          }
+        }
+      }
+
+      this.$set(this.grid, i, {
+        value: null,
+        related: related,
+        conflicts: [],
+        locked: false
+      })
+    }
+    console.log(this.grid)
+  },
   methods: {
     checkValid: function (index) {
       // Check if value is valid
@@ -44,18 +89,22 @@ export default {
         if (this.grid[col].value === null) {
           continue
         } else if (this.grid[index].value !== null && this.grid[index].value === this.grid[col].value) {
-          console.log('Adding: ' + col)
-          this.grid[index].conflicts.add(parseInt(col))
-          this.grid[col].conflicts.add(parseInt(index))
+          if (this.grid[index].conflicts.indexOf(parseInt(col)) === -1) {
+            // console.log('Adding: ' + col)
+            this.grid[index].conflicts.push(parseInt(col))
+            this.grid[col].conflicts.push(parseInt(index))
+          }
         } else {
-          console.log('Removing: ' + col)
-          this.grid[index].conflicts.delete(parseInt(col))
-          this.grid[col].conflicts.delete(parseInt(index))
+          if (this.grid[index].conflicts.indexOf(parseInt(col)) !== -1) {
+            // console.log('Removing: ' + col)
+            this.grid[index].conflicts.slice(this.grid[index].conflicts.indexOf(parseInt(col)), 1)
+            this.grid[col].conflicts.slice(this.grid[col].conflicts.indexOf(parseInt(index)), 1)
+          }
         }
       }
       this.$forceUpdate()
-      console.log('Index: ' + index)
-      console.log(this.grid[index].conflicts)
+      // console.log('Index: ' + index)
+      // console.log(this.grid[index].conflicts)
     },
     userInput: function (index, event) {
       var input = parseInt(event.key)
@@ -68,43 +117,6 @@ export default {
     }
   },
   watch: {
-  },
-  created () {
-    console.log('010020300002003040050000006004700050000100003070068000300004090000600104006000000')
-
-    // Setting up grid
-    for (var i = 0; i < 81; i++) {
-      var related = new Set()
-      var val
-      // Rows
-      for (var j = 0; j < 9; j++) {
-        val = (Math.floor(i / 9) * 9) + j
-        if (val !== i) {
-          related.add(val)
-        }
-      }
-      // Columns
-      for (var k = 0; k < 9; k++) {
-        val = (i % 9) + 9 * k
-        if (val !== i) {
-          related.add(val)
-        }
-      }
-      // 9x9 Grid
-      for (var l = 0; l < 9; l++) {
-        val = (Math.floor(i / 27) * 27 + Math.floor((i % 9) / 3) * 3) + (Math.floor(l / 3) * 9) + (l % 3)
-        if (val !== i) {
-          related.add(val)
-        }
-      }
-
-      this.$set(this.grid, i, {
-        value: null,
-        related: [...related],
-        conflicts: new Set(),
-        locked: false
-      })
-    }
   },
   mounted () {
   },
@@ -142,12 +154,22 @@ export default {
     width: 100%;
     font-size: 7vmin;
     text-align: center;
+    caret-color: transparent;
+  }
+
+  .grid-block > input:focus {
+    background-color: whitesmoke;
+    outline: none;
+    border-width: 1px;
+    border-color: whitesmoke;
   }
 
   .error {
     color: red;
+    background-color: pink;
   }
   .normal {
     color: black;
   }
+
 </style>
