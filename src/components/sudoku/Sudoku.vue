@@ -3,7 +3,7 @@
 
 <template>
   <div class="flex-row" id="sudoku">
-    <button @click='recursive()'>Yo</button>
+    <button @click='recursiveSolve()'>Yo</button>
     <table class="grid flex-row">
       <td v-for="(key, index) in grid" class="grid-block">
         <input 
