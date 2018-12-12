@@ -9,7 +9,7 @@
         <input 
         :class="[ key.conflicts.length > 0 ? 'error' : 'normal']"
         :value="key.value" 
-        @keyup.delete="setValue(index)" 
+        @keyup.delete="userInput(index, $event)" 
         @keypress.prevent="userInput(index, $event)">
         </input>
       </td>
@@ -27,12 +27,10 @@ export default {
   mixins: [sudokuMonteCarlo, sudokuRecursive, sudokuGenetic],
   data () {
     return {
-      grid: {}
+      grid: []
     }
   },
   created () {
-    console.log('010020300002003040050000006004700050000100003070068000300004090000600104006000000')
-
     // Setting up grid
     for (var i = 0; i < 81; i++) {
       var related = []
@@ -65,14 +63,18 @@ export default {
         }
       }
 
-      this.$set(this.grid, i, {
+      this.grid.push({
         value: null,
         related: related,
         conflicts: [],
         locked: false
       })
+      var premade = ' 1  2 3    2  3 4  5      6  47   5    1    3 7  68   3    4 9    6  1 4  6      '
+      for (var z = 0; z < this.grid.length; z++) {
+        var p = parseInt(premade[z]) > 0 || parseInt(premade[z]) < 10 ? parseInt(premade[z]) : null
+        this.$set(this.grid[z], 'value', p)
+      }
     }
-    console.log(this.grid)
   },
   methods: {
     checkValid: function (index) {
@@ -83,22 +85,21 @@ export default {
     setValue: function (index, input = null) {
       // Set value
       this.$set(this.grid[index], 'value', input)
-
       // Update conflicts
-      for (var col of this.grid[index].related) {
-        if (this.grid[col].value === null) {
+      for (var r of this.grid[index].related) {
+        if (this.grid[r].value === null) {
           continue
-        } else if (this.grid[index].value !== null && this.grid[index].value === this.grid[col].value) {
-          if (this.grid[index].conflicts.indexOf(parseInt(col)) === -1) {
-            // console.log('Adding: ' + col)
-            this.grid[index].conflicts.push(parseInt(col))
-            this.grid[col].conflicts.push(parseInt(index))
+        } else if (this.grid[index].value !== null && this.grid[index].value === this.grid[r].value) {
+          if (this.grid[index].conflicts.indexOf(r) === -1) {
+            // console.log('Adding: ' + r)
+            this.grid[index].conflicts.push(r)
+            this.grid[r].conflicts.push(index)
           }
         } else {
-          if (this.grid[index].conflicts.indexOf(parseInt(col)) !== -1) {
-            // console.log('Removing: ' + col)
-            this.grid[index].conflicts.slice(this.grid[index].conflicts.indexOf(parseInt(col)), 1)
-            this.grid[col].conflicts.slice(this.grid[col].conflicts.indexOf(parseInt(index)), 1)
+          if (this.grid[index].conflicts.indexOf(r) !== -1) {
+            // console.log('Removing: ' + r)
+            this.grid[index].conflicts.splice(this.grid[index].conflicts.indexOf(r), 1)
+            this.grid[r].conflicts.splice(this.grid[r].conflicts.indexOf(index), 1)
           }
         }
       }
@@ -107,10 +108,11 @@ export default {
       // console.log(this.grid[index].conflicts)
     },
     userInput: function (index, event) {
+      console.log(index)
       var input = parseInt(event.key)
       // Check if input is an integer
       if (input <= 9 && input >= 1) {
-        this.setValue(index, event.key)
+        this.setValue(index, input)
       } else {
         this.setValue(index)
       }
