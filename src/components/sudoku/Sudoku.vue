@@ -4,7 +4,9 @@
 <template>
   <div class="flex-row" id="sudoku">
     <button @click='recursiveSolve()'>Yo</button>
-    <table class="grid flex-row">
+    {{ state }}
+    <!-- <table class="grid flex-row"> -->
+    <table>
       <td v-for="(key, index) in grid" class="grid-block">
         <input 
         :class="[ key.conflicts.length > 0 ? 'error' : 'normal']"
@@ -116,6 +118,15 @@ export default {
       } else {
         this.setValue(index)
       }
+    }
+  },
+  computed: {
+    state: function () {
+      var result = ''
+      for (var i = 0; i < this.grid.length; i++) {
+        result += this.grid[i].value ? this.grid[i].value : ' '
+      }
+      return result
     }
   },
   watch: {

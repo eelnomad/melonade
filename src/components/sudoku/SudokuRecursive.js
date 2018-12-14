@@ -2,7 +2,8 @@ export default {
   data () {
     return {
       recursiveGrid: [],
-      recursiveStack: []
+      recursiveStack: [],
+      recursiveRunning: 0
     }
   },
   methods: {
@@ -17,15 +18,18 @@ export default {
     },
     recursiveSolve: function () {
       this.recursiveInit()
+      this.recursiveStack.push(this.fewestPossible())
       this.recursiveInterval = setInterval(() => {
-        if (this.recursiveStack.length > this.initial && this.recursiveStack[this.recursiveStack.length - 1]) {
-          this.recursiveStack.push(this.fewestPossible())
-          this.recursiveStep()
-        } else {
-          console.log(this.recursiveGrid)
-          clearInterval(this.recursiveInterval)
+        if (!this.recursiveRunning) {
+          this.recursiveRunning = 1
+          if (this.recursiveStack.length > this.initial && this.recursiveStack[this.recursiveStack.length - 1] !== null) {
+            this.recursiveStep()
+          } else {
+            clearInterval(this.recursiveInterval)
+          }
+          this.$forceUpdate()
+          this.recursiveRunning = 0
         }
-        this.$forceUpdate()
       }, 10)
     },
     recursiveStep: function () {
@@ -50,7 +54,6 @@ export default {
       }
     },
     setRecursiveValue: function (index, input = null) {
-      // this.$set(this.grid[index], 'value', newVal)
       this.setValue(index, input)
       if (!input) {
         this.possible(index)
