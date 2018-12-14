@@ -4,9 +4,9 @@
 <template>
   <div class="flex-row" id="sudoku">
     <button @click='recursiveSolve()'>Yo</button>
-    {{ state }}
-    <!-- <table class="grid flex-row"> -->
-    <table>
+    <button @click='mcSolve()'>Wasup</button>
+    <table class="grid flex-row">
+    <!-- <table> -->
       <td v-for="(key, index) in grid" class="grid-block">
         <input 
         :class="[ key.conflicts.length > 0 ? 'error' : 'normal']"
