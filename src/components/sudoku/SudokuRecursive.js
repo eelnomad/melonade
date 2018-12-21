@@ -3,7 +3,7 @@ export default {
     return {
       recursiveGrid: [],
       recursiveStack: [],
-      recursiveRunning: 0
+      recursiveRunning: false
     }
   },
   methods: {
@@ -21,14 +21,14 @@ export default {
       this.recursiveStack.push(this.fewestPossible())
       this.recursiveInterval = setInterval(() => {
         if (!this.recursiveRunning) {
-          this.recursiveRunning = 1
+          this.recursiveRunning = true
           if (this.recursiveStack.length > this.initial && this.recursiveStack[this.recursiveStack.length - 1] !== null) {
             this.recursiveStep()
           } else {
             clearInterval(this.recursiveInterval)
           }
           this.$forceUpdate()
-          this.recursiveRunning = 0
+          this.recursiveRunning = false
         }
       }, 10)
     },

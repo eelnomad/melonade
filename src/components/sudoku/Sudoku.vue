@@ -2,11 +2,16 @@
      Will contain Sudoku Solving amazingness.-->
 
 <template>
-  <div class="flex-row" id="sudoku">
+  <div class="flex-col" id="sudoku">
     <button @click='recursiveSolve()'>Yo</button>
     <button @click='mcSolve()'>Wasup</button>
-    <table class="grid flex-row">
-    <!-- <table> -->
+    <button @click='mcFitness = 0'>cry</button>
+    <div>
+      {{ mcFitness }}
+      {{ mcTemp }}
+    </div>
+    <!-- <table class="grid flex-row"> -->
+    <table>
       <td v-for="(key, index) in grid" class="grid-block">
         <input 
         :class="[ key.conflicts.length > 0 ? 'error' : 'normal']"
@@ -37,27 +42,23 @@ export default {
     for (var i = 0; i < 81; i++) {
       var related = []
       var val
-      // Rows
       for (var j = 0; j < 9; j++) {
-        val = (Math.floor(i / 9) * 9) + j
+        // Rows
+        val = Math.floor(i / 9) * 9 + j
         if (val !== i) {
           if (related.indexOf(val) === -1) {
             related.push(val)
           }
         }
-      }
-      // Columns
-      for (var k = 0; k < 9; k++) {
-        val = (i % 9) + 9 * k
+        // Columns
+        val = (i % 9) + 9 * j
         if (val !== i) {
           if (related.indexOf(val) === -1) {
             related.push(val)
           }
         }
-      }
-      // 9x9 Grid
-      for (var l = 0; l < 9; l++) {
-        val = (Math.floor(i / 27) * 27 + Math.floor((i % 9) / 3) * 3) + (Math.floor(l / 3) * 9) + (l % 3)
+        // Boxes
+        val = (Math.floor(i / 27) * 27 + Math.floor((i % 9) / 3) * 3) + (Math.floor(j / 3) * 9) + (j % 3)
         if (val !== i) {
           if (related.indexOf(val) === -1) {
             related.push(val)
@@ -110,7 +111,7 @@ export default {
       // console.log(this.grid[index].conflicts)
     },
     userInput: function (index, event) {
-      console.log(index)
+      // console.log(index)
       var input = parseInt(event.key)
       // Check if input is an integer
       if (input <= 9 && input >= 1) {
