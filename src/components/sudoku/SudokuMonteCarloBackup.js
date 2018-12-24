@@ -4,7 +4,7 @@ export default {
       mcInitial: [],
       mcEmpty: [],
       mcFitness: null,
-      mcTemp: 0.3,
+      mcTemp: 0.5,
       mcRunning: false
     }
   },
@@ -21,7 +21,7 @@ export default {
         this.setValue(second, firstVal)
         var newFit = this.mcIndividualCost(first) + this.mcIndividualCost(second)
         // var newFit = this.grid[first].conflicts.length + this.grid[second].conflicts.length
-        if (newFit < currentFit || 1 / (1 + Math.exp((newFit - currentFit) / this.mcTemp)) > Math.random()) {
+        if (Math.exp((currentFit - newFit) / this.mcTemp) > Math.random()) {
           this.mcFitness += (newFit - currentFit)
         } else {
           this.setValue(first, firstVal)
@@ -34,9 +34,9 @@ export default {
       this.mcInterval = setInterval(() => {
         if (!this.mcRunning) {
           this.mcRunning = true
-          var startFitness = this.mcFitness
+          // var startFitness = this.mcFitness
           var i = 0
-          while (i !== 2000) {
+          while (i !== 200) {
             this.mcStep()
             if (this.mcFitness === 0) {
               clearInterval(this.mcInterval)
@@ -44,8 +44,9 @@ export default {
             }
             i++
           }
-          var tempModifier = Math.abs(startFitness - this.mcFitness) / startFitness < 0.005 ? 1.05 : 0.9
-          this.mcTemp = this.mcTemp * tempModifier
+          // var tempModifier = Math.abs(startFitness - this.mcFitness) / startFitness < 0.005 ? 1.05 : 0.9
+          // this.mcTemp = this.mcTemp * tempModifier
+          this.mcTemp = this.mcTemp * 0.9995
           // console.log(startFitness + ':' + this.mcFitness)
           this.$forceUpdate()
           this.mcRunning = false

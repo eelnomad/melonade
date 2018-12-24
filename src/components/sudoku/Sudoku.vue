@@ -10,8 +10,8 @@
       {{ mcFitness }}
       {{ mcTemp }}
     </div>
-    <!-- <table class="grid flex-row"> -->
-    <table>
+    <table class="grid flex-row">
+    <!-- <table> -->
       <td v-for="(key, index) in grid" class="grid-block">
         <input 
         :class="[ key.conflicts.length > 0 ? 'error' : 'normal']"
@@ -21,6 +21,7 @@
         </input>
       </td>
     </table>
+    <highcharts v-if="chartOptions" :constructor-type="'stockChart'" :options="chartOptions" ref="chart"></highcharts>
   </div>
 </template>
 
@@ -34,7 +35,8 @@ export default {
   mixins: [sudokuMonteCarlo, sudokuRecursive, sudokuGenetic],
   data () {
     return {
-      grid: []
+      grid: [],
+      chartOptions: null
     }
   },
   created () {

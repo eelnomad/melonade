@@ -1,17 +1,25 @@
+import Highcharts from 'highcharts'
+import stockInit from 'highcharts/modules/stock'
+
+stockInit(Highcharts)
 export default {
   data () {
     return {
       mcInitial: [],
       mcEmpty: [],
       mcFitness: null,
-      mcTemp: 0.5,
-      mcRunning: false
+      mcTemp: null,
+      mcRunning: false,
+      mcTotalSteps: null,
+      mcFitnessTracker: [],
+      mcTempTracker: []
     }
   },
   methods: {
     mcStep: function () {
-      var first = this.mcEmpty[Math.floor(Math.random() * this.mcEmpty.length)]
-      var second = this.mcEmpty[Math.floor(Math.random() * this.mcEmpty.length)]
+      var row = Math.floor(Math.random() * 9)
+      var first = this.mcEmpty[row][Math.floor(Math.random() * this.mcEmpty[row].length)]
+      var second = this.mcEmpty[row][Math.floor(Math.random() * this.mcEmpty[row].length)]
       var firstVal = this.grid[first].value
       var secondVal = this.grid[second].value
       if (firstVal !== secondVal) {
@@ -34,45 +42,95 @@ export default {
       this.mcInterval = setInterval(() => {
         if (!this.mcRunning) {
           this.mcRunning = true
-          // var startFitness = this.mcFitness
+          var startFitness = this.mcFitness
+          this.mcFitnessTracker.push([this.mcTotalSteps, this.mcFitness])
+          this.mcTempTracker.push([this.mcTotalSteps, this.mcTemp])
           var i = 0
-          while (i !== 200) {
+          while (i !== 500) {
+            i++
+            this.mcTotalSteps++
             this.mcStep()
             if (this.mcFitness === 0) {
               clearInterval(this.mcInterval)
+              this.mcFitnessTracker.push([this.mcTotalSteps, this.mcFitness])
+              this.mcTempTracker.push([this.mcTotalSteps, this.mcTemp])
+              this.mcChart()
               break
             }
-            i++
           }
-          // var tempModifier = Math.abs(startFitness - this.mcFitness) / startFitness < 0.005 ? 1.05 : 0.9
-          // this.mcTemp = this.mcTemp * tempModifier
-          this.mcTemp = this.mcTemp * 0.9995
-          // console.log(startFitness + ':' + this.mcFitness)
+          var tempModifier = Math.abs(startFitness - this.mcFitness) < 1 ? 1.002 : 0.999
+          this.mcTemp = this.mcTemp * tempModifier
           this.$forceUpdate()
           this.mcRunning = false
         }
-      }, 10)
+      }, 100)
     },
     mcInit: function () {
-      // Tracking unset values and counts of each number in the system
-      var blanks = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+      // Tracking set and unset values in the grid
       for (var i = 0; i < this.grid.length; i++) {
+        // Things to do at the start of every row
+        if (i % 9 === 0) {
+          var emptyIndex = Math.floor(i / 9)
+          var available = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+          this.$set(this.mcEmpty, emptyIndex, [])
+        }
+        // If the grid box has a value add to fixed list, otherwise, add to corresponding row list
         if (this.grid[i].value) {
-          blanks[this.grid[i].value - 1]++
+          available.splice(available.indexOf(this.grid[i].value), 1)
           this.mcInitial.push(i)
         } else {
-          this.mcEmpty.push(i)
+          this.mcEmpty[emptyIndex].push(i)
+        }
+        // Things to do at the end of every row
+        if (i % 9 === 8) {
+          for (var j = 0; j < this.mcEmpty[emptyIndex].length; j++) {
+            this.setValue(this.mcEmpty[emptyIndex][j], available[j])
+          }
         }
       }
-      var empty = JSON.parse(JSON.stringify(this.mcEmpty))
-      for (var j = 0; j < 9; j++) {
-        while (blanks[j] !== 9) {
-          var random = empty.splice([Math.floor(Math.random() * empty.length)], 1)[0]
-          this.setValue(random, j + 1)
-          blanks[j]++
-        }
-      }
+      this.mcTotalSteps = 0
+      this.mcTemp = 0.5
       this.mcFitness = this.mcTotalCost()
+    },
+    mcChart: function () {
+      // Setting up Chart
+      this.chartOptions = {
+        title: {
+          text: 'MonteCarlo'
+        },
+        chart: {
+          type: 'line'
+        },
+        rangeSelector: {
+          buttons: [{
+            count: 20000,
+            type: 'millisecond',
+            text: '20K'
+          }, {
+            count: 60000,
+            type: 'millisecond',
+            text: '60K'
+          }, {
+            type: 'all',
+            text: 'All'
+          }],
+          inputEnabled: false,
+          selection: 0
+        },
+        series: [
+          {
+            title: 'Fitness',
+            data: this.mcFitnessTracker
+          },
+          {
+            title: 'Temperature',
+            data: this.mcTempTracker
+          }
+        ],
+        xAxis: {
+          type: 'linear'
+        }
+      }
     },
     mcTotalCost: function () {
       var totalFitness = 0
