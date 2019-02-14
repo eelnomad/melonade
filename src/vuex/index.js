@@ -20,7 +20,7 @@ const getters = {
 
 const mutations = {
   pushBackgroundQueue (state, payload) {
-    if (state.backgroundQueue.length < 2) {
+    if (state.backgroundQueue.length === 1) {
       state.backgroundQueue.push(payload)
     }
   },

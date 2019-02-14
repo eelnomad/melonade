@@ -3,9 +3,11 @@
 
 <template>
   <div class="flex-col" id="sudoku">
-    <button @click='recursiveSolve()'>Yo</button>
-    <button @click='mcSolve()'>Wasup</button>
-    <button @click='mcFitness = 0'>cry</button>
+    <input type="text" v-model='customPuzzle'></input>
+    <button @click='load()'>Load Puzzle</button>
+    <button @click='recursiveSolve()'>Recursion</button>
+    <button @click='mcSolve()'>Monte Carlo</button>
+    <button @click='mcFitness = 0'>Stop Monte Carlo</button>
     <div>
       {{ mcFitness }}
       {{ mcTemp }}
@@ -36,7 +38,8 @@ export default {
   data () {
     return {
       grid: [],
-      chartOptions: null
+      chartOptions: null,
+      customPuzzle: ' 1  2 3    2  3 4  5      6  47   5    1    3 7  68   3    4 9    6  1 4  6      '
     }
   },
   created () {
@@ -74,14 +77,16 @@ export default {
         conflicts: [],
         locked: false
       })
-      var premade = ' 1  2 3    2  3 4  5      6  47   5    1    3 7  68   3    4 9    6  1 4  6      '
-      for (var z = 0; z < this.grid.length; z++) {
-        var p = parseInt(premade[z]) > 0 || parseInt(premade[z]) < 10 ? parseInt(premade[z]) : null
-        this.$set(this.grid[z], 'value', p)
-      }
     }
   },
   methods: {
+    load: function () {
+      var premade = this.customPuzzle
+      for (var z = 0; z < this.grid.length; z++) {
+        var p = parseInt(premade[z]) > 0 && parseInt(premade[z]) < 10 ? parseInt(premade[z]) : null
+        this.$set(this.grid[z], 'value', p)
+      }
+    },
     checkValid: function (index) {
       // Check if value is valid
       // console.log(this.grid[index].conflicts)

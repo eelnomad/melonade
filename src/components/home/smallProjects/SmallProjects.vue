@@ -4,7 +4,7 @@
 <template>
   <div id="small-projects">
     <div id="small-projects-filter">
-      <input v-model="searchQuery" placeholder="Search Here">
+      <input v-model="searchQuery" placeholder="Filter Projects">
     </div>
     <div id="small-projects-content">
       <transition-group name="staggered-fade" class="flex-row" mode="out-in">
@@ -80,11 +80,11 @@
     height: 35px;
     border-radius: 7px;
     font-size: 20px;
+    padding-left: 20px;
   }
 
   #small-projects-content {
     display: flex;
-    height: 100%;
     width: 100%;
   }
 

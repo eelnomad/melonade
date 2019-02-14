@@ -1,32 +1,9 @@
 <!-- Blog.vue
-     Contains listof posts of specific type to select from.-->
+ Contains listof posts of specific type to select from.-->
 
-<template>
+ <template>
   <div class="flex-row" id="blog">
-    <div class="flex-row" id="blog-header">
-      <span></span>
-        <div class="flex-column" id="blog-header-content">
-            <div id="logo">
-              <router-link :to="'/'" id="logo">
-              Melonade
-              </router-link>
-            </div>
-          <span></span>
-          <div id="blog-filter">
-            <button :class="{'selected' : type === filter}" v-for="type in types" @click="setFilter(type)">
-              {{type}}
-            </button>
-          </div>
-        </div>
-      <span></span>
-    </div>
-    <span></span>
-    <div id="blog-listing">
-      <div id="blog-banner" :style="{ 'background-image': 'url(' + randomPost.background_image + ')' }"></div>
-      <blog-nav v-for="post in filteredPosts.slice(0,10)" :key="post._id" :post="post"></blog-nav>
-      <div id="footer-spacer"></div>
-    </div>
-    <span></span>
+    This straight up needs to be redesigned :/
   </div>
 </template>
 
@@ -85,7 +62,9 @@ export default {
 #blog {
   width: 100%;
   height: 100%;
-  position: absolute;
+  display: flex;
+  flex-direction: column;
+  color: white;
 }
 
 #blog-header {

@@ -5,7 +5,9 @@
   <div id="home">
     <div id="home-container" class="flex-row">
       <div id="side-nav">
-        <h1>Melonade</h1>
+        <router-link to="photogallery">
+          <h1>Melonade</h1>
+        </router-link>  
         <ul>
           <li v-for="route in routes">
             <router-link :to="route.name">{{ route.displayName }}</router-link>
@@ -89,12 +91,16 @@
     box-sizing: border-box;
   }
 
-  #side-nav > h1, #side-nav > ul > li > a {
+  #side-nav > h1, #side-nav > ul > li > a, #side-nav > a {
     color: whitesmoke;
   }
 
   #side-nav > ul {
     list-style-type: none;
+  }
+
+  #side-nav > ul > li{
+    padding-top: 5px;
   }
 
   router-view {

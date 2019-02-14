@@ -23,6 +23,8 @@
     },
     beforeDestroy () {
       this.stopBackgroundInterval()
+      window.removeEventListener('focus', this.startBackgroundInterval)
+      window.removeEventListener('blur', this.stopBackgroundInterval)
     },
     destroyed () {
     },
@@ -37,12 +39,17 @@
         clearInterval(this.backgroundInterval)
       },
       pushBackground: function () {
-        // Stops redundant mutation of background details
-        do {
-          var newBackground = Object.assign({}, photodata[Math.floor(Math.random() * photodata.length)])
-          newBackground.base_url += 'w1980-h1320-no?.jpg'
-        } while (newBackground.base_url === this.background.base_url)
-        this.$store.dispatch('pushBackgroundQueue', newBackground)
+        // Prevent queue from piling up
+        if (this.$store.getters.getBackgroundQueue.length !== 1) {
+          return null
+        } else {
+          // Stops redundant mutation of background details
+          do {
+            var newBackground = Object.assign({}, photodata[Math.floor(Math.random() * photodata.length)])
+            newBackground.base_url += 'w1980-h1320-no?.jpg'
+          } while (newBackground.base_url === this.background.base_url)
+          this.$store.dispatch('pushBackgroundQueue', newBackground)
+        }
       }
     },
     computed: {

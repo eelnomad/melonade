@@ -57,21 +57,24 @@ export default new Router({
       name: 'showerthoughts',
       component: ShowerThoughts,
       smallProjects: true,
-      displayName: 'Shower Thoughts'
+      displayName: 'Shower Thoughts',
+      description: 'A simple screensaver alternative that pulls the top posts from the /r/showerthoughts sub-reddit and displays them in a breath-like manner across the page.'
     },
     {
       path: '/sudoku',
       name: 'sudoku',
       component: Sudoku,
       smallProjects: true,
-      displayName: 'Sudoku Solver'
+      displayName: 'Sudoku Solver',
+      description: 'A sudoku solver showcasing the power of recursion and Monte Carlo methods when solving sudoku. Can also be used to just play sudoku!'
     },
     {
       path: '/league',
       name: 'league',
       component: WIP,
       smallProjects: true,
-      displayName: 'League of Legends Analysis'
+      displayName: 'League of Legends Analysis',
+      description: 'The dream is to someday perform some analysis on top of League of Legends data. That\'s the dream...'
     },
     {
       path: '*',

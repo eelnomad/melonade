@@ -1,6 +1,5 @@
 <template>
   <div id="about">
-    <router-link id="home-button" :to="{name: 'home'}">Home</router-link>
     <div id="animation">
       <div id="sky">
         <div v-for="i in stars" :style="i"></div>
