@@ -27,10 +27,9 @@
     background-color: rgb(50,50,50,.75);
     width: 350px;
     height: 250px;
-    margin: 50px 20px 0px 20px;
+    margin: 10px 20px 40px 20px;
     border: 1px solid transparent;
     border-radius: 5px;
-    margin-bottom: 10px;
   }
 
   #small-projects-nav:hover {

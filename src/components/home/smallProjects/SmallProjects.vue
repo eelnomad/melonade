@@ -7,7 +7,7 @@
       <input v-model="searchQuery" placeholder="Filter Projects">
     </div>
     <div id="small-projects-content">
-      <transition-group name="staggered-fade" class="flex-row" mode="out-in">
+      <transition-group name="staggered-fade" class="flex-row flex-wrap" mode="out-in">
         <small-projects-nav v-for="route in filteredRoutes" :key="route.path" :route="route" :ref="route.name"></small-projects-nav>
       </transition-group>
     </div>
@@ -77,21 +77,22 @@
   }
   #small-projects-filter > input {
     width: 50%;
-    height: 35px;
+    height: 3vh;
     border-radius: 7px;
     font-size: 20px;
     padding-left: 20px;
   }
 
   #small-projects-content {
-    display: flex;
+    overflow-y: overlay;
     width: 100%;
+    margin-top: 5vh;
+    padding-bottom: 10vh;
+    height: 87vh;
   }
 
   .flex-row {
-    flex-wrap: wrap;
     justify-content: space-evenly;
-    overflow-y: hidden;
   }
 
 
@@ -114,7 +115,7 @@
   }
 
   .staggered-fade-move {
-    transition-delay: 1s;
+    transition-delay: 2s;
     transition: all .5s cubic-bezier(0.77, 0, 0.175, 1);
 
   }

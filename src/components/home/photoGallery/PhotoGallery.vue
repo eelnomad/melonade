@@ -14,6 +14,7 @@
     name: 'photo-gallery',
     data () {
       return {
+        photoData: photodata
       }
     },
     created () {
@@ -45,7 +46,7 @@
         } else {
           // Stops redundant mutation of background details
           do {
-            var newBackground = Object.assign({}, photodata[Math.floor(Math.random() * photodata.length)])
+            var newBackground = Object.assign({}, this.photoData[Math.floor(Math.random() * this.photoData.length)])
             newBackground.base_url += 'w1980-h1320-no?.jpg'
           } while (newBackground.base_url === this.background.base_url)
           this.$store.dispatch('pushBackgroundQueue', newBackground)
@@ -72,6 +73,7 @@
   }
 
   #photo-gallery > h1 {
+    font-size: 4vmin;
     color: whitesmoke;
   }
 </style>

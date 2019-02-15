@@ -17,6 +17,15 @@ html {
   flex-direction: column;
 }
 
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+@-webkit-scrollbar {
+    width: 6px;
+    background-color: #F5F5F5;
+}
+
 span {
   flex: 99 1 auto;
 }
