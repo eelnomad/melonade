@@ -3,7 +3,7 @@
 
 <template>
   <div id="photo-gallery" class="flex-row">
-    <h1>{{ background.title }}</h1>
+    <h3>{{ background.title }}</h3>
   </div>
 </template>
 
@@ -68,12 +68,13 @@
   #photo-gallery {
     width: 100%;
     height: 100%;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-end;
+    align-items: flex-end;
   }
 
-  #photo-gallery > h1 {
-    font-size: 4vmin;
+  #photo-gallery > h3 {
     color: whitesmoke;
+    text-align: right;
+    margin: 0 2vw 2vh 0;
   }
 </style>
