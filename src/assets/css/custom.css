@@ -30,6 +30,10 @@ span {
   flex: 99 1 auto;
 }
 
+input {
+  font-family: 'Quicksand', sans-serif;
+}
+
 h1 {
   font-family: 'Quicksand', sans-serif;
   font-size: 24px;

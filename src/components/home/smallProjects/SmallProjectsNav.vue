@@ -24,7 +24,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   #small-projects-nav {
-    background-color: rgb(50,50,50,.75);
+    background-color: rgb(10,10,10,.55);
     width: 350px;
     height: 250px;
     margin: 10px 20px 40px 20px;
@@ -33,7 +33,7 @@
   }
 
   #small-projects-nav:hover {
-    background-color: rgb(75,75,75,.85);
+    background-color: rgb(25,25,25,.85);
     animation: pulse 2s infinite;
   }
 
@@ -59,22 +59,22 @@
 
 
   @-webkit-keyframes pulse {
-    0% {-webkit-box-shadow: 0 0 0 0 rgba(95,95,95, 0.4)}
-    70%{-webkit-box-shadow: 0 0 0 10px rgba(95,95,95, 0)}
-    100%{-webkit-box-shadow: 0 0 0 0 rgba(95,95,95, 0)}
+    0% {-webkit-box-shadow: 0 0 0 0 rgba(35,35,35, 0.4)}
+    70%{-webkit-box-shadow: 0 0 0 10px rgba(35,35,35, 0)}
+    100%{-webkit-box-shadow: 0 0 0 0 rgba(35,35,35, 0)}
   }
   @keyframes pulse {
     0% {
-      -moz-box-shadow: 0 0 0 0 rgba(95,95,95, 0.4);
-      box-shadow: 0 0 0 0 rgba(95,95,95, 0.4);
+      -moz-box-shadow: 0 0 0 0 rgba(35,35,35, 0.4);
+      box-shadow: 0 0 0 0 rgba(35,35,35, 0.4);
     }
     70% {
-        -moz-box-shadow: 0 0 0 10px rgba(95,95,95, 0);
-        box-shadow: 0 0 0 10px rgba(95,95,95, 0);
+        -moz-box-shadow: 0 0 0 10px rgba(35,35,35, 0);
+        box-shadow: 0 0 0 10px rgba(35,35,35, 0);
     }
     100% {
-        -moz-box-shadow: 0 0 0 0 rgba(95,95,95, 0);
-        box-shadow: 0 0 0 0 rgba(95,95,95, 0);
+        -moz-box-shadow: 0 0 0 0 rgba(35,35,35, 0);
+        box-shadow: 0 0 0 0 rgba(35,35,35, 0);
     }
   }
 

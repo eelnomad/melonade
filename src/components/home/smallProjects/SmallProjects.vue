@@ -71,19 +71,20 @@
 
   #small-projects-filter {
     display: flex;
+    flex: 0 0 150px;
     justify-content: center;
-    align-content: center;
-    margin-top: 10vh;
+    align-items: flex-end;
   }
   #small-projects-filter > input {
     width: 50%;
     height: 3vh;
     border-radius: 7px;
     font-size: 20px;
-    padding-left: 20px;
+    padding: 10px 20px 10px 20px;
   }
 
   #small-projects-content {
+    flex: 1 1 80vh;
     overflow-y: overlay;
     width: 100%;
     margin-top: 5vh;
@@ -117,6 +118,5 @@
   .staggered-fade-move {
     transition-delay: 2s;
     transition: all .5s cubic-bezier(0.77, 0, 0.175, 1);
-
   }
 </style>
