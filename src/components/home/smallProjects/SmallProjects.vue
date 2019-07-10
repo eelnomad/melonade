@@ -16,8 +16,6 @@
 
 <script>
   import SmallProjectsNav from './SmallProjectsNav'
-  // import _ from 'lodash'
-  // import Velocity from 'velocity-animate'
   export default {
     name: 'small-projects',
     data () {

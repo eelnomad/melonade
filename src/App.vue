@@ -16,18 +16,6 @@
       return {
       }
     },
-    head: {
-      title: {
-        inner: 'Melonade'
-      },
-      link: [
-        {
-          rel: 'icon',
-          type: 'image/png',
-          href: 'static/images/favicon.png'
-        }
-      ]
-    },
     created () {
       if (!localStorage.getItem('melonade_device_id')) {
         var d = Date.now()

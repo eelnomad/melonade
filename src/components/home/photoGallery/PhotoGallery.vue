@@ -8,7 +8,7 @@
 </template>
 
 <script>
-  import photodata from '@/../static/data/photodata.json'
+  import photodata from '@/assets/data/photodata.json'
 
   export default {
     name: 'photo-gallery',

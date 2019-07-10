@@ -25,7 +25,7 @@
 
 <script>
   // Replace with rest call that returns details of specific post id
-  import blogdata from '@/../static/data/blogdata.json'
+  import blogdata from '@/assets/data/blogdata.json'
 
   export default {
     name: 'blog-post',
