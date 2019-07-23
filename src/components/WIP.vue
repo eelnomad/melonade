@@ -3,7 +3,11 @@
 
 <template>
   <div class="flex-row dim" id="wip">
-    <router-link id="home-button" to="/">Home</router-link>
+    <button id="home-button" @click="back()">
+      <h3>
+        Back
+      </h3>
+    </button>
     <span></span>
     <div class="flex-column" id="wip-text">
       <span></span>
@@ -26,7 +30,11 @@
     },
     created () {
     },
-    methods: {}
+    methods: {
+      back: function () {
+        this.$router.go(-1)
+      }
+    }
   }
 </script>
 
@@ -61,6 +69,7 @@
     border-width: 1px;
     border-bottom-width: 3px;
     border-color: white;
+    border-radius: 5px;
     color: white;
     float: right;
     outline-width: 1px;
@@ -77,6 +86,11 @@
   h1 {
     font-size: 5vw;
     margin-bottom: 6vw;
+  }
+
+  h3 {
+    
+    margin: 10px 10px;
   }
 
   p {

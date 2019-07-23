@@ -1,9 +1,9 @@
 <!-- League.vue
-     Will contain Sudoku Solving amazingness.-->
+ Will contain Sudoku Solving amazingness.-->
 
-<template>
+ <template>
   <div class="flex-col" id="sudoku">
-    <input type="text" v-model='customPuzzle'></input>
+    <input type="text" v-model='customPuzzle' />
     <button @click='load()'>Load Puzzle</button>
     <button @click='recursiveSolve()'>Recursion</button>
     <button @click='mcSolve()'>Monte Carlo</button>
@@ -13,14 +13,13 @@
       {{ mcTemp }}
     </div>
     <table class="grid flex-row">
-    <!-- <table> -->
-      <td v-for="(key, index) in grid" class="grid-block">
-        <input 
-        :class="[ key.conflicts.length > 0 ? 'error' : 'normal']"
-        :value="key.value" 
-        @keyup.delete="userInput(index, $event)" 
-        @keypress.prevent="userInput(index, $event)">
-        </input>
+      <!-- <table> -->
+        <td v-for="(key, index) in grid" class="grid-block" :key="index">
+          <input 
+          :class="[ key.conflicts.length > 0 ? 'error' : 'normal']"
+          :value="key.value" 
+          @keyup.delete="userInput(index, $event)" 
+          @keypress.prevent="userInput(index, $event)" />
       </td>
     </table>
     <highcharts v-if="chartOptions" :constructor-type="'stockChart'" :options="chartOptions" ref="chart"></highcharts>
@@ -28,21 +27,21 @@
 </template>
 
 <script>
-import sudokuRecursive from './SudokuRecursive.js'
-import sudokuMonteCarlo from './SudokuMonteCarlo.js'
-import sudokuGenetic from './SudokuGenetic.js'
+  import sudokuRecursive from './SudokuRecursive.js'
+  import sudokuMonteCarlo from './SudokuMonteCarlo.js'
+  import sudokuGenetic from './SudokuGenetic.js'
 
-export default {
-  name: 'sudoku',
-  mixins: [sudokuMonteCarlo, sudokuRecursive, sudokuGenetic],
-  data () {
-    return {
-      grid: [],
-      chartOptions: null,
-      customPuzzle: ' 1  2 3    2  3 4  5      6  47   5    1    3 7  68   3    4 9    6  1 4  6      '
-    }
-  },
-  created () {
+  export default {
+    name: 'sudoku',
+    mixins: [sudokuMonteCarlo, sudokuRecursive, sudokuGenetic],
+    data () {
+      return {
+        grid: [],
+        chartOptions: null,
+        customPuzzle: ' 1  2 3    2  3 4  5      6  47   5    1    3 7  68   3    4 9    6  1 4  6      '
+      }
+    },
+    created () {
     // Setting up grid
     for (var i = 0; i < 81; i++) {
       var related = []
@@ -148,49 +147,50 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  #sudoku {
-    height: 100%;
-    width: 100%;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    align-items: center;
-    /*background-image: url('https://lh3.googleusercontent.com/UqrZHJ0MVurefzgefF9zCzR3cUGkOQY97ZSx6yiZJycfSLNAy9fpK0VzfmPXZiib9JA459-cPcxke699A8Ovy3Nh4bM8xVv5NsatsBL4gyF6Q3Gp0Xn1ZZshnz4MzSmmCRP4vI2g8dqys0jqOUIDzz2B28ia1AYKPd4NN7_gu2e5sLyD-0X2Pbb_Zi6LNIt20nl15dJjuLI-QaMnYH9EjtBp1qPMLwJFG5q5l3tTbOFgA-Tws1rRJ6sfLNYfywnEKtwzt6_C-uqSfdPlzu_0btVpI3aRZz2zfSr13tkJ3mYAVSnRuG_23laoaG4fhOEIaZGqOUPzNVtDyWojZ2ORWu48YoOM_EpxGAWQ_1S2AH51eiqB-wJaPSZVpkdy_RqBz0_oRePLAfkIVNF-DzNg0qfmYfjn1wMkRXkwRwp0xny0oMh6FCpYbfbC1D4rnSWW_nfCE9CbwhOM-oQfDPzqv4Bwwf3DVqCltLROzgjOa_j9bW_23kop1wK80QeXnFCd506eXKqb_GtHmViQ1Z_KU1lSjF36wbsRsA0Dql5YojNBEnMR_ZsJHNNXYM8mwRSEBOxfgzDEEEwE9rKwNem3oerhJfF8WY6vwDCum23B7aPqZckO8jmq1b7dCxGWNUwsJhqjRKX53De50Gun_NxMQqgnf7OV0JQ-5OA=w1980-h1320-no?.jpg');*/
-  }
+#sudoku {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  align-items: center;
+  /*background-image: url('https://lh3.googleusercontent.com/UqrZHJ0MVurefzgefF9zCzR3cUGkOQY97ZSx6yiZJycfSLNAy9fpK0VzfmPXZiib9JA459-cPcxke699A8Ovy3Nh4bM8xVv5NsatsBL4gyF6Q3Gp0Xn1ZZshnz4MzSmmCRP4vI2g8dqys0jqOUIDzz2B28ia1AYKPd4NN7_gu2e5sLyD-0X2Pbb_Zi6LNIt20nl15dJjuLI-QaMnYH9EjtBp1qPMLwJFG5q5l3tTbOFgA-Tws1rRJ6sfLNYfywnEKtwzt6_C-uqSfdPlzu_0btVpI3aRZz2zfSr13tkJ3mYAVSnRuG_23laoaG4fhOEIaZGqOUPzNVtDyWojZ2ORWu48YoOM_EpxGAWQ_1S2AH51eiqB-wJaPSZVpkdy_RqBz0_oRePLAfkIVNF-DzNg0qfmYfjn1wMkRXkwRwp0xny0oMh6FCpYbfbC1D4rnSWW_nfCE9CbwhOM-oQfDPzqv4Bwwf3DVqCltLROzgjOa_j9bW_23kop1wK80QeXnFCd506eXKqb_GtHmViQ1Z_KU1lSjF36wbsRsA0Dql5YojNBEnMR_ZsJHNNXYM8mwRSEBOxfgzDEEEwE9rKwNem3oerhJfF8WY6vwDCum23B7aPqZckO8jmq1b7dCxGWNUwsJhqjRKX53De50Gun_NxMQqgnf7OV0JQ-5OA=w1980-h1320-no?.jpg');*/
+}
 
-  .grid {
-    flex-wrap: wrap;
-    height: 81vmin;
-    width: 81vmin;
-  }
+.grid {
+  flex-wrap: wrap;
+  height: 81vmin;
+  width: 81vmin;
+}
 
-  .grid-block {
-    box-sizing: border-box;
-    height: 9vmin;
-    width: 9vmin;
-  }
+.grid-block {
+  box-sizing: border-box;
+  height: 9vmin;
+  width: 9vmin;
+}
 
-  .grid-block > input {
-    height: 100%;
-    width: 100%;
-    font-size: 7vmin;
-    text-align: center;
-    caret-color: transparent;
-  }
+.grid-block > input {
+  height: 100%;
+  width: 100%;
+  font-size: 7vmin;
+  text-align: center;
+  caret-color: transparent;
+}
 
-  .grid-block > input:focus {
-    background-color: whitesmoke;
-    outline: none;
-    border-width: 1px;
-    border-color: whitesmoke;
-  }
+.grid-block > input:focus {
+  background-color: whitesmoke;
+  outline: none;
+  border-width: 1px;
+  border-color: whitesmoke;
+}
 
-  .error {
-    color: red;
-    background-color: pink;
-  }
-  .normal {
-    color: black;
-  }
+.error {
+  color: red;
+  background-color: pink;
+}
+.normal {
+  color: black;
+}
 
 </style>

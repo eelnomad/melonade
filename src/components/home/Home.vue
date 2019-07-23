@@ -9,7 +9,7 @@
           <h1>Melonade</h1>
         </router-link>  
         <ul>
-          <li v-for="route in routes">
+          <li v-for="route in routes" :key="route.path">
             <router-link :to="route.name">{{ route.displayName }}</router-link>
           </li>
         </ul>

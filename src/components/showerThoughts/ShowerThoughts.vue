@@ -5,7 +5,7 @@
   <div id="shower-thoughts">
     <router-link id="home-button" to="/">Home</router-link>
     <div class="overlay">
-      <span v-for="i in grid" :class="['opacity-' + i.toString()]"></span>
+      <span v-for="i in grid" :class="['opacity-' + i.toString()]" :key="i"></span>
     </div>
     <transition-group name="fade" :style="{'background': 'transparent'}">
       <a id="thought-bubble" v-for="thought in activeRandomThoughts" :key="thought.key" :style="thought.style" :href="thought.url">
@@ -84,9 +84,9 @@
           localStorage.setItem('reddit_access_token', 'Bearer ' + response.data.access_token)
           localStorage.setItem('reddit_refresh', Math.floor(Date.now() / 1000) + 3600)
           this.access_token = localStorage.getItem('reddit_access_token')
-          console.log('refreshed token')
-        }).catch(error => {
-          console.log(error)
+          // console.log('refreshed token')
+        }).catch(() => {
+          // console.log(error)
           localStorage.removeItem('reddit_access_token')
         })
       },
@@ -102,8 +102,8 @@
               'url': response['data']['data']['children'][thought]['data']['url']
             })
           }
-        }).catch(error => {
-          console.log(error)
+        }).catch(() => {
+          // console.log(error)
           this.getToken()
           this.getShowerThoughts()
         })
@@ -202,7 +202,7 @@
         // console.log('status: ' + status)
       },
       getGrid: function () {
-        console.log(document.documentElement)
+        // console.log(document.documentElement)
         var grids = Math.ceil(document.documentElement.clientHeight * 8 / document.documentElement.clientWidth) * 8
         while (this.grid.length > grids) {
           this.grid.pop()

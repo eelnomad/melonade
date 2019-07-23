@@ -1,60 +1,31 @@
-<!-- Blog.vue
- Contains listof posts of specific type to select from.-->
+<!-- Blog.vue - Contains list of posts of specific type to select from.-->
 
- <template>
-  <div class="flex-row" id="blog">
-    This straight up needs to be redesigned :/
+<template>
+  <div id="blog">
+    <component :is="dynamicComponent"/>
   </div>
 </template>
 
 <script>
-// Replace with rest call that returns 10 posts (title, preview, bg_image, date) for that type maybe
-import blogdata from '@/assets/data/blogdata.json'
-import BlogNav from './BlogNav'
 
-export default {
-  name: 'blog',
-  data () {
-    return {
-      posts: [],
-      types: [],
-      filter: 'Recent'
-    }
-  },
-  created () {
-    this.posts = blogdata
-    this.types = this.getTypes()
-  },
-  destroyed () {
-  },
-  methods: {
-    setFilter: function (type) {
-      this.filter = type
-    },
-    getTypes: function () {
-      var types = ['Recent']
-      for (var i = 0; i < blogdata.length; i++) {
-        if (!types.includes(blogdata[i].type)) {
-          types.push(blogdata[i].type)
-        }
+  export default {
+    name: 'blog',
+    data () {
+      return {
+        dynamicComponent: undefined
       }
-      return types
-    }
-  },
-  computed: {
-    filteredPosts () {
-      return this.posts.filter(post => {
-        return post.type === this.filter || this.filter === 'Recent'
-      })
     },
-    randomPost () {
-      return this.posts[Math.floor(Math.random() * this.posts.length)]
+    created () {
+    },
+    destroyed () {
+    },
+    methods: {
+    },
+    computed: {
+    },
+    components: {
     }
-  },
-  components: {
-    BlogNav
   }
-}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

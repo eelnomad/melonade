@@ -41,8 +41,11 @@
   }
 
   .fade-enter-active, .fade-leave-active {
-    transition: all .75s ease-out;
+    transition: all .1s ease-in;
     overflow-x: hidden;
+  }
+  .fade-enter {
+    z-index: -1;
   }
   .fade-enter, .fade-leave-to {
     opacity: 0;
