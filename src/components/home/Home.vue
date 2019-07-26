@@ -10,7 +10,7 @@
         </router-link>  
         <ul>
           <li v-for="route in routes" :key="route.path">
-            <router-link :to="route.name">{{ route.displayName }}</router-link>
+            <router-link :to="route.name ? route.name : { path: route.path }">{{ route.displayName }}</router-link>
           </li>
         </ul>
         <span></span>

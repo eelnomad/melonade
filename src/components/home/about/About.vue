@@ -9,13 +9,6 @@
           <div id="crater"></div>
         </div>
       </div>
-      <div id="layer-three"></div>
-      <div id="layer-two"></div>
-      <div id="layer-one">
-        <objects-one v-for="i in layerOne" :key="i"></objects-one>
-        <div id="person-layer"></div>
-        <div id="ground"></div>
-      </div>
     </div>
 <!--     <h1>About me</h1>
   <h2>Just a dreamer :) ... wow this is hideous </h2> -->
@@ -152,7 +145,7 @@
   position: absolute;
   height: 100%;
   width: 100%;
-  background:transparent url('/static/images/star_effect.png') repeat top center;
+  background:transparent url("~@/assets/images/star_effect.png") repeat top center;
   z-index:-4;
   animation: star-effect 500s linear infinite;
 }

@@ -1,7 +1,7 @@
 <!-- BlogNav.vue - This is the landing page of the website with four quadrants to select what category of routes to look at.-->
 
 <template>
-  <router-link id="blog-nav" :to="{name: 'blogPost', params: {id: post.id.toString()}}">
+  <router-link id="blog-nav" :to="{name: 'blogPost', params: {id: post.id.toString()}}" append>
     <div class="flex-column" id="blog-preview">
       <h2>{{post.title}}</h2>
       <h4>{{post.create_date}}</h4>
