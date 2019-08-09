@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/home/Home'
 import BlogPost from '@/components/home/blog/BlogPost'
+import BlogHome from '@/components/home/blog/BlogHome'
 import Blog from '@/components/home/blog/Blog'
 import PhotoGallery from '@/components/home/photoGallery/PhotoGallery'
 import About from '@/components/home/about/About'
@@ -22,24 +23,26 @@ export default new Router({
       children: [
         {
           path: '',
-          name: 'photogallery',
+          name: 'home',
           component: PhotoGallery,
           displayName: 'Home'
         },
         {
           path: 'blog',
-          name: 'blog',
+          childName: 'blog',
           displayName: 'Blog',
+          component: Blog,
           children: [
             {
               name: 'blogPost',
               path: ':id',
-              component: BlogPost
+              component: BlogPost,
+              props: true
             },
             {
-              name: 'blogHome',
+              name: 'blog',
               path: '',
-              component: Blog
+              component: BlogHome
             }
           ]
         },

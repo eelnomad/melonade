@@ -1,14 +1,13 @@
 <template>
-  <div id="blog">
-    <transition name="fade" mode="out-in">
-      <router-view></router-view>
-    </transition>
+  <div class="flex-column" id="the-blog-begins">
+    <h1>This is the end...</h1>
+    <h2>Hold your breath and count to ten.</h2>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'blog',
+    name: 'the-blog-begins',
     data () {
       return {
       }
@@ -28,13 +27,9 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#blog {
+#the-blog-begins {
   width: 100%;
-  height: 100%;
-}
-.fade-enter-active, .fade-leave-active {
-  transition: all .1s ease-in;
-  overflow-x: hidden;
+  margin: 20px 50px;
 }
 
 </style>
