@@ -29,7 +29,6 @@
 #blog-nav {
   transition: all .1s ease;
   flex: 1 0 auto;
-  vertical-align: center;
   color: whitesmoke;
   font-size: 1vw;
 }

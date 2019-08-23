@@ -37,6 +37,10 @@ export default {
         }
       }
     },
+    mcStop: function () {
+      clearInterval(this.mcInterval)
+      this.mcChart()
+    },
     mcSolve: function () {
       this.mcInit()
       this.mcInterval = setInterval(() => {
@@ -55,6 +59,7 @@ export default {
               this.mcFitnessTracker.push([this.mcTotalSteps, this.mcFitness])
               this.mcTempTracker.push([this.mcTotalSteps, this.mcTemp])
               this.mcChart()
+              this.current = null
               break
             }
           }

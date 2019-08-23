@@ -44,7 +44,8 @@
 #blog-list {
   margin: 0 20%;
   padding-bottom: 100px;
-  border-left: 2px solid gray;
+  border-right: 2px solid gray;
+  text-align: right;
 }
 
 </style>

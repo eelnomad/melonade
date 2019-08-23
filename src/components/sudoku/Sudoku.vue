@@ -5,10 +5,11 @@
   <div class="flex-col" id="sudoku">
     <input type="text" v-model='customPuzzle' />
     <button @click='load()'>Load Puzzle</button>
-    <button @click='recursiveSolve()'>Recursion</button>
-    <button @click='mcSolve()'>Monte Carlo</button>
-    <button @click='mcFitness = 0'>Stop Monte Carlo</button>
+    <button @click='start("Recursion")'>Recursion</button>
+    <button @click='start("Monte")'>Monte Carlo</button>
+    <button @click='stop()'>Stop</button>
     <div>
+      {{ current }}
       {{ mcFitness }}
       {{ mcTemp }}
     </div>
@@ -36,6 +37,7 @@
     mixins: [sudokuMonteCarlo, sudokuRecursive, sudokuGenetic],
     data () {
       return {
+        current: null,
         grid: [],
         chartOptions: null,
         customPuzzle: ' 1  2 3    2  3 4  5      6  47   5    1    3 7  68   3    4 9    6  1 4  6      '
@@ -79,11 +81,39 @@
     }
   },
   methods: {
+    stop: function () {
+      if (this.current === 'Recursion') {
+        this.recursiveStop()
+      }
+      if (this.current === 'Monte') {
+        this.mcStop()
+      }
+      this.current = null
+    },
+    start: function (type) {
+      if (type === 'Recursion') {
+        this.recursiveSolve()
+        this.current = type
+      } else if (type === 'Monte') {
+        this.mcSolve()
+        this.current = type
+      }
+    },
     load: function () {
       var premade = this.customPuzzle
       for (var z = 0; z < this.grid.length; z++) {
         var p = parseInt(premade[z]) > 0 && parseInt(premade[z]) < 10 ? parseInt(premade[z]) : null
-        this.$set(this.grid[z], 'value', p)
+        this.setValue(z, p)
+      }
+    },
+    userInput: function (index, event) {
+      // console.log(index)
+      var input = parseInt(event.key)
+      // Check if input is an integer
+      if (input <= 9 && input >= 1) {
+        this.setValue(index, input)
+      } else {
+        this.setValue(index)
       }
     },
     checkValid: function (index) {
@@ -115,16 +145,6 @@
       this.$forceUpdate()
       // console.log('Index: ' + index)
       // console.log(this.grid[index].conflicts)
-    },
-    userInput: function (index, event) {
-      // console.log(index)
-      var input = parseInt(event.key)
-      // Check if input is an integer
-      if (input <= 9 && input >= 1) {
-        this.setValue(index, input)
-      } else {
-        this.setValue(index)
-      }
     }
   },
   computed: {

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/components/home/Home'
+import Landing from '@/components/home/landing/Landing'
 import BlogPost from '@/components/home/blog/BlogPost'
 import BlogHome from '@/components/home/blog/BlogHome'
 import Blog from '@/components/home/blog/Blog'
@@ -24,7 +25,7 @@ export default new Router({
         {
           path: '',
           name: 'home',
-          component: PhotoGallery,
+          component: Landing,
           displayName: 'Home'
         },
         {
@@ -45,6 +46,12 @@ export default new Router({
               component: BlogHome
             }
           ]
+        },
+        {
+          path: 'photo',
+          name: 'photo',
+          component: PhotoGallery,
+          displayName: 'Photos'
         },
         {
           path: 'smallprojects',

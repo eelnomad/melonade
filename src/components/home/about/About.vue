@@ -16,8 +16,6 @@
 </template>
 
 <script>
-  import ObjectsOne from './ObjectsOne'
-
   export default {
     name: 'about',
     data () {
@@ -53,7 +51,6 @@
       }
     },
     components: {
-      ObjectsOne
     }
   }
 </script>

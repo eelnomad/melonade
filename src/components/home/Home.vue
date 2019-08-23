@@ -53,7 +53,7 @@
       },
       routes () {
         return this.$router.options.routes.find((route) => {
-          return route.sideNav
+          return route.path === '/'
         }).children
       }
     },
@@ -99,8 +99,12 @@
   list-style-type: none;
 }
 
-#side-nav > ul > li{
-  padding-top: 5px;
+#side-nav > ul > li {
+  padding-top: 10px;
+}
+
+#side-nav > ul > li > a:hover {
+  font-weight: bold;
 }
 
 router-view {

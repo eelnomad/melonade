@@ -28,8 +28,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #the-blog-begins {
-  width: 100%;
-  margin: 20px 50px;
+  padding: 20px 50px;
 }
 
 </style>

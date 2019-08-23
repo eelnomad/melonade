@@ -16,6 +16,9 @@ export default {
       }
       this.$set(this.recursiveGrid, index, values)
     },
+    recursiveStop: function () {
+      clearInterval(this.recursiveInterval)
+    },
     recursiveSolve: function () {
       this.recursiveInit()
       this.recursiveStack.push(this.fewestPossible())
@@ -25,6 +28,7 @@ export default {
           if (this.recursiveStack.length > this.initial && this.recursiveStack[this.recursiveStack.length - 1] !== null) {
             this.recursiveStep()
           } else {
+            this.current = null
             clearInterval(this.recursiveInterval)
           }
           this.$forceUpdate()
