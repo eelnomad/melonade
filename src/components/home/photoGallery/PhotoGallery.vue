@@ -26,9 +26,7 @@
       for (var i = 0; i < sortedPhotos.length; i++) {
         sortedPhotos[i]['preview'] = sortedPhotos[i]['base_url'] += 'w200-h100-no?.jpg'
         sortedPhotos[i]['full'] = sortedPhotos[i]['base_url'] += 'w2000-h1000-no?.jpg'
-        let flex_pct = 20 + Math.floor(Math.random() * 20)
-        let height_pct = 25 + Math.floor(Math.random() * 10)
-        sortedPhotos[i]['style'] = 'flex: 1 1 ' + flex_pct.toString() + '%;' // height:' + height_pct.toString() + 'vh;'
+        sortedPhotos[i]['style'] = 'flex: 1 1 ' + (300 + 2 * this.asciiToInt(sortedPhotos[i]['base_url'])) + 'px;' // height:' + height_pct.toString() + 'vh;'
       }
       this.sortedPhotos = sortedPhotos
     },
@@ -39,6 +37,13 @@
     watch: {
     },
     methods: {
+      asciiToInt: function (input) {
+        var result = 0
+        for (var i = 0; i < input.length; i++) {
+          result += input.charCodeAt(i)
+        }
+        return result % 100
+      }
     },
     computed: {
     },
@@ -58,7 +63,6 @@
   #photo-list {
     padding: 5% 5% 5% 5%;
     box-sizing: border-box;
-    height: 100%;
   }
 
   .photo {
@@ -68,7 +72,7 @@
 
   .photo > img{
     width: 100%;
-    height: 20vh;
+    height: 300px;
     display: block;
     object-fit: cover;
     transition: transform .5s ease;
