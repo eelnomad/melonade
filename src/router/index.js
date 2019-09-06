@@ -51,7 +51,8 @@ export default new Router({
           path: 'photo',
           name: 'photo',
           component: PhotoGallery,
-          displayName: 'Photos'
+          displayName: 'Photos',
+          sidenav_style: 'photo-nav'
         },
         {
           path: 'smallprojects',

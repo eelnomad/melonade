@@ -26,7 +26,7 @@
       for (var i = 0; i < sortedPhotos.length; i++) {
         sortedPhotos[i]['preview'] = sortedPhotos[i]['base_url'] += 'w200-h100-no?.jpg'
         sortedPhotos[i]['full'] = sortedPhotos[i]['base_url'] += 'w2000-h1000-no?.jpg'
-        sortedPhotos[i]['style'] = 'flex: 1 1 ' + (300 + 2 * this.asciiToInt(sortedPhotos[i]['base_url'])) + 'px;' // height:' + height_pct.toString() + 'vh;'
+        sortedPhotos[i]['style'] = 'flex: 1 1 ' + (200 + 4 * this.asciiToInt(sortedPhotos[i]['base_url'])) + 'px;' // height:' + height_pct.toString() + 'vh;'
       }
       this.sortedPhotos = sortedPhotos
     },
@@ -58,6 +58,7 @@
     width: 100%;
     height: 100%;
     overflow-y: auto;
+    background-color: white;
   }
 
   #photo-list {
@@ -66,19 +67,23 @@
   }
 
   .photo {
+    margin: 7px 8px;
     display: inline-block;
     overflow: hidden;
   }
 
-  .photo > img{
+  .photo > img {
     width: 100%;
     height: 300px;
     display: block;
     object-fit: cover;
-    transition: transform .5s ease;
+    /*filter: grayscale(100%);*/
+    transition: transform .5s ease, filter .1s ease;
+
   }
 
   .photo > img:hover {
+    /*filter: grayscale(0%);*/
     transform: scale(1.1);
   }
 </style>

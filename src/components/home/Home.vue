@@ -4,7 +4,7 @@
  <template>
   <div id="home">
     <div id="home-container" class="flex-row">
-      <div id="side-nav">
+      <div id="side-nav" class="default-nav">
         <router-link :to="{ name: 'home' }">
           <h1>Melonade</h1>
         </router-link>  
@@ -67,7 +67,7 @@
 #home {
   width: 100%;
   height: 100%;
-  background-color: gray;
+  background-color: #303030;
   position: absolute;
 }
 
@@ -84,11 +84,19 @@
 #side-nav {
   height: 100%;
   flex: 0 0 300px;
-  background: rgba(0,0,0,0.5);
   z-index: 99;
-  text-align: right;
   padding: 30vh 20px 0 0;
   box-sizing: border-box;
+}
+
+.default-nav {
+  text-align: right;
+  background: rgba(0,0,0,0.5);
+}
+
+.photo-nav {
+  text-align: left;
+  background: white;
 }
 
 #side-nav > h1, #side-nav > ul > li > a, #side-nav > a {
