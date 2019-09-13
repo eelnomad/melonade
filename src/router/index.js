@@ -26,13 +26,15 @@ export default new Router({
           path: '',
           name: 'home',
           component: Landing,
-          displayName: 'Home'
+          displayName: 'Home',
+          type: 'major'
         },
         {
           path: 'blog',
           childName: 'blog',
-          displayName: 'Blog',
           component: Blog,
+          displayName: 'Blog',
+          type: 'major',
           children: [
             {
               name: 'blogPost',
@@ -52,19 +54,21 @@ export default new Router({
           name: 'photo',
           component: PhotoGallery,
           displayName: 'Photos',
-          sidenav_style: 'photo-nav'
+          type: 'major'
         },
         {
           path: 'smallprojects',
           name: 'smallprojects',
           component: SmallProjects,
-          displayName: 'Small Projects'
+          displayName: 'Small Projects',
+          type: 'major'
         },
         {
           path: 'about',
           name: 'about',
           component: About,
-          displayName: 'About'
+          displayName: 'About',
+          type: 'minor'
         }
       ]
     },

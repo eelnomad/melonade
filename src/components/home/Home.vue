@@ -4,15 +4,13 @@
  <template>
   <div id="home">
     <div id="home-container" class="flex-row">
-      <div id="side-nav" class="default-nav">
+      <div id="side-nav" class="flex-column">
         <router-link :to="{ name: 'home' }">
           <h1>Melonade</h1>
-        </router-link>  
-        <ul>
-          <li v-for="route in routes" :key="route.path">
-            <router-link :to="{ name: route.name ? route.name : route.childName }">{{ route.displayName }}</router-link>
-          </li>
-        </ul>
+        </router-link>
+        <router-link :class="route.type" class="side-nav-item" v-for="route in routes" :key="route.path" :to="{ name: route.name ? route.name : route.childName }">
+          {{ route.displayName }}
+        </router-link>
         <span></span>
       </div>
       <transition name="fade" mode="out-in">
@@ -85,34 +83,26 @@
   height: 100%;
   flex: 0 0 300px;
   z-index: 99;
-  padding: 30vh 20px 0 0;
+  padding: 30vh 20px 0 50px;
   box-sizing: border-box;
-}
-
-.default-nav {
-  text-align: right;
   background: rgba(0,0,0,0.5);
 }
-
-.photo-nav {
-  text-align: left;
-  background: white;
+.side-nav-item {
+  padding: 5px 0;
 }
 
-#side-nav > h1, #side-nav > ul > li > a, #side-nav > a {
-  color: whitesmoke;
-}
-
-#side-nav > ul {
-  list-style-type: none;
-}
-
-#side-nav > ul > li {
-  padding-top: 10px;
-}
-
-#side-nav > ul > li > a:hover {
+.side-nav-item:hover {
   font-weight: bold;
+}
+
+.major {
+  color: whitesmoke;
+  font-size: 1.2em;
+}
+
+.minor {
+  color: whitesmoke;
+  font-size: 1em;
 }
 
 router-view {

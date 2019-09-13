@@ -58,11 +58,11 @@
     width: 100%;
     height: 100%;
     overflow-y: auto;
-    background-color: white;
+    background-color: rgb(0,0,0,.5);
   }
 
   #photo-list {
-    padding: 5% 5% 5% 5%;
+    padding: 1% 1% 1% 1%;
     box-sizing: border-box;
   }
 
@@ -74,7 +74,7 @@
 
   .photo > img {
     width: 100%;
-    height: 300px;
+    height: 350px;
     display: block;
     object-fit: cover;
     /*filter: grayscale(100%);*/
