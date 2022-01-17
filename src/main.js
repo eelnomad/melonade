@@ -1,17 +1,12 @@
-import Vue from 'vue'
+import { Vue, createApp } from 'vue'
 import axios from 'axios/dist/axios.js'
 import HighchartsVue from 'highcharts-vue'
 import App from './App'
 import router from './router'
 import store from './store'
 
-Vue.config.productionTip = false
-Vue.prototype.$http = axios
 
-Vue.use(HighchartsVue)
-
-new Vue({
-  render: h => h(App),
-  router,
-  store
-}).$mount('#app')
+const app = createApp(App).use(store).use(router).mount('#app')
+app.use(HighchartsVue)
+app.prototype.$http = axios
+app.config.productionTip = false

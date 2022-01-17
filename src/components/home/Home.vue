@@ -8,9 +8,16 @@
         <router-link :to="{ name: 'home' }">
           <h1>Melonade</h1>
         </router-link>
-        <router-link :class="route.type" class="side-nav-item" v-for="route in routes" :key="route.path" :to="{ name: route.name ? route.name : route.childName }">
-          {{ route.displayName }}
-        </router-link>
+        <div class="flex-column side-nav-block">
+          <router-link class="major" v-for="route in majorRoutes" :key="route.path" :to="{ name: route.name ? route.name : route.childName }">
+            {{ route.displayName }}
+          </router-link>
+        </div>
+        <div class="flex-column side-nav-block">
+          <router-link class="minor" v-for="route in minorRoutes" :key="route.path" :to="{ name: route.name ? route.name : route.childName }">
+            {{ route.displayName }}
+          </router-link>
+        </div>
         <span></span>
       </div>
       <transition name="fade" mode="out-in">
@@ -49,10 +56,19 @@
       backgroundQueue () {
         return this.$store.getters.getBackgroundQueue
       },
-      routes () {
+      majorRoutes () {
         return this.$router.options.routes.find((route) => {
           return route.path === '/'
-        }).children
+        }).children.filter(route => {
+          return route.type === 'major'
+        })
+      },
+      minorRoutes () {
+        return this.$router.options.routes.find((route) => {
+          return route.path === '/'
+        }).children.filter(route => {
+          return route.type === 'minor'
+        })
       }
     },
     components: {
@@ -84,25 +100,30 @@
   flex: 0 0 300px;
   z-index: 99;
   padding: 30vh 20px 0 50px;
+  text-align: right;
   box-sizing: border-box;
   background: rgba(0,0,0,0.5);
 }
-.side-nav-item {
-  padding: 5px 0;
-}
 
-.side-nav-item:hover {
-  font-weight: bold;
+#side-nav-block {
+  margin: 20px 0;
 }
 
 .major {
+  padding: .4em 0;
   color: whitesmoke;
   font-size: 1.2em;
 }
+.major:hover {
+
+}
 
 .minor {
-  color: whitesmoke;
+  color: lightgray;
   font-size: 1em;
+}
+.minor:hover {
+
 }
 
 router-view {
