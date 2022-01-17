@@ -1,21 +1,21 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '@/components/home/Home'
-import Landing from '@/components/home/landing/Landing'
-import BlogPost from '@/components/home/blog/BlogPost'
-import BlogHome from '@/components/home/blog/BlogHome'
-import Blog from '@/components/home/blog/Blog'
-import PhotoGallery from '@/components/home/photoGallery/PhotoGallery'
-import About from '@/components/home/about/About'
-import SmallProjects from '@/components/home/smallProjects/SmallProjects'
+import MainPage from '@/components/main/MainPage'
+import Landing from '@/components/main/landing/Landing'
+import BlogPost from '@/components/main/blog/BlogPost'
+import BlogHome from '@/components/main/blog/BlogHome'
+import Blog from '@/components/main/blog/Blog'
+import PhotoGallery from '@/components/main/photoGallery/PhotoGallery'
+import About from '@/components/main/about/About'
+import SmallProjects from '@/components/main/smallProjects/SmallProjects'
 // import League from '@/components/League'
-import ShowerThoughts from '@/components/showerThoughts/ShowerThoughts'
-import Sudoku from '@/components/sudoku/Sudoku'
+import ShowerThoughts from '@/components/standalone/showerThoughts/ShowerThoughts'
+import Sudoku from '@/components/standalone/sudoku/Sudoku'
 
 
 const routes = [
 {
   path: '/',
-  component: Home,
+  component: MainPage,
   sideNav: true,
   children: [
   {
@@ -69,7 +69,7 @@ const routes = [
   {
     path: 'contact',
     name: 'contact',
-    component: () => import('@/components/WIP'),
+    component: () => import('@/components/standalone/WIP'),
     displayName: 'Contact',
     type: 'minor'
   }
@@ -94,7 +94,7 @@ const routes = [
 {
   path: '/league',
   name: 'league',
-  component: () => import('@/components/WIP'),
+  component: () => import('@/components/standalone/WIP'),
   smallProjects: true,
   displayName: 'League of Legends Analysis',
   description: 'The dream is to someday perform some analysis on top of League of Legends data. That\'s the dream...'

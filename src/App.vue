@@ -1,8 +1,6 @@
 <template>
   <div id="app">
-    <transition name="fade">
-      <router-view></router-view>
-    </transition>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -36,19 +34,10 @@
 
 <style>
   #app {
-    width: 100%;
-    height: 100%;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
   }
-
-  .fade-enter-active, .fade-leave-active {
-    transition: all .1s ease-in;
-    overflow-x: hidden;
-  }
-  .fade-enter {
-    z-index: -1;
-  }
-  .fade-enter, .fade-leave-to {
-    opacity: 0;
-  }
-
 </style>
