@@ -1,113 +1,77 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import MainPage from '@/components/main/MainPage'
-import Landing from '@/components/main/landing/Landing'
-import BlogPost from '@/components/main/blog/BlogPost'
-import BlogHome from '@/components/main/blog/BlogHome'
-import Blog from '@/components/main/blog/Blog'
-import PhotoGallery from '@/components/main/photoGallery/PhotoGallery'
-import About from '@/components/main/about/About'
-import SmallProjects from '@/components/main/smallProjects/SmallProjects'
-// import League from '@/components/League'
-import ShowerThoughts from '@/components/standalone/showerThoughts/ShowerThoughts'
-import Sudoku from '@/components/standalone/sudoku/Sudoku'
 
-
-const routes = [
-{
-  path: '/',
-  component: MainPage,
-  sideNav: true,
-  children: [
-  {
-    path: '',
-    name: 'home',
-    component: Landing,
-    displayName: 'Home',
-    type: 'major'
-  },
-  {
-    path: 'blog',
-    childName: 'blog',
-    component: Blog,
-    displayName: 'Blog',
-    type: 'major',
-    children: [
-    {
-      name: 'blogPost',
-      path: ':id',
-      component: BlogPost,
-      props: true
+const routes = [{
+        path: '/',
+        component: () => import('@/components/main/MainPage'),
+        children: [{
+                path: '',
+                component: () => import('@/components/main/landing/Landing'),
+                displayName: 'Home',
+            },
+            {
+                path: 'blog',
+                component: () => import('@/components/main/blog/Blog'),
+                displayName: 'Blog',
+                children: [{
+                        path: ':id',
+                        component: () => import('@/components/main/blog/BlogPost'),
+                        props: true
+                    },
+                    {
+                        path: '',
+                        component: () => import('@/components/main/blog/BlogHome'),
+                    }
+                ]
+            },
+            {
+                path: 'photo',
+                component: () => import('@/components/main/photoGallery/PhotoGallery'),
+                displayName: 'Photos',
+            },
+            {
+                path: 'smallprojects',
+                component: () => import('@/components/main/smallProjects/SmallProjects'),
+                displayName: 'Small Projects',
+            },
+            {
+                path: 'about',
+                component: () => import('@/components/main/about/About'),
+                displayName: 'About',
+            },
+            {
+                path: 'contact',
+                component: () => import('@/components/standalone/WIP'),
+                displayName: 'Contact',
+            }
+        ]
     },
     {
-      name: 'blog',
-      path: '',
-      component: BlogHome
+        path: '/showerthoughts',
+        component: () => import('@/components/standalone/showerThoughts/ShowerThoughts'),
+        displayName: 'Shower Thoughts',
+        description: 'A simple screensaver alternative that pulls the top posts from the /r/showerthoughts sub-reddit and displays them in a breath-like manner across the page.'
+    },
+    {
+        path: '/sudoku',
+        component: () => import('@/components/standalone/sudoku/Sudoku'),
+        displayName: 'Sudoku Solver',
+        description: 'A sudoku solver showcasing the power of recursion and Monte Carlo methods when solving sudoku. Can also be used to just play sudoku!'
+    },
+    {
+        path: '/league',
+        component: () => import('@/components/standalone/WIP'),
+        displayName: 'League of Legends Analysis',
+        description: 'The dream is to someday perform some analysis on top of League of Legends data. That\'s the dream...'
+    },
+    {
+        path: '/:catchAll(.*)',
+        redirect: '/',
     }
-    ]
-  },
-  {
-    path: 'photo',
-    name: 'photo',
-    component: PhotoGallery,
-    displayName: 'Photos',
-    type: 'major'
-  },
-  {
-    path: 'smallprojects',
-    name: 'smallprojects',
-    component: SmallProjects,
-    displayName: 'Small Projects',
-    type: 'major'
-  },
-  {
-    path: 'about',
-    name: 'about',
-    component: About,
-    displayName: 'About',
-    type: 'minor'
-  },
-  {
-    path: 'contact',
-    name: 'contact',
-    component: () => import('@/components/standalone/WIP'),
-    displayName: 'Contact',
-    type: 'minor'
-  }
-  ]
-},
-{
-  path: '/showerthoughts',
-  name: 'showerthoughts',
-  component: ShowerThoughts,
-  smallProjects: true,
-  displayName: 'Shower Thoughts',
-  description: 'A simple screensaver alternative that pulls the top posts from the /r/showerthoughts sub-reddit and displays them in a breath-like manner across the page.'
-},
-{
-  path: '/sudoku',
-  name: 'sudoku',
-  component: Sudoku,
-  smallProjects: true,
-  displayName: 'Sudoku Solver',
-  description: 'A sudoku solver showcasing the power of recursion and Monte Carlo methods when solving sudoku. Can also be used to just play sudoku!'
-},
-{
-  path: '/league',
-  name: 'league',
-  component: () => import('@/components/standalone/WIP'),
-  smallProjects: true,
-  displayName: 'League of Legends Analysis',
-  description: 'The dream is to someday perform some analysis on top of League of Legends data. That\'s the dream...'
-},
-{
-  path: '/:catchAll(.*)',
-  redirect: '/',
-}
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
+    history: createWebHistory(process.env.BASE_URL),
+    routes
 })
 
 export default router

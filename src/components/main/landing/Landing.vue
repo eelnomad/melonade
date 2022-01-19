@@ -1,9 +1,9 @@
 <!-- PhotoGallery.vue
-     This is the landing page of the website with four quadrants to select what category of posts to look at.-->
+     This is the landing page of the website.-->
 
 <template>
-  <div id="landing" class="flex-row">
-    <h3>{{ background.title }}</h3>
+  <div id="landing">
+    This will be the intro page!
   </div>
 </template>
 
@@ -66,10 +66,6 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   #landing {
-    width: 100%;
-    height: 100%;
-    justify-content: flex-end;
-    align-items: flex-end;
   }
 
   #landing > h3 {

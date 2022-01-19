@@ -58,10 +58,6 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #about {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  color: white;
 }
 
 #animation {

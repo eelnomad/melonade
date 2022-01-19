@@ -29,8 +29,6 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #blog {
-  width: 100%;
-  height: 100%;
 }
 .fade-enter-active, .fade-leave-active {
   transition: all .1s ease-in;
