@@ -18,7 +18,6 @@ export default {
         return {}
     },
     created() {
-        this.$store.commit('nav/setNavDim', true)
         this.$store.commit('theme/setTheme', this.$store.getters['theme/themes'].BLACK)
     },
     methods: {

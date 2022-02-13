@@ -2,11 +2,7 @@
  A hub for routing to smaller projects.-->
 <template>
     <div id="small-projects">
-        <router-view v-slot="{ Component }">
-            <transition name="fade" mode="out-in">
-                <component :is="Component" class="content" />
-            </transition>
-        </router-view>
+        <router-view class="content"></router-view>
         <!-- <div id="small-projects-filter">
       <input v-model="searchQuery" placeholder="Filter Projects">
     </div> -->
@@ -26,8 +22,15 @@ export default {
         }
     },
     created() {
+        this.$store.commit('theme/setTheme', this.$store.getters['theme/themes'].WHITE)
         this.addRoutes(PROJECT_ROUTES)
-        this.addRoutes(PROJECT_ROUTES)
+        if (this.$route.params.id) {
+            if ((PROJECT_ROUTES.find(route => route.path === this.$route.params.id))) {
+                this.$router.go(this.$router.currentRoute)
+            } else {
+                this.$router.replace({ name: this.$route.name })
+            }
+        }
     },
     mounted() {},
     methods: {
@@ -41,17 +44,15 @@ export default {
             this.$router.addRoute(route)
         }
     },
-    watch: {},
+    watch: {
+      $route (to, from) {
+        if (to.name === 'Projects') {
+          this.$store.commit('theme/setTheme', this.$store.getters['theme/themes'].WHITE)
+        }
+        window.scrollTo(0, 0)
+      }
+    },
     computed: {
-        loadPage() {
-            if (this.$route.params.id === null) {
-                return null
-            } else if (this.$route.params.id) {
-                this.$router.replace({ name: this.$route.name })
-                return null
-            }
-            return photoData[this.$route.params.id]
-        },
         routes() {
           return this.$route.matched[0].children
         }
@@ -69,28 +70,17 @@ export default {
     background-color: white;
     color: black;
     display: grid;
-    grid-template-columns: repeat(9, 1fr);
+    grid-template-columns: 1fr fit-content(600px) 1fr;
     grid-auto-flow: column;
     grid-auto-rows: 200px;
 }
 
 .card {
-    grid-column: 3;
-    grid-column-end: span 3;
+    grid-column: 2;
 
 }
 
 .content {
     min-height: 100vh;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 0.25s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
 }
 </style>

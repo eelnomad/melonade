@@ -53,7 +53,6 @@ export default {
         classes () {
             return {
                 'nav-compact': mapGetters.compact,
-                'nav-dim': mapGetters.dim,
                 'nav-scrolled': this.scrolled,
                 'nav-unscrolled': !this.scrolled,
             }
@@ -89,10 +88,6 @@ export default {
     grid-column: 3;
     justify-self: end;
     align-self: center;
-}
-
-.nav-dim {
-    background-color: rgba(0, 0, 0, .4);
 }
 
 .nav-scrolled {

@@ -4,10 +4,10 @@
       <div id="sky">
         <div v-for="(i, index) in stars" :style="i" :key="index"></div>
         <div id="star-effect"></div>
-        <div id="sky-color"></div>
-        <div id="moon">
-          <div id="crater"></div>
-        </div>
+      </div>
+      <div id="sky-color"></div>
+      <div id="moon">
+        <div id="crater"></div>
       </div>
     </div>
     <h1>About me</h1>
@@ -27,6 +27,7 @@
       }
     },
     created () {
+        this.$store.commit('theme/setTheme', this.$store.getters['theme/themes'].WHITE)
       this.setStars()
       this.layerOne.push(Math.random())
       this.building = setInterval(function () {
@@ -45,7 +46,7 @@
             'left': (Math.random() * 100) + '%',
             'top': (Math.random() * 100) + '%',
             'background': 'white',
-            'z-index': '-4',
+            'z-index': '2',
             'border-radius': '50%'
           })
         }
@@ -72,18 +73,21 @@
   position: absolute;
   height: 100%;
   width: 100%;
+  mask-image: url("~@/assets/images/star_effect.png");
+  animation: star-effect 500s linear infinite;
+
 }
 
 #layer-three {
-  z-index: 2;
-}
-
-#layer-two {
   z-index: 3;
 }
 
-#layer-one {
+#layer-two {
   z-index: 4;
+}
+
+#layer-one {
+  z-index: 5;
 }
 
 #ground {
@@ -93,7 +97,7 @@
   width: 200vw;
   height: 10vh;
   background: #000026;
-  z-index: 4;
+  z-index: 5;
 }
 
 .first {
@@ -102,8 +106,7 @@
   width: 25%;
   left: 100vw;
   bottom: 10vh;
-  z-index: 4;
-  animation: slide 15s linear infinite;
+  z-index: 5;
 }
 
 #moon {
@@ -115,6 +118,7 @@
   border-radius: 50%;
   background: #EEE;
   box-shadow: 0 0 150px -20px #EEE;
+  z-index: 6;
 }
 
 #crater {
@@ -131,15 +135,7 @@
   12vw 6vw 0 0.05vw rgba(0,0,0,.1),
   9vw 9vw 0 0.7vw rgba(0,0,0,.1),
   4vw 11vw 0 0.1vw rgba(0,0,0,.1);
-}
-
-#star-effect {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  background:transparent url("~@/assets/images/star_effect.png") repeat top center;
-  z-index:1;
-  animation: star-effect 500s linear infinite;
+  z-index: 6;
 }
 
 #sky-color {
@@ -148,37 +144,11 @@
   opacity: .5;
   background: #0F002E;
   background: linear-gradient(to bottom right, black, #0F001C, #1F084C);
+  z-index: 6;
 }
 
-@keyframes slide
-{
-  100% { transform: translate3d(-200vw,0,0) }
-}
 @keyframes star-effect {
-  from {background-position:0 0;}
-  to {background-position:-10000px 5000px;}
-}
-#home-button {
-  bottom: 0;
-  right: 0;
-  margin: 20px 50px;
-  padding: 10px 20px;
-  position: absolute;
-  background-color: transparent;
-  background-repeat: no-repeat;
-  border-style: solid;
-  border-width: 1px;
-  border-bottom-width: 3px;
-  border-color: white;
-  color: white;
-  float: right;
-  outline-width: 1px;
-  outline-color: white;
-  cursor: pointer;
-  z-index: 5;
-}
-#home-button:hover {
-  border-bottom-width: 2px;
-  outline: none;
+  from {mask-position:0 0;}
+  to {mask-position:-10000px 5000px;}
 }
 </style>

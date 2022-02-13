@@ -4,7 +4,6 @@ export default {
     namespaced: true,
     state: {
         compact: false,
-        dim: false,
     },
     getters: {
         navState: state => {
@@ -12,9 +11,6 @@ export default {
         },
     },
     mutations: {
-        setNavDim(state, bool) {
-            state.dim = bool
-        },
         setNavCompact(state, val) {
             state.compact = payload
         },

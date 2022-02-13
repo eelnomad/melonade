@@ -15,7 +15,6 @@
       }
     },
     created () {
-        this.$store.commit('nav/setNavDim', false)
         this.$store.commit('theme/setTheme', this.$store.getters['theme/themes'].WHITE)
     },
     beforeDestroy () {
