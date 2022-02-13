@@ -1,70 +1,75 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-const routes = [{
+export const MAJOR_ROUTES = [{
+        name: 'Projects',
+        path: '/projects/:id?',
+        component: () => import('@/components/smallProjects/SmallProjects'),
+        children: [],
+        meta: {
+            title: 'Melonade - Projects',
+            metaTags: [{
+                name: 'description',
+                content: 'A list of projects.'
+            }]
+        }
+    },
+    {
+        name: 'Photos',
+        path: '/photo/:id?',
+        component: () => import('@/components/photoGallery/PhotoGallery'),
+        meta: {
+            title: 'Melonade - Photos',
+            metaTags: [{
+                name: 'description',
+                content: 'A gallery of photos.'
+            }]
+        }
+    },
+]
+
+export const MINOR_ROUTES = [{
+        name: 'About',
+        path: '/about',
+        component: () => import('@/components/about/About'),
+        meta: {
+            title: 'Melonade - About',
+            metaTags: [{
+                name: 'description',
+                content: 'A bit about Melonade.'
+            }]
+        }
+    },
+    {
+        name: 'Contact',
+        path: '/contact',
+        component: () => import('@/components/WIP'),
+        meta: {
+            title: 'Melonade - Contact',
+            metaTags: [{
+                name: 'description',
+                content: 'Contact me.'
+            }]
+        }
+    },
+]
+
+const routes = [
+    ...MAJOR_ROUTES,
+    ...MINOR_ROUTES,
+    {
+        name: 'Home',
         path: '/',
-        component: () => import('@/components/main/MainPage'),
-        children: [{
-                path: '',
-                component: () => import('@/components/main/landing/Landing'),
-                displayName: 'Home',
-            },
-            {
-                path: 'blog',
-                component: () => import('@/components/main/blog/Blog'),
-                displayName: 'Blog',
-                children: [{
-                        path: ':id',
-                        component: () => import('@/components/main/blog/BlogPost'),
-                        props: true
-                    },
-                    {
-                        path: '',
-                        component: () => import('@/components/main/blog/BlogHome'),
-                    }
-                ]
-            },
-            {
-                path: 'photo',
-                component: () => import('@/components/main/photoGallery/PhotoGallery'),
-                displayName: 'Photos',
-            },
-            {
-                path: 'smallprojects',
-                component: () => import('@/components/main/smallProjects/SmallProjects'),
-                displayName: 'Small Projects',
-            },
-            {
-                path: 'about',
-                component: () => import('@/components/main/about/About'),
-                displayName: 'About',
-            },
-            {
-                path: 'contact',
-                component: () => import('@/components/standalone/WIP'),
-                displayName: 'Contact',
-            }
-        ]
+        component: () => import('@/components/landing/Landing'),
+        meta: {
+            title: 'Melonade',
+            metaTags: [{
+                name: 'description',
+                content: 'Home page.'
+            }]
+        }
     },
     {
-        path: '/showerthoughts',
-        component: () => import('@/components/standalone/showerThoughts/ShowerThoughts'),
-        displayName: 'Shower Thoughts',
-        description: 'A simple screensaver alternative that pulls the top posts from the /r/showerthoughts sub-reddit and displays them in a breath-like manner across the page.'
-    },
-    {
-        path: '/sudoku',
-        component: () => import('@/components/standalone/sudoku/Sudoku'),
-        displayName: 'Sudoku Solver',
-        description: 'A sudoku solver showcasing the power of recursion and Monte Carlo methods when solving sudoku. Can also be used to just play sudoku!'
-    },
-    {
-        path: '/league',
-        component: () => import('@/components/standalone/WIP'),
-        displayName: 'League of Legends Analysis',
-        description: 'The dream is to someday perform some analysis on top of League of Legends data. That\'s the dream...'
-    },
-    {
-        path: '/:catchAll(.*)',
+        path: '/:pathMatch(.*)',
         redirect: '/',
     }
 ]
@@ -73,5 +78,34 @@ const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes
 })
+
+router.afterEach((to, from, next) => {
+    const nearestWithTitle = to.matched.slice().reverse().find(r => r.meta && r.meta.title);
+    const nearestWithMeta = to.matched.slice().reverse().find(r => r.meta && r.meta.metaTags);
+    const previousNearestWithMeta = from.matched.slice().reverse().find(r => r.meta && r.meta.metaTags);
+
+    if (nearestWithTitle) {
+        document.title = nearestWithTitle.meta.title;
+    } else if (previousNearestWithMeta) {
+        document.title = previousNearestWithMeta.meta.title;
+    }
+
+    Array.from(document.querySelectorAll('[data-vue-router-controlled]')).map(el => el.parentNode.removeChild(el));
+
+    if (!nearestWithMeta) return next();
+
+    nearestWithMeta.meta.metaTags.map(tagDef => {
+            const tag = document.createElement('meta');
+
+            Object.keys(tagDef).forEach(key => {
+                tag.setAttribute(key, tagDef[key]);
+            });
+
+            tag.setAttribute('data-vue-router-controlled', '');
+
+            return tag;
+        })
+        .forEach(tag => document.head.appendChild(tag));
+});
 
 export default router

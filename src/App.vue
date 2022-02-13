@@ -1,9 +1,21 @@
 <template>
-    <router-view></router-view>
+    <div id="melonade" :style="theme">
+        <main-nav />
+        <router-view v-slot="{ Component }">
+            <keep-alive>
+                <transition name="fade" mode="out-in">
+                    <component :is="Component" class="content" />
+                </transition>
+            </keep-alive>
+        </router-view>
+    </div>
 </template>
 <script>
+import '@/assets/css/custom.scss'
+import MainNav from '@/components/MainNav.vue'
+
 export default {
-    name: 'app',
+    name: 'melonade',
     data() {
         return {}
     },
@@ -18,90 +30,32 @@ export default {
             localStorage.setItem('melonade_device_id', uuid)
         }
     },
-    components: {},
-    computed: {}
+    components: {
+        MainNav
+    },
+    computed: {
+        theme() {
+            return this.$store.getters['theme/themeState']
+        }
+    }
 }
 </script>
-<style lang="scss">
-// imports
-@import url('https://fonts.googleapis.com/css?family=Sacramento|Fredericka+the+Great|Quicksand');
-
-// general 
-* {
-    color: dimgrey;
-    margin: 0;
-    padding: 0;
-    font-family: 'Quicksand', sans-serif;
-    font-size: 1em;
-    font-style: normal;
-    font-variant: normal;
+<style lang="scss" scoped>
+#melonade {
+    transition: background-color 1s 0.25s ease
 }
 
-body {
-    height: 100vh;
-    width: 100vw;
+.content {
+    min-height: 100vh;
 }
 
-span {
-    flex: 99 1 auto;
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.25s ease;
 }
 
-a {
-    text-decoration: none;
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
 }
-
-// flex classes 
-.f-center {
-    justify-content: center;
-    align-items: center;
-}
-
-.f-col {
-    display: flex;
-    flex-direction: column;
-}
-
-.f-grow {
-    flex: 99 1 auto;
-}
-
-.f-row {
-    display: flex;
-    flex-direction: row;
-}
-
-.f-wrap {
-    flex-wrap: wrap;
-}
-
-// margin + padding
-$directions: ('T': 'top',
-'B': 'bottom',
-'L': 'left',
-'R': 'right'
-);
-$sizes: ('s': .33em,
-'m': .66em,
-'l': 1em,
-);
-
-@each $sizeName,
-$sizeVal in $sizes {
-    .m-#{$sizeName} {
-        margin: $sizeVal
-    }
-    .p-#{$sizeName} {
-        margin: $sizeVal
-    }
-    @each $directionShort, $directionLong in $directions {
-        .m#{$directionShort}-#{$sizeName} {
-            margin-#{$directionLong}: $sizeVal
-        }
-        .p#{$directionShort}-#{$sizeName} {
-            margin-#{$directionLong}: $sizeVal
-        }
-    }
-}
-
-// scrollbar
 </style>

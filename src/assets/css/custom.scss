@@ -1,0 +1,116 @@
+// General Styling
+// imports
+@import url('https://fonts.googleapis.com/css?family=Sacramento|Fredericka+the+Great|Quicksand');
+
+// general 
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1rem;
+    font-style: normal;
+    font-variant: normal;
+    color: inherit;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+    overflow-y: overlay;
+}
+
+span {
+    flex: 99 1 auto;
+}
+
+a {
+    text-decoration: none;
+}
+
+// flex and grid classes 
+.f-center {
+    justify-content: center;
+    align-items: center;
+}
+
+.f-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.f-grow {
+    flex: 99 1 auto;
+}
+
+.f-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.f-wrap {
+    flex-wrap: wrap;
+}
+
+.g-center {
+    place-self: center;
+}
+
+.g-col-first {
+    grid-column: 1;
+    grid-row: 1 / -1;
+}
+
+.g-col-last {
+    grid-column: -1;
+    grid-row: 1 / -1;
+}
+
+// margin + padding
+$directions: ('T': 'top',
+'B': 'bottom',
+'L': 'left',
+'R': 'right'
+);
+$sizes: ('s': .33rem,
+'m': .66rem,
+'l': 1rem,
+'xl': 4rem,
+'xxl': 8rem,
+);
+
+@each $sizeName,
+$sizeVal in $sizes {
+    .m-#{$sizeName} {
+        margin: $sizeVal
+    }
+
+    .p-#{$sizeName} {
+        margin: $sizeVal
+    }
+
+    @each $directionShort,
+    $directionLong in $directions {
+        .m#{$directionShort}-#{$sizeName} {
+            margin-#{$directionLong}: $sizeVal
+        }
+
+        .p#{$directionShort}-#{$sizeName} {
+            padding-#{$directionLong}: $sizeVal
+        }
+    }
+}
+
+// scrollbar
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgb(black, .3);
+    border-radius: 20px;
+}
