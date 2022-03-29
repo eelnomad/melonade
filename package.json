@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "deploy": "cd docs && copy index.html 404.html"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.3.0-beta3",
