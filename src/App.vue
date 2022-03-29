@@ -35,14 +35,14 @@ export default {
     },
     computed: {
         theme() {
-            return this.$store.getters['theme/themeState']
+            return this.$store.getters['theme/theme']
         }
     }
 }
 </script>
 <style lang="scss" scoped>
 #melonade {
-    transition: background-color 1s 0.25s ease
+    transition: background-color 0.25s linear;
 }
 
 .content {

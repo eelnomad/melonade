@@ -1,21 +1,39 @@
 <!-- MainNav.vue
     MainNav for main page-->
 <template>
-    <div 
-        id="main-nav"
+    <div
         :class="classes"
+        id="main-nav"
     >
-        <div id="nav-left" class="f-row mL-m">
-            <router-link v-for="route in majorRoutes" :to="{name : route.name}" class="mL-l">
-                <h2>{{ route.name }}</h2>
+        <div
+            class="f-row mL-m"
+            id="nav-major"
+        >
+            <router-link
+                v-for="route in majorRoutes"
+                :to="{name : route.name}"
+                class="mL-l"
+            >
+                <h2 :style="{color: color}">{{ route.name }}</h2>
             </router-link>
         </div>
-        <router-link class="m-l" id="nav-mid" to="/">
-            <h1>Melonade</h1>
+        <router-link
+            class="m-l"
+            id="nav-logo"
+            to="/"
+        >
+            <h1 :style="{color: color}">Melonade</h1>
         </router-link>
-        <div id="nav-right" class="f-row mR-m">
-            <router-link v-for="route in minorRoutes" :to="{name : route.name}" class="mR-l">
-                <h3>{{ route.name }}</h3>
+        <div
+            class="f-row mR-m"
+            id="nav-minor"
+        >
+            <router-link
+                v-for="route in minorRoutes"
+                :to="{name : route.name}"
+                class="mR-l"
+            >
+                <h3 :style="{color: color}">{{ route.name }}</h3>
             </router-link>
         </div>
     </div>
@@ -24,7 +42,8 @@
 import { createNamespacedHelpers } from 'vuex'
 import { MAJOR_ROUTES, MINOR_ROUTES } from '@/router'
 
-const { mapGetters, mapActions } = createNamespacedHelpers('nav')
+const { mapGetters: navGetters } = createNamespacedHelpers('nav')
+const { mapGetters: themeGetters } = createNamespacedHelpers('theme')
 
 export default {
     name: 'MainNav',
@@ -43,19 +62,27 @@ export default {
         window.removeEventListener('scroll', this.checkTop)
     },
     methods: {
-        checkTop (event) {
+        checkTop(event) {
             this.scrolled = window.scrollY !== 0
         }
     },
-    watch: {
-    },
+    watch: {},
     computed: {
-        classes () {
+        ...navGetters([
+            'navState'
+        ]),
+        ...themeGetters([
+            'theme'
+        ]),
+        classes() {
             return {
-                'nav-compact': mapGetters.compact,
+                'nav-compact': this.navState.compact,
                 'nav-scrolled': this.scrolled,
                 'nav-unscrolled': !this.scrolled,
             }
+        },
+        color() {
+            return this.scrolled ? 'black' : this.theme.color
         }
     },
     components: {}
@@ -68,31 +95,31 @@ export default {
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas: "major logo minor";
     z-index: 99;
     transition: all .25s ease;
 }
 
-#nav-left {
-    grid-column: 1;
-    justify-self: start;
-    align-self: center;
-}
-
-#nav-mid {
-    grid-column: 2;
+#nav-logo {
+    grid-area: logo;
     justify-self: center;
     align-self: center;
 }
 
-#nav-right {
-    grid-column: 3;
+#nav-major {
+    grid-area: major;
+    justify-self: start;
+    align-self: center;
+}
+
+#nav-minor {
+    grid-area: minor;
     justify-self: end;
     align-self: center;
 }
 
 .nav-scrolled {
     background-color: whitesmoke;
-    color: black;
     border-bottom: gainsboro 1px solid;
     box-shadow: 0 4px 8px rgba(220, 220, 220, 0.3);
 }

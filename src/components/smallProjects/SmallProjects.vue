@@ -2,12 +2,24 @@
  A hub for routing to smaller projects.-->
 <template>
     <div id="small-projects">
-        <router-view class="content"></router-view>
+        <router-view v-slot="{ Component }">
+            <transition name="fade" mode="out-in">
+                <component :is="Component" class="content" />
+            </transition>
+        </router-view>
         <!-- <div id="small-projects-filter">
       <input v-model="searchQuery" placeholder="Filter Projects">
     </div> -->
-        <div id="small-projects-list" class="content pT-xxl">
-            <small-projects-card v-for="route in routes" :key="route.path" :route="route" class="card"></small-projects-card>
+        <div
+            class="content pT-xxl"
+            id="small-projects-list"
+        >
+            <small-projects-card
+                v-for="route in routes"
+                :key="route.path"
+                :route="route"
+                class="card"
+            ></small-projects-card>
         </div>
     </div>
 </template>
@@ -18,8 +30,7 @@ import { PROJECT_ROUTES } from '@/router/projects'
 export default {
     name: 'small-projects',
     data() {
-        return {
-        }
+        return {}
     },
     created() {
         this.$store.commit('theme/setTheme', this.$store.getters['theme/themes'].WHITE)
@@ -44,17 +55,9 @@ export default {
             this.$router.addRoute(route)
         }
     },
-    watch: {
-      $route (to, from) {
-        if (to.name === 'Projects') {
-          this.$store.commit('theme/setTheme', this.$store.getters['theme/themes'].WHITE)
-        }
-        window.scrollTo(0, 0)
-      }
-    },
     computed: {
         routes() {
-          return this.$route.matched[0].children
+            return this.$route.matched[0].children.filter(route => route.path != '')
         }
     },
     components: {
@@ -67,12 +70,12 @@ export default {
 #small-projects {}
 
 #small-projects-list {
-    background-color: white;
-    color: black;
     display: grid;
-    grid-template-columns: 1fr fit-content(600px) 1fr;
+    grid-template-columns: 1fr fit-content(800px) 1fr;
     grid-auto-flow: column;
     grid-auto-rows: 200px;
+    background-color: whitesmoke;
+    color: black;
 }
 
 .card {
@@ -82,5 +85,15 @@ export default {
 
 .content {
     min-height: 100vh;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.25s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
 }
 </style>

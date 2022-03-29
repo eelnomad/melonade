@@ -27,7 +27,7 @@
       }
     },
     created () {
-        this.$store.commit('theme/setTheme', this.$store.getters['theme/themes'].WHITE)
+        this.$store.commit('theme/setTheme', this.$store.getters['theme/themes'].BLACK)
       this.setStars()
       this.layerOne.push(Math.random())
       this.building = setInterval(function () {

@@ -2,7 +2,7 @@
      This is the landing page of the website with four quadrants to select what category of routes to look at.-->
 
 <template>
-  <router-link id="small-projects-card" :to="{ name: route.name }">
+  <router-link id="small-projects-card" :to="{ name: route.name }" @click="toTop">
     <h1>{{route.name}}</h1>
     <h3>{{route.description}}</h3>
   </router-link>
@@ -16,7 +16,12 @@
       return {
       }
     },
-    methods: {},
+    methods: {
+      toTop() {
+        console.log('yoyoyo')
+        window.scrollTo(0, 0)
+      }
+    },
     created () {
     }
   }

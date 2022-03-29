@@ -1,18 +1,22 @@
 <!-- PhotoGallery.vue
      This is the landing page of the photo gallery. There should be thumbnails to photos and a hidden modal that appears on selecting a photo.-->
 <template>
-    <div id="photo-gallery" class="pT-xxl pB-xxl">
-        <photo-thumb v-for="(photo, index) in photoData" :key="photo" :src="photo" class="photo" @click="navigate(index)" />
-        <transition name="fade" mode="out-in">
-            <photo-modal v-if="selectedImage" :src="selectedImage" @click="navigate(-1)" />
-        </transition>
+    <div
+        id="photo-gallery"
+        class="pT-xxl pB-xxl"
+    >
+        <Image
+            v-for="(photo, index) in photoData"
+            :key="photo"
+            :preview="thumbnailURL(photo)"
+            :src="imageURL(photo)"
+            class="photo"
+        />
     </div>
 </template>
 <script>
 import photoData from '@/assets/data/photodata.json'
-
-import PhotoModal from './PhotoModal.vue'
-import PhotoThumb from './PhotoThumb.vue'
+import Image from '@/utils/Image.vue'
 
 export default {
     name: 'photo-gallery',
@@ -21,13 +25,19 @@ export default {
             photoData: photoData
         }
     },
-    created() {
+    beforeCreate() {
         this.$store.commit('theme/setTheme', this.$store.getters['theme/themes'].WHITE)
     },
     beforeDestroy() {},
     destroyed() {},
     watch: {},
     methods: {
+        thumbnailURL(base) {
+            return base + '=w400-h400-no?.jpg'
+        },
+        imageURL(base) {
+            return base + '=w1500-h1500-no?.jpg'
+        },
         navigate(index) {
             if (index >= 0) {
                 this.$router.push({ name: this.$route.name, params: { id: index, internal: true } })
@@ -50,15 +60,16 @@ export default {
         }
     },
     components: {
-        PhotoModal,
-        PhotoThumb
+        Image
     }
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped>
+<style
+    lang="scss"
+    scoped
+>
 #photo-gallery {
-    background-color: whitesmoke;
     display: grid;
     row-gap: 1.5rem;
     column-gap: 1rem;
@@ -77,7 +88,6 @@ $gridMapping: (1: 3,
 
 .photo {
     grid-row-end: span 2;
-    // border: white 1px solid;
 }
 
 @each $i,
@@ -91,15 +101,5 @@ $c in $gridMapping {
             grid-row-start: 2;
         }
     }
-}
-
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 0.25s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
 }
 </style>

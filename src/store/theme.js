@@ -21,8 +21,11 @@ export default {
         themes: state => {
             return state.Theme
         },
-        themeState: state => {
+        theme: state => {
             return state.theme
+        },
+        color: state => {
+            return state.theme.color
         },
     },
     actions: {

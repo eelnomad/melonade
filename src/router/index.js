@@ -1,21 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 export const MAJOR_ROUTES = [{
-        name: 'Projects',
-        path: '/projects/:id?',
-        component: () => import('@/components/smallProjects/SmallProjects'),
-        children: [],
-        meta: {
-            title: 'Melonade - Projects',
-            metaTags: [{
-                name: 'description',
-                content: 'A list of projects.'
-            }]
-        }
-    },
-    {
         name: 'Photos',
-        path: '/photo/:id?',
+        path: '/photos/:id?',
         component: () => import('@/components/photoGallery/PhotoGallery'),
         meta: {
             title: 'Melonade - Photos',
@@ -38,19 +25,7 @@ export const MINOR_ROUTES = [{
                 content: 'A bit about Melonade.'
             }]
         }
-    },
-    {
-        name: 'Contact',
-        path: '/contact',
-        component: () => import('@/components/WIP'),
-        meta: {
-            title: 'Melonade - Contact',
-            metaTags: [{
-                name: 'description',
-                content: 'Contact me.'
-            }]
-        }
-    },
+    }
 ]
 
 const routes = [
@@ -59,18 +34,37 @@ const routes = [
     {
         name: 'Home',
         path: '/',
-        component: () => import('@/components/landing/Landing'),
+        redirect: '/projects',
+        // component: () => import('@/components/landing/Landing'),
+        // meta: {
+        //     title: 'Melonade',
+        //     metaTags: [{
+        //         name: 'description',
+        //         content: 'Home page.'
+        //     }]
+        // }
+    },
+    {
+        name: 'Projects',
+        path: '/projects',
+        component: () => import('@/components/smallProjects/SmallProjects'),
+        children: [
+            {
+                path: '',
+                component: () => import('@/components/landing/Landing'),
+            }
+        ],
         meta: {
-            title: 'Melonade',
+            title: 'Melonade - Projects',
             metaTags: [{
                 name: 'description',
-                content: 'Home page.'
+                content: 'A list of projects.'
             }]
         }
     },
     {
         path: '/:pathMatch(.*)',
-        redirect: '/',
+        redirect: '/projects',
     }
 ]
 
