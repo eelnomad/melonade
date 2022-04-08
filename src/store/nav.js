@@ -4,6 +4,7 @@ export default {
     namespaced: true,
     state: {
         compact: false,
+        hide: false,
     },
     getters: {
         navState: state => {
@@ -12,7 +13,10 @@ export default {
     },
     mutations: {
         setNavCompact(state, val) {
-            state.compact = payload
+            state.compact = val
+        },
+        setNavHide(state, val) {
+            state.hide = val
         },
     },
     actions: {},

@@ -18,7 +18,6 @@
     },
     methods: {
       toTop() {
-        console.log('yoyoyo')
         window.scrollTo(0, 0)
       }
     },

@@ -34,6 +34,7 @@ export default {
     },
     created() {
         this.$store.commit('theme/setTheme', this.$store.getters['theme/themes'].WHITE)
+        console.log(this.$route)
         this.addRoutes(PROJECT_ROUTES)
         if (this.$route.params.id) {
             if ((PROJECT_ROUTES.find(route => route.path === this.$route.params.id))) {
@@ -71,7 +72,7 @@ export default {
 
 #small-projects-list {
     display: grid;
-    grid-template-columns: 1fr fit-content(800px) 1fr;
+    grid-template-columns: 1fr fit-content(600px) 1fr;
     grid-auto-flow: column;
     grid-auto-rows: 200px;
     background-color: whitesmoke;

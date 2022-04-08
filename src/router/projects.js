@@ -1,6 +1,7 @@
 export const PROJECT_ROUTES = [{
         path: 'showerthoughts',
-        component: () => import('@/components/WIP'),
+        // component: () => import('@/components/WIP'),
+        component: () => import('@/components/smallProjects/showerThoughts/ShowerThoughts'),
         // name: 'showerthoughts',
         name: 'A Relaxing Way to Look at /r/showerthoughts',
         // description: 'A simple screensaver alternative that pulls the top posts from the /r/showerthoughts sub-reddit and displays them in a breath-like manner across the page.'

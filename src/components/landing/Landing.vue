@@ -60,7 +60,7 @@ export default {
 @keyframes fadeInLeft {
     0% {
         opacity: 0;
-        transform: translateX(50px);
+        transform: translateX(20px);
     }
 
     100% {
@@ -72,7 +72,7 @@ export default {
 @keyframes fadeInRight {
     0% {
         opacity: 0;
-        transform: translateX(-50px);
+        transform: translateX(-20px);
     }
 
     100% {
