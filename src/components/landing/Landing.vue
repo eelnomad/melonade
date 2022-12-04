@@ -6,11 +6,12 @@
         class="f-col pB-l"
     >
         <div class="f-col f-center f-grow">
-            <p class="f-self-start pB-xxl pL-xxl fadeInLeft">SOME COOL TEXT</p>
-            <p class="f-self-end pR-xxl fadeInRight">FADES IN HERE</p>
+            <p class="fadeInLeft mR-l">SOME COOL TEXT</p>
+            <div class="spacer"></div>
+            <p class="fadeInRight mL-l">FADES IN HERE</p>
         </div>
         <font-awesome-icon
-            class="breathe"
+            class="breathe mB-l"
             icon="chevron-down"
             size="5x"
         />
@@ -55,6 +56,10 @@ export default {
 .fadeInRight {
     animation: fadeInRight 3s ease-in-out 3s;
     animation-fill-mode: both;
+}
+
+.spacer {
+    height: 10%;
 }
 
 @keyframes fadeInLeft {

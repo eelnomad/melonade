@@ -64,6 +64,9 @@ export default {
             this.thumbnailReady = true
         })
     },
+    emits: {
+        ready: ['ready']
+    },
     beforeDestroy() {},
     destroyed() {},
     methods: {
