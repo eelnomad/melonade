@@ -24,7 +24,7 @@
     </div>
 </template>
 <script>
-import SmallProjectsCard from '@/components/smallProjects/SmallProjectsCard'
+import SmallProjectsCard from '@/components/smallProjects/SmallProjectsCard.vue'
 import { PROJECT_ROUTES } from '@/router/projects'
 
 export default {

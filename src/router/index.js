@@ -1,9 +1,9 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 export const MAJOR_ROUTES = [{
         name: 'Photos',
         path: '/photos/:id?',
-        component: () => import('@/components/photoGallery/PhotoGallery'),
+        component: () => import('@/components/photoGallery/PhotoGallery.vue'),
         meta: {
             title: 'Melonade - Photos',
             metaTags: [{
@@ -17,7 +17,7 @@ export const MAJOR_ROUTES = [{
 export const MINOR_ROUTES = [{
         name: 'About',
         path: '/about',
-        component: () => import('@/components/about/About'),
+        component: () => import('@/components/about/About.vue'),
         meta: {
             title: 'Melonade - About',
             metaTags: [{
@@ -34,7 +34,7 @@ const routes = [
     {
         name: 'Home',
         path: '/',
-        redirect: '/projects',
+        redirect: { name: 'Projects'},
         // component: () => import('@/components/landing/Landing'),
         // meta: {
         //     title: 'Melonade',
@@ -45,13 +45,13 @@ const routes = [
         // }
     },
     {
-        name: 'Projects',
         path: '/projects',
-        component: () => import('@/components/smallProjects/SmallProjects'),
+        component: () => import('@/components/smallProjects/SmallProjects.vue'),
         children: [
             {
+                name: 'Projects',
                 path: '',
-                component: () => import('@/components/landing/Landing'),
+                component: () => import('@/components/landing/Landing.vue'),
             }
         ],
         meta: {
@@ -69,7 +69,7 @@ const routes = [
 ]
 
 const router = createRouter({
-    history: createWebHashHistory(process.env.BASE_URL),
+    history: createWebHistory(),
     routes
 })
 

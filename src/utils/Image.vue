@@ -19,11 +19,11 @@
                     class="f-row f-center"
                     id="image-modal"
                 >
-                    <font-awesome-icon
+                    <v-icon
                         v-if="!imageReady"
-                        icon="ellipsis"
+                        name="fa-ellipsis-h"
                         id="imageModalLoading"
-                        size="5x"
+                        scale="5"
                     />
                     <Transition
                         mode="out-in"

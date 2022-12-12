@@ -1,19 +1,19 @@
-<!-- PhotoGallery.vue
+<!-- Landing.vue
      This is the landing page of the website.-->
 <template>
     <div
         id="landing"
-        class="f-col pB-l"
+        class="f-center f-col pB-l"
     >
         <div class="f-col f-center f-grow">
             <p class="fadeInLeft mR-l">SOME COOL TEXT</p>
             <div class="spacer"></div>
             <p class="fadeInRight mL-l">FADES IN HERE</p>
         </div>
-        <font-awesome-icon
+        <v-icon
             class="breathe mB-l"
-            icon="chevron-down"
-            size="5x"
+            name="fa-chevron-down"
+            scale="5"
         />
     </div>
 </template>

@@ -1,26 +1,23 @@
 import { createApp } from 'vue'
 
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faChevronDown, faCircleLeft, faCircleRight, faEllipsis } from '@fortawesome/free-solid-svg-icons'
-import axios from 'axios/dist/axios.js'
+import { OhVueIcon, addIcons } from "oh-vue-icons";
+import { FaChevronDown, FaEllipsisH } from "oh-vue-icons/icons";
+
+import axios from 'axios'
 import HighchartsVue from 'highcharts-vue'
 
-import App from '@/App'
+import App from './App.vue'
 import router from '@/router'
 import store from '@/store'
 
-library.add(faChevronDown)
-library.add(faCircleLeft)
-library.add(faCircleRight)
-library.add(faEllipsis)
+addIcons(FaChevronDown, FaEllipsisH);
 
 const app = createApp(App)
 
 app.use(store)
 app.use(router)
 app.use(HighchartsVue)
-app.component('font-awesome-icon', FontAwesomeIcon)
+app.component("v-icon", OhVueIcon);
 
 app.provide('$http', axios)
 

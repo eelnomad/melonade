@@ -16,14 +16,6 @@
         </div>
         <h1>About me</h1>
         <h2>Just a dreamer :) ... wow this is hideous </h2>
-        <font-awesome-icon
-            icon="xmark"
-            size="3x"
-            @click="$emit('close')"
-            id="photoModalClose"
-            class="p-l"
-            spin
-        />
     </div>
 </template>
 <script>
