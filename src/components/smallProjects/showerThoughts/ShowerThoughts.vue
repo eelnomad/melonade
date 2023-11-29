@@ -208,7 +208,7 @@ export default {
                         title: 'cake'
                     },
                     4: {
-                        title: "imagine if this were an actual shower thought and not just pies, cake, or pizza"
+                        title: "imagine if these were actual shower thoughts and not just pies, cake, or pizza"
                     }
                 }
                 return
