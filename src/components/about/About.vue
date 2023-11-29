@@ -18,8 +18,8 @@
         <div id="about-content">
             <h1>About Me</h1>
             <br/>
-            <h2>Hi! I'm a developer trying to help make an impact in people's lives</h2>
-            <h2>and hopefully spread a little joy using code.</h2>
+            <h2>Hello! I'm a developer on a mission to positively impact people's lives</h2>
+            <h2>and spread some joy through coding.</h2>
         </div>
     </div>
 </template>
