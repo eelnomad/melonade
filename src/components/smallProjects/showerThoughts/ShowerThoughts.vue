@@ -28,7 +28,7 @@
                 Shower Thoughts! A relaxing way to sit back and enjoy the entropy that is the human mind.
                 </div>
                 <br/>
-                <div class="section-header">*Note: Due to Reddit's API changes, this page no longer interacts with Reddit's API.</div>
+                <div class="section-header">*Note: Due to API changes, this page no longer interacts with Reddit's API.</div>
                 <br/>
                 <div class="section-body">In the fast-paced world of the internet, moments of serenity are often hard to come by. Amidst the hustle and bustle of online interactions, there exists a unique corner on the web where users can unwind and let their thoughts flow freely—the realm of Shower Thoughts. Shower thoughts are those fleeting, often profound ideas that occur to us when we least expect them. Inspired by this concept, I embarked on a creative journey to build a tranquil online space dedicated to showcasing these musings. In this article, I will share my experience of designing and developing a web page that elegantly displays shower thoughts fetched from Reddit's API, complete with a soothing breathing effect. Join me as I delve into the details of this implementation.</div>
                 <br/>

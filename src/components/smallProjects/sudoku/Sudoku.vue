@@ -5,8 +5,8 @@
         <div class="f-col f-center main" id="sudoku">
         	<div class="controls f-row f-center pT-xl f-col-gap-xl">
                 <div class="f-col f-center pH-xl">
-                    <div class="f-center">Solve With</div>
-                    <div class="f-row f-center">
+                    <div>Solve With</div>
+                    <div class="f-row f-center f-col-gap-s">
                         <button @click='start("Recursion")'>Recursion</button>
                         <button @click='start("Monte")'>Monte Carlo</button>
                         <button @click='stop()'>Stop</button>
@@ -14,7 +14,7 @@
                 </div>
                 <div class="f-col f-center pH-xl">
                     <div>Manage Puzzle</div>
-                    <div class="f-row">
+                    <div class="f-row f-col-gap-s">
                         <button @click='get()'>Get State</button>
                         <button @click='load()'>Load Puzzle</button>
                         <input type="text" v-model='customPuzzle' />

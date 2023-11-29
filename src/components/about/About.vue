@@ -15,7 +15,8 @@
                 <div id="crater"></div>
             </div>
         </div>
-        <div id="about-content">
+        <div id="about-content"
+        class="pH-xl f-col f-center f-row-gap-l">
             <h1>About Me</h1>
             <br/>
             <h2>Hello! I'm a developer on a mission to positively impact people's lives</h2>
