@@ -1,5 +1,6 @@
 <template>
-    <div id="about">
+    <div id="about"
+    class="f-col f-center">
         <div id="animation">
             <div id="sky">
                 <div
@@ -14,8 +15,12 @@
                 <div id="crater"></div>
             </div>
         </div>
-        <h1>About me</h1>
-        <h2>Just a dreamer :) ... wow this is hideous </h2>
+        <div id="about-content">
+            <h1>About Me</h1>
+            <br/>
+            <h2>Hi! I'm a developer trying to help make an impact in people's lives</h2>
+            <h2>and hopefully spread a little joy using code.</h2>
+        </div>
     </div>
 </template>
 <script>
@@ -59,7 +64,14 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-#about {}
+#about {
+    height: 100vh;
+}
+
+#about-content {
+    color: white;
+    z-index: 99;
+}
 
 #animation {
     position: fixed;
@@ -72,7 +84,8 @@ export default {
     position: absolute;
     height: 100%;
     width: 100%;
-    mask-image: url("~@/assets/images/star_effect.png");
+    mask-image: url("@/assets/images/star_effect.png");
+    -webkit-mask-image: url("@/assets/images/star_effect.png");
     animation: star-effect 500s linear infinite;
 
 }
@@ -149,10 +162,12 @@ export default {
 @keyframes star-effect {
     from {
         mask-position: 0 0;
+        -webkit-mask-position: 0 0;
     }
 
     to {
         mask-position: -10000px 5000px;
+        -webkit-mask-position: -10000px 5000px;
     }
 }
 </style>

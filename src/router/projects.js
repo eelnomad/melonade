@@ -13,7 +13,7 @@ export const PROJECT_ROUTES = [{
         path: 'sudoku',
         component: () => import('@/components/smallProjects/sudoku/Sudoku.vue'),
         name: 'Sudoku Solver',
-        description: 'Definitely broken',
+        description: 'Solve it quickly (or slowly)',
         meta: {
             hideable: true,
             title: 'Melonade - Sudoku',

@@ -37,7 +37,7 @@ export default {
     }
 }
 </script>
-<style scoped>
+<style>
 #small-projects {}
 
 #small-projects-list {
@@ -47,6 +47,35 @@ export default {
     grid-auto-rows: 200px;
     background-color: whitesmoke;
     color: black;
+}
+
+.main {
+    height: 100vh;
+}
+
+.article {
+    background-color: whitesmoke;
+}
+
+.article-content {
+    max-width: 1000px;
+    color: black;
+    line-height: 2em;
+}
+
+.article-title {
+    font-size: 3em;
+    line-height: 1em;
+    font-style: bold;
+    font-variant: bold;
+}
+
+.section-header {
+    font-size: 1.5em;
+}
+
+.section-body {
+    font-size: 1.2em;
 }
 
 .card {

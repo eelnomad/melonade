@@ -3,7 +3,7 @@
 <template>
     <div>
         <div id="shower-thoughts"
-        class="f-col f-center f-grow">
+        class="main f-col f-center f-grow">
             <TransitionGroup name="fade">
                 <a
                     v-for="(thought, index) in thoughtQueue"
@@ -19,11 +19,14 @@
             </TransitionGroup>
         </div>
         <div 
-            id="article"
-            class="f-row pT-xl pB-xl"
+            class="article f-row pT-xxl pB-xl"
         >
             <span class="f-grow"></span>
-            <div id="article-content">
+            <div class="article-content">
+                <div class="article-timestamp">2023-11-15</div>
+                <div class="article-title pB-l">
+                Shower Thoughts! A relaxing way to sit back and enjoy the entropy that is the human mind.
+                </div>
                 <br/>
                 <div class="section-header">*Note: Due to Reddit's API changes, this page no longer interacts with Reddit's API.</div>
                 <br/>
@@ -134,7 +137,7 @@ export default {
                     'top': top + '%',
                     'font-size': fontSize + 'vw',
                     'line-height': lineHeight + 'vw',
-                    'transition': 'opacity ' + (Math.floor((Math.random() * 2 + 2) * 100) / 100) + 's ease',
+                    'transition': 'opacity ' + (Math.floor((Math.random() * 2 + 2) * 100) / 100) + 's ease-in',
                     'text-align': this.alignments[Math.floor(Math.random() * this.alignments.length)]
                 }
                 temp.timer = Math.random() * 4 + 6
@@ -205,7 +208,7 @@ export default {
                         title: 'cake'
                     },
                     4: {
-                        title: "imagine if this were an actual shower thought and not pies or cake or pizza"
+                        title: "imagine if this were an actual shower thought and not just pies, cake, or pizza"
                     }
                 }
                 return
@@ -272,27 +275,8 @@ export default {
     background-position: center;
     background-repeat: no-repeat;
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://lh3.googleusercontent.com/PRZt9UFlJ3EVyk1S-kC7gwbBHEkG06sjG2aVlCiabI_hNqncSI4fnHLFcaAFBoJHceoB6hZwQZYOD8kyHqxWBNf3Zkuk-qf8q6Kv6zgNwsBQouo-1xlKS5BT6uN-jBEB9K3ARzktZNTeRGqBJwzk8OikCdlk2qAm0jSbKSwXw_4zmMqGQQG-GKw1WDDmXmF7gJ4aCbjBJ4_WQqjssh66jQoZ6hga0kyAul4eF_I3oCRZFOeQDs3YtPvvKEvEmgPO374VcwBl_AIzkyTZTUVVZAB8_AHu8uJ8pYsENSRNSeBuv8Pea_d11wI3ySZtwBx7n_jh7r7B6VqfknPJhWrIynpKjtvvivaoSxnJXiCFxm99cuSe_7Wr8sNZ3qRHjCs8GPW81POCcEpRpkWT2Tf86AXaPwTfolSPAxspLtxwMg4RYM412lrUkQwafsO9M5jpewanID-wfxFwUgidEMx_oXap4rqb5RuK-bHkdgxaBDB_MLyF1TCog2BSany4Q9q2QT0DaQ307L2x_J4uc2X8H2OaU8esEOiFRhJN3rHYi6xh54PLcjipIJQXHoDnIiS9A1c8EjVBekjBqr9GsGBlfbRAUN_hMkWmEs80yBt368Lalz5W_uPHE9A3AE4v5bfLIB0HSXjewlFuUii3UEg4NwCQRYr6WgqTT8c=w1980-h1320-no?.jpg');
-    height: 100vh;
     font-size: 40px;
     overflow-y: hidden;
-}
-
-#article {
-    background-color: whitesmoke;
-}
-
-#article-content {
-    max-width: 1000px;
-    color: black;
-    line-height: 2em;
-}
-
-.section-header {
-    font-size: 1.5em;
-}
-
-.section-body {
-    font-size: 1.2em;
 }
 
 .thought-bubble {

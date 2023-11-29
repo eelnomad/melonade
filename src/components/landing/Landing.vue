@@ -5,10 +5,14 @@
         id="landing"
         class="f-center f-col pB-l"
     >
-        <div class="f-col f-center f-grow">
-            <p class="fadeInLeft mR-l">EXPLORING CODE</p>
+        <div class="f-col f-center f-grow w-100">
+            <div class="fadeInLeft f-row f-main-start w-100">
+                <p class="f-cross-start mH-xl t-center">EXPLORING CODE</p>
+            </div>
             <div class="spacer"></div>
-            <p class="fadeInRight mL-l">EMBRACING FUN</p>
+            <div class="fadeInRight f-row f-main-end w-100">
+                <p class="f-cross-end mH-xl t-center">EMBRACING FUN</p>
+            </div>
         </div>
         <v-icon
             class="breathe mB-l"

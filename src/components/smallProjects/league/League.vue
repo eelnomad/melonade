@@ -2,7 +2,7 @@
      Will contain League of Legends analytics.-->
 
 <template>
-  <div id="league">
+  <div id="league" class="main">
     STILL A WIP :)
   </div>
 </template>

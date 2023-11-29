@@ -52,10 +52,30 @@ a {
 //     border-radius: 20px;
 // }
 
+.w-100 {
+    width: 100%;
+}
+
 // flex and grid classes 
 .f-center {
     align-items: center;
     justify-content: center;
+}
+
+.f-main-end {
+    justify-content: flex-end;
+}
+
+.f-main-start {
+    justify-content: flex-start;
+}
+
+.f-cross-end {
+    align-items: flex-end;
+}
+
+.f-cross-start {
+    align-items: flex-start;
 }
 
 .f-default {
@@ -107,6 +127,10 @@ a {
     grid-row: 1 / -1;
 }
 
+.t-center {
+    text-align: center;
+}
+
 // margin + padding
 $directions: (
     'T': 'top',
@@ -129,7 +153,7 @@ $sizeVal in $sizes {
     }
 
     .p-#{$sizeName} {
-        margin: $sizeVal
+        padding: $sizeVal
     }
 
     .f-row-gap-#{$sizeName} {
@@ -137,7 +161,27 @@ $sizeVal in $sizes {
     }
 
     .f-col-gap-#{$sizeName} {
-        col-gap: $sizeVal
+        column-gap: $sizeVal
+    }
+
+    .mH-#{$sizeName} {
+        margin-left: $sizeVal;
+        margin-right: $sizeVal;
+    }
+
+    .mV-#{$sizeName} {
+        margin-top: $sizeVal;
+        margin-bottom: $sizeVal;
+    }
+
+    .pH-#{$sizeName} {
+        padding-left: $sizeVal;
+        padding-right: $sizeVal;
+    }
+
+    .pV-#{$sizeName} {
+        padding-top: $sizeVal;
+        padding-bottom: $sizeVal;
     }
 
     @each $directionShort,
