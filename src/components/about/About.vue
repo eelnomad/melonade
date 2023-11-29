@@ -1,6 +1,6 @@
 <template>
     <div id="about"
-    class="f-col f-center">
+    class="t-center">
         <div id="animation">
             <div id="sky">
                 <div
@@ -15,13 +15,13 @@
                 <div id="crater"></div>
             </div>
         </div>
+        <span></span>
         <div id="about-content"
-        class="pH-xl f-col f-center f-row-gap-l">
+            class="g-center f-col f-row-gap-xl">
             <h1>About Me</h1>
-            <br/>
-            <h2>Hello! I'm a developer on a mission to positively impact people's lives</h2>
-            <h2>and spread some joy through coding.</h2>
+            <p>Hello! I'm a developer on a mission to positively impact people's lives and spread some joy through coding.</p>
         </div>
+        <span></span>
     </div>
 </template>
 <script>
@@ -66,7 +66,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #about {
-    height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr fit-content(800px) 1fr;
 }
 
 #about-content {
@@ -88,7 +89,6 @@ export default {
     mask-image: url("@/assets/images/star_effect.png");
     -webkit-mask-image: url("@/assets/images/star_effect.png");
     animation: star-effect 500s linear infinite;
-
 }
 
 #layer-three {
@@ -170,5 +170,14 @@ export default {
         mask-position: -10000px 5000px;
         -webkit-mask-position: -10000px 5000px;
     }
+}
+
+h1 {
+  font-size: 2em;
+}
+
+p {
+  font-size: 1.5em;
+  line-height: 2em;
 }
 </style>

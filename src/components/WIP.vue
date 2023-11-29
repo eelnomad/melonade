@@ -3,9 +3,9 @@
 <template>
     <div id="wip" class="pT-xl">
         <span></span>
-        <span class="g-center">
-            <h1 class="pB-l">May be available soon!</h1>
-            <p class="pT-l">This page isn't available yet. Maybe it will be available sometime in the near future, maybe it won't. To be honest, I'm really not sure.</p>
+        <span class="g-center f-col f-row-gap-l">
+            <h1>May be available soon!</h1>
+            <p>This page isn't available yet. Maybe it will be available sometime in the near future, maybe it won't. To be honest, I'm really not sure.</p>
             <p>-Nomad</p>
         </span>
         <span></span>
