@@ -19,7 +19,7 @@
             </TransitionGroup>
         </div>
         <div 
-            class="article f-row pT-xxl pB-xl"
+            class="article f-row pV-xxl pH-l"
         >
             <span class="f-grow"></span>
             <div class="article-content">
