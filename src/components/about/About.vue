@@ -17,7 +17,7 @@
         </div>
         <span></span>
         <div id="about-content"
-            class="g-center f-col f-row-gap-xl">
+            class="g-center f-col f-row-gap-xl pH-m">
             <h1>About Me</h1>
             <p>Hello! I'm a developer on a mission to positively impact people's lives and spread some joy through coding.</p>
         </div>
@@ -68,6 +68,7 @@ export default {
 #about {
     display: grid;
     grid-template-columns: 1fr fit-content(800px) 1fr;
+    overflow-y: visible;
 }
 
 #about-content {
