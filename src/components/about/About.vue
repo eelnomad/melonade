@@ -130,7 +130,7 @@ export default {
     height: 15vw;
     border-radius: 50%;
     background: #EEE;
-    box-shadow: 0 0 150px -20px #EEE;
+    box-shadow: 0 0 120px 40px rgb(255,255,255,0.25);
     z-index: 6;
 }
 
