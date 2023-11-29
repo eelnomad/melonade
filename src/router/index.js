@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 
 import { useNavStore } from '@/stores/nav'
 import { useThemeStore } from '@/stores/theme'
@@ -6,7 +6,7 @@ import { useThemeStore } from '@/stores/theme'
 import { routes } from './routes'
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHashHistory(),
     routes,
     scrollBehavior(to, from, savedPosition) {
         return { top: 0 }
