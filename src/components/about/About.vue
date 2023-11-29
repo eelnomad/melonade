@@ -21,6 +21,7 @@
 <script>
 export default {
     name: 'about',
+    setup() {},
     data() {
         return {
             stars: [],
@@ -29,7 +30,6 @@ export default {
         }
     },
     created() {
-        this.$store.commit('theme/setTheme', this.$store.getters['theme/themes'].BLACK)
         this.setStars()
         this.layerOne.push(Math.random())
         this.building = setInterval(function() {

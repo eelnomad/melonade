@@ -1,21 +1,73 @@
-import Highcharts from 'highcharts'
-import stockInit from 'highcharts/modules/stock'
-
-stockInit(Highcharts)
 export default {
   data () {
     return {
-      mcInitial: [],
-      mcEmpty: [],
+      mcRunning: false,
       mcFitness: null,
       mcTemp: null,
-      mcRunning: false,
       mcTotalSteps: null,
-      mcFitnessTracker: [],
-      mcTempTracker: []
     }
   },
   methods: {
+    mcInit: function () {
+      this.mcInitial = []
+      this.mcEmpty = []
+      this.mcTempTracker = []
+      this.mcFitnessTracker = []
+      // Tracking set and unset values in the grid
+      for (var i = 0; i < this.grid.length; i++) {
+        // Things to do at the start of every row
+        if (i % 9 === 0) {
+          var emptyIndex = Math.floor(i / 9)
+          var available = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+          this.mcEmpty[emptyIndex] = []
+        }
+        // If the grid box has a value add to fixed list, otherwise, add to corresponding row list
+        if (this.grid[i].value) {
+          available.splice(available.indexOf(this.grid[i].value), 1)
+          this.mcInitial.push(i)
+        } else {
+          this.mcEmpty[emptyIndex].push(i)
+        }
+        // Things to do at the end of every row
+        if (i % 9 === 8) {
+          for (var j = 0; j < this.mcEmpty[emptyIndex].length; j++) {
+            this.setValue(this.mcEmpty[emptyIndex][j], available[j])
+          }
+        }
+      }
+      this.mcTotalSteps = 0
+      this.mcTemp = 0.5
+      this.mcFitness = this.mcTotalCost()
+    },
+    mcSolve: function () {
+      this.mcInit()
+      this.mcInterval = setInterval(() => {
+        if (!this.mcRunning) {
+          this.mcRunning = true
+          var startFitness = this.mcFitness
+          this.mcFitnessTracker.push([this.mcTotalSteps, this.mcFitness])
+          this.mcTempTracker.push([this.mcTotalSteps, this.mcTemp])
+          var i = 0
+          while (i !== 500) {
+            i++
+            this.mcTotalSteps++
+            this.mcStep()
+            if (this.mcFitness === 0) {
+              clearInterval(this.mcInterval)
+              this.mcRunning = false
+              this.mcFitnessTracker.push([this.mcTotalSteps, this.mcFitness])
+              this.mcTempTracker.push([this.mcTotalSteps, this.mcTemp])
+              this.mcChart()
+              break
+            }
+          }
+          var tempModifier = Math.abs(startFitness - this.mcFitness) < 1 ? 1.002 : 0.999
+          this.mcTemp = this.mcTemp * tempModifier
+          // this.$forceUpdate()
+          this.mcRunning = false
+        }
+      }, 100)
+    },
     mcStep: function () {
       var row = Math.floor(Math.random() * 9)
       var first = this.mcEmpty[row][Math.floor(Math.random() * this.mcEmpty[row].length)]
@@ -40,62 +92,6 @@ export default {
     mcStop: function () {
       clearInterval(this.mcInterval)
       this.mcChart()
-    },
-    mcSolve: function () {
-      this.mcInit()
-      this.mcInterval = setInterval(() => {
-        if (!this.mcRunning) {
-          this.mcRunning = true
-          var startFitness = this.mcFitness
-          this.mcFitnessTracker.push([this.mcTotalSteps, this.mcFitness])
-          this.mcTempTracker.push([this.mcTotalSteps, this.mcTemp])
-          var i = 0
-          while (i !== 500) {
-            i++
-            this.mcTotalSteps++
-            this.mcStep()
-            if (this.mcFitness === 0) {
-              clearInterval(this.mcInterval)
-              this.mcFitnessTracker.push([this.mcTotalSteps, this.mcFitness])
-              this.mcTempTracker.push([this.mcTotalSteps, this.mcTemp])
-              this.mcChart()
-              this.current = null
-              break
-            }
-          }
-          var tempModifier = Math.abs(startFitness - this.mcFitness) < 1 ? 1.002 : 0.999
-          this.mcTemp = this.mcTemp * tempModifier
-          this.$forceUpdate()
-          this.mcRunning = false
-        }
-      }, 100)
-    },
-    mcInit: function () {
-      // Tracking set and unset values in the grid
-      for (var i = 0; i < this.grid.length; i++) {
-        // Things to do at the start of every row
-        if (i % 9 === 0) {
-          var emptyIndex = Math.floor(i / 9)
-          var available = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-          this.$set(this.mcEmpty, emptyIndex, [])
-        }
-        // If the grid box has a value add to fixed list, otherwise, add to corresponding row list
-        if (this.grid[i].value) {
-          available.splice(available.indexOf(this.grid[i].value), 1)
-          this.mcInitial.push(i)
-        } else {
-          this.mcEmpty[emptyIndex].push(i)
-        }
-        // Things to do at the end of every row
-        if (i % 9 === 8) {
-          for (var j = 0; j < this.mcEmpty[emptyIndex].length; j++) {
-            this.setValue(this.mcEmpty[emptyIndex][j], available[j])
-          }
-        }
-      }
-      this.mcTotalSteps = 0
-      this.mcTemp = 0.5
-      this.mcFitness = this.mcTotalCost()
     },
     mcChart: function () {
       // Setting up Chart

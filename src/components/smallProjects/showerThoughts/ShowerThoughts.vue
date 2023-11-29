@@ -1,20 +1,56 @@
 <!-- ShowerThoughts.vue
 		 This is the page that shows Shower Thoughts.-->
 <template>
-    <div id="shower-thoughts">
-        <TransitionGroup name="fade">
-            <a
-                v-for="(thought, index) in thoughtQueue"
-                v-show="thought.active"
-                :href="thought.url"
-                :key="index"
-                :style="thought.style"
-                class="thought-bubble"
-                target="_blank"
-            >
-                {{thought.title}}
-            </a>
-        </TransitionGroup>
+    <div>
+        <div id="shower-thoughts"
+        class="f-col f-center f-grow">
+            <TransitionGroup name="fade">
+                <a
+                    v-for="(thought, index) in thoughtQueue"
+                    v-show="thought.active"
+                    :href="thought.url"
+                    :key="index"
+                    :style="thought.style"
+                    class="thought-bubble"
+                    target="_blank"
+                >
+                    {{thought.title}}
+                </a>
+            </TransitionGroup>
+        </div>
+        <div 
+            id="article"
+            class="f-row pT-xl pB-xl"
+        >
+            <span class="f-grow"></span>
+            <div id="article-content">
+                <br/>
+                <div class="section-header">*Note: Due to Reddit's API changes, this page no longer interacts with Reddit's API.</div>
+                <br/>
+                <div class="section-body">In the fast-paced world of the internet, moments of serenity are often hard to come by. Amidst the hustle and bustle of online interactions, there exists a unique corner on the web where users can unwind and let their thoughts flow freely—the realm of Shower Thoughts. Shower thoughts are those fleeting, often profound ideas that occur to us when we least expect them. Inspired by this concept, I embarked on a creative journey to build a tranquil online space dedicated to showcasing these musings. In this article, I will share my experience of designing and developing a web page that elegantly displays shower thoughts fetched from Reddit's API, complete with a soothing breathing effect. Join me as I delve into the details of this implementation.</div>
+                <br/>
+                <br/>
+                <div class="section-header">Exploring Reddit's API:</div>
+                <br/>
+                <div class="section-body">To bring my vision to life, I utilized Reddit's API, a powerful resource that taps into the collective mind of the internet. After obtaining the necessary API credentials, I set out to retrieve shower thoughts—captivating snippets of wisdom shared by Reddit users of /r/showerthoughts. Through API requests, I fetch a curated selection of these thoughts, ensuring a diverse and engaging collection for visitors to experience.</div>
+                <br/>
+                <br/>
+                <div class="section-header">Designing the User Interface:</div>
+                <br/>
+                <div class="section-body">A crucial aspect of this page was crafting a visually appealing interface. I opted for a simple background image of nature and a slow paced breathing effect, focusing on readability and gentle animations. The shower thoughts were randomly presented across the viewable screen, each with a varying font size to drive home the random nature of shower thoughts. To create a calming ambiance, I incorporated a subtle breathing effect—a gentle fade-in and fade-out for each thought, reminiscent of a peaceful meditation exercise. This effect was achieved using CSS animations, providing visitors with a soothing visual experience.</div>
+                <br/>
+                <br/>
+                <div class="section-header">Implementing the Breathing Effect:</div>
+                <br/>
+                <div class="section-body">The trickiest part of this page was randomizing the font size and appearance location of each thought while keeping it constrained in the initial viewable bounds. My process started with generating a random width and number of rows within some constraints for how wide and tall the thought would appear on the screen. Then, based off of those numbers and because this was meant to be a quick project, I created a generalized formula for how large the font size and element heights should be. After that, they're placed in a queue to be displayed on the screen. A process runs through the queue and any shower thoughts what won't be overlapping with any currently existing elements and begins the transition process. Each thought only lasts on the screen for a short amount of time, randomly decided by math.rand(), before they fade back out, completing the lifecycle of a thought on the page.</div>
+                <br/>
+                <br/>
+                <div class="section-header">Conclusion:</div>
+                <br/>
+                <div class="section-body">Building a web page to display shower thoughts with a breathing effect proved to be a delightful and meditative endeavor. By harnessing the power of Reddit's API and combining it with creative design and animations, I created a serene online space where visitors can immerse themselves in the wisdom of the internet community. This project not only provided a platform for the expression of diverse thoughts but also served as a reminder of the beauty that emerges when technology and creativity harmonize. As the virtual page gently breathes in and out, it invites users to relax, reflect, and appreciate the profound musings that shower thoughts have to offer.</div>
+            </div>
+            <span class="f-grow"></span>
+        </div>
     </div>
 </template>
 <script>
@@ -24,31 +60,49 @@ export default {
     data() {
         return {
             alignments: ['left', 'right', 'center'],
+            isVisible: true,
             reddit: {
                 after: '',
                 expires: 0,
                 token: null,
             },
+            useReddit: false,
             thoughts: {},
             thoughtQueue: {},
+            thoughtInterval: null,
+            tokenBackOff: 100,
+            tokenInterval: null,
         }
     },
     created() {
+        // Listen for visibility change events
+        document.addEventListener("visibilitychange", this.handleVisibilityChange);
+
         this.thoughtInterval = setInterval(() => {
-        	this.queueThought()
-        	this.processThoughts()
+            if (this.isVisible) {
+                this.queueThought()
+                this.processThoughts()
+            }
         }, 1000)
     },
     mounted() {},
     beforeUnmount() {
+        document.removeEventListener("visibilitychange", this.handleVisibilityChange)
         clearInterval(this.thoughtInterval)
+        clearInterval(this.tokenInterval)
     },
     computed: {},
     methods: {
+        handleVisibilityChange() {
+          // Update the isVisible property based on the page visibility state
+          this.isVisible = !document.hidden;
+        },
         queueThought: function() {
             if (Math.random() < 0.5 - Object.keys(this.thoughtQueue).length * 0.1) {
             	const thoughtKeys = Object.keys(this.thoughts)
-                if (thoughtKeys.length < 5 && !this.fetchingThoughts) {
+                if (thoughtKeys.length < 5 && !this.fetchingThoughts && this.useReddit) {
+                    this.getThoughts()
+                } else if (!this.useReddit && Object.keys(this.thoughtQueue) == 0) {
                     this.getThoughts()
                 }
 
@@ -139,12 +193,33 @@ export default {
             })
         },
         getThoughts: function() {
-            if (Date.now() > this.reddit.expires && !this.fetchingToken) {
-                this.getToken()
-                return setTimeout(this.getThoughts, 500)
+            if (!this.useReddit) {
+                this.thoughts = {
+                    1: {
+                        title: 'pies'
+                    },
+                    2: {
+                        title: 'pizza'
+                    },
+                    3: {
+                        title: 'cake'
+                    },
+                    4: {
+                        title: "imagine if this were an actual shower thought and not pies or cake or pizza"
+                    }
+                }
+                return
+            }
+            this.fetchingThoughts = true
+
+            if (Date.now() > this.reddit.expires) {
+                if (!this.fetchingToken) {
+                    this.getToken()
+                }
+                this.tokenInterval = setTimeout(this.getThoughts, this.tokenBackOff)
+                return
             }
 
-            this.fetchingThoughts = true
             const url = 'https://oauth.reddit.com/r/showerthoughts/hot?limit=100&after=' + this.reddit.after
             this.$http.get(url, {
                 headers: {
@@ -178,8 +253,10 @@ export default {
                 this.reddit.after = response.after
                 this.reddit.token = 'Bearer ' + response.data.access_token
                 this.reddit.expires = Date.now() + response.data.expires_in
+                this.tokenBackOff = 300
                 this.fetchingToken = false
             }).catch(error => {
+                this.tokenBackOff *= 2
                 this.fetchingToken = false
                 console.log(error)
             })
@@ -195,7 +272,27 @@ export default {
     background-position: center;
     background-repeat: no-repeat;
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://lh3.googleusercontent.com/PRZt9UFlJ3EVyk1S-kC7gwbBHEkG06sjG2aVlCiabI_hNqncSI4fnHLFcaAFBoJHceoB6hZwQZYOD8kyHqxWBNf3Zkuk-qf8q6Kv6zgNwsBQouo-1xlKS5BT6uN-jBEB9K3ARzktZNTeRGqBJwzk8OikCdlk2qAm0jSbKSwXw_4zmMqGQQG-GKw1WDDmXmF7gJ4aCbjBJ4_WQqjssh66jQoZ6hga0kyAul4eF_I3oCRZFOeQDs3YtPvvKEvEmgPO374VcwBl_AIzkyTZTUVVZAB8_AHu8uJ8pYsENSRNSeBuv8Pea_d11wI3ySZtwBx7n_jh7r7B6VqfknPJhWrIynpKjtvvivaoSxnJXiCFxm99cuSe_7Wr8sNZ3qRHjCs8GPW81POCcEpRpkWT2Tf86AXaPwTfolSPAxspLtxwMg4RYM412lrUkQwafsO9M5jpewanID-wfxFwUgidEMx_oXap4rqb5RuK-bHkdgxaBDB_MLyF1TCog2BSany4Q9q2QT0DaQ307L2x_J4uc2X8H2OaU8esEOiFRhJN3rHYi6xh54PLcjipIJQXHoDnIiS9A1c8EjVBekjBqr9GsGBlfbRAUN_hMkWmEs80yBt368Lalz5W_uPHE9A3AE4v5bfLIB0HSXjewlFuUii3UEg4NwCQRYr6WgqTT8c=w1980-h1320-no?.jpg');
+    height: 100vh;
+    font-size: 40px;
     overflow-y: hidden;
+}
+
+#article {
+    background-color: whitesmoke;
+}
+
+#article-content {
+    max-width: 1000px;
+    color: black;
+    line-height: 2em;
+}
+
+.section-header {
+    font-size: 1.5em;
+}
+
+.section-body {
+    font-size: 1.2em;
 }
 
 .thought-bubble {

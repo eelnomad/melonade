@@ -17,9 +17,7 @@ export default {
     data() {
         return {}
     },
-    created() {
-        this.$store.commit('theme/setTheme', this.$store.getters['theme/themes'].BLACK)
-    },
+    created() {},
     methods: {
         back: function() {
             this.$router.go(-1)

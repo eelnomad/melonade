@@ -1,23 +1,22 @@
 export default {
   data () {
     return {
-      recursiveGrid: [],
-      recursiveStack: [],
       recursiveRunning: false
     }
   },
   methods: {
-    possible: function (index) {
-      var values = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-      for (var r of this.grid[index].related) {
-        if (values.indexOf(this.grid[r].value) !== -1) {
-          values.splice(values.indexOf(this.grid[r].value), 1)
+    recursiveInit: function () {
+      this.recursiveGrid = []
+      this.recursiveStack = []
+      // Set up the initial stack of filled items and the possibility grid
+      this.initial = 0
+      for (var i = 0; i < this.grid.length; i++) {
+        this.possible(i)
+        if (this.grid[i].value) {
+          this.recursiveStack.push(i)
+          this.initial++
         }
       }
-      this.$set(this.recursiveGrid, index, values)
-    },
-    recursiveStop: function () {
-      clearInterval(this.recursiveInterval)
     },
     recursiveSolve: function () {
       this.recursiveInit()
@@ -28,10 +27,10 @@ export default {
           if (this.recursiveStack.length > this.initial && this.recursiveStack[this.recursiveStack.length - 1] !== null) {
             this.recursiveStep()
           } else {
-            this.current = null
             clearInterval(this.recursiveInterval)
+            this.recursiveRunning = false
           }
-          this.$forceUpdate()
+          // this.$forceUpdate()
           this.recursiveRunning = false
         }
       }, 10)
@@ -46,16 +45,17 @@ export default {
         this.recursiveStack.push(this.fewestPossible())
       }
     },
-    recursiveInit: function () {
-      // Set up the initial stack of filled items and the possibility grid
-      this.initial = 0
-      for (var i = 0; i < this.grid.length; i++) {
-        this.possible(i)
-        if (this.grid[i].value) {
-          this.recursiveStack.push(i)
-          this.initial++
+    recursiveStop: function () {
+      clearInterval(this.recursiveInterval)
+    },
+    possible: function (index) {
+      var values = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+      for (var r of this.grid[index].related) {
+        if (values.indexOf(this.grid[r].value) !== -1) {
+          values.splice(values.indexOf(this.grid[r].value), 1)
         }
       }
+      this.recursiveGrid[index] = values
     },
     setRecursiveValue: function (index, input = null) {
       this.setValue(index, input)

@@ -6,9 +6,9 @@
         class="f-center f-col pB-l"
     >
         <div class="f-col f-center f-grow">
-            <p class="fadeInLeft mR-l">SOME COOL TEXT</p>
+            <p class="fadeInLeft mR-l">EXPLORING CODE</p>
             <div class="spacer"></div>
-            <p class="fadeInRight mL-l">FADES IN HERE</p>
+            <p class="fadeInRight mL-l">EMBRACING FUN</p>
         </div>
         <v-icon
             class="breathe mB-l"
@@ -23,9 +23,7 @@ export default {
     data() {
         return {}
     },
-    created() {
-        this.$store.commit('theme/setTheme', this.$store.getters['theme/themes'].BLACK)
-    },
+    created() {},
     beforeDestroy() {},
     destroyed() {},
     methods: {},

@@ -1,57 +1,86 @@
 <!-- MainNav.vue
     MainNav for main page-->
 <template>
-    <div
-        :class="classes"
-        id="main-nav"
+    <div 
+        :style="{color: color}"
+        class="f-col f-center"
+        id="nav"
     >
-        <div
-            class="f-row mL-m"
-            id="nav-major"
-        >
-            <router-link
-                v-for="route in majorRoutes"
-                :to="{name : route.name}"
-                class="mL-l"
+        <transition name="fade" mode="out-in">
+            <div
+                v-show="shown"
+                :class="classes"
+                class="g"
+                id="main-nav"
             >
-                <h2 :style="{color: color}">{{ route.name }}</h2>
-            </router-link>
-        </div>
-        <router-link
-            class="m-l"
-            id="nav-logo"
-            to="/"
-        >
-            <h1 :style="{color: color}">Melonade</h1>
-        </router-link>
-        <div
-            class="f-row mR-m"
-            id="nav-minor"
-        >
-            <router-link
-                v-for="route in minorRoutes"
-                :to="{name : route.name}"
-                class="mR-l"
-            >
-                <h3 :style="{color: color}">{{ route.name }}</h3>
-            </router-link>
-        </div>
+                <div
+                    class="f-row m-l"
+                    id="nav-major"
+                >
+                    <router-link
+                        v-for="route in majorRoutes"
+                        :to="{name : route.name}"
+                    >
+                        <h2>{{ route.name }}</h2>
+                    </router-link>
+                </div>
+                <router-link
+                    class="m-l"
+                    id="nav-logo"
+                    :to="{name : 'Landing'}"
+                >
+                    <h1>Melonade</h1>
+                </router-link>
+                <div
+                    class="f-row f-center m-l"
+                    id="nav-minor"
+                >
+                    <transition name="erase">
+                        <button
+                            v-show="navStore.hideable"
+                            :disabled="scrolled"
+                            @click="hide"
+                            class="pR-m"
+                        >
+                            <v-icon
+                                id="hide-icon"
+                                name="fa-regular-eye-slash"
+                                scale="1.5"
+                            />
+                        </button>
+                    </transition>
+                    <router-link
+                        v-for="route in minorRoutes"
+                        :to="{name : route.name}"
+                    >
+                        <h3>{{ route.name }}</h3>
+                    </router-link>
+                </div>
+            </div>
+        </transition>
     </div>
 </template>
 <script>
-import { createNamespacedHelpers } from 'vuex'
-import { MAJOR_ROUTES, MINOR_ROUTES } from '@/router'
-
-const { mapGetters: navGetters } = createNamespacedHelpers('nav')
-const { mapGetters: themeGetters } = createNamespacedHelpers('theme')
+import { MAJOR_ROUTES, MINOR_ROUTES } from '@/router/routes'
+import { useNavStore } from '@/stores/nav'
+import { useThemeStore } from '@/stores/theme'
 
 export default {
     name: 'MainNav',
+    setup() {
+        const navStore = useNavStore()
+        const themeStore = useThemeStore()
+        return {
+            navStore,
+            themeStore,
+        }
+    },
     data() {
         return {
+            hidden: true,
             majorRoutes: MAJOR_ROUTES,
             minorRoutes: MINOR_ROUTES,
-            scrolled: false
+            scrolled: false,
         }
     },
     created() {
@@ -64,43 +93,49 @@ export default {
     methods: {
         checkTop(event) {
             this.scrolled = window.scrollY !== 0
+            if (this.scrolled) {
+                this.hidden = false
+            }
+        },
+        hide() {
+            this.hidden = true
         }
     },
-    watch: {},
+    watch: {
+        $route(to, from) {
+            this.hide()
+        }
+    },
     computed: {
-        ...navGetters([
-            'navState'
-        ]),
-        ...themeGetters([
-            'theme'
-        ]),
         classes() {
             return {
-                'nav-compact': this.navState.compact,
-                'nav-hidden': this.navState.hide,
                 'nav-scrolled': this.scrolled,
                 'nav-unscrolled': !this.scrolled,
             }
         },
         color() {
-            return this.scrolled ? 'black' : this.theme.color
+            return this.scrolled ? 'black' : this.themeStore.color
+        },
+        shown() {
+            return this.navStore.hideable ? !this.hidden : true
         }
     },
     components: {}
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style 
-    lang="scss"
-    scoped>
-#main-nav {
+<style scoped>
+#nav {
     position: fixed;
+    transition: all .25s ease;
     width: 100%;
-    display: grid;
+    z-index: 99;
+}
+
+#main-nav {
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-areas: "major logo minor";
-    z-index: 99;
-    transition: all .25s ease;
+    width: 100%;
 }
 
 #nav-logo {
@@ -121,6 +156,10 @@ export default {
     align-self: center;
 }
 
+#hide-icon {
+    color: inherit;
+}
+
 .nav-scrolled {
     background-color: whitesmoke;
     border-bottom: gainsboro 1px solid;
@@ -133,7 +172,38 @@ export default {
     box-shadow: 0 4px 8px rgba(220, 220, 220, 0.0);
 }
 
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.25s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+
+.erase-enter-active,
+.erase-leave-active {
+  transition: all 0.5s ease;
+}
+
+.erase-enter,
+.erase-leave-to {
+    opacity: 0;
+  transform: translate(100%, 0);
+  flex-grow: 0 !important;
+}
+
 h1 {
     font-size: 1.5rem;
+}
+
+button {
+    background-color: transparent;
+    border: none;
+    transition: all 0.5s ease;
+}
+button:disabled {
+    color: lightgray;
 }
 </style>

@@ -1,5 +1,5 @@
 <!-- SmallProjects.vue
- A hub for routing to smaller projects.-->
+   A hub for routing to smaller projects.-->
 <template>
     <div id="small-projects">
         <router-view v-slot="{ Component }">
@@ -9,17 +9,9 @@
         </router-view>
         <!-- <div id="small-projects-filter">
       <input v-model="searchQuery" placeholder="Filter Projects">
-    </div> -->
-        <div
-            class="content pT-xxl"
-            id="small-projects-list"
-        >
-            <small-projects-card
-                v-for="route in routes"
-                :key="route.path"
-                :route="route"
-                class="card"
-            ></small-projects-card>
+  </div> -->
+        <div class="content pT-xxl" id="small-projects-list">
+            <small-projects-card v-for="route in routes" :key="route.path" :route="route" class="card"></small-projects-card>
         </div>
     </div>
 </template>
@@ -32,30 +24,9 @@ export default {
     data() {
         return {}
     },
-    created() {
-        this.$store.commit('theme/setTheme', this.$store.getters['theme/themes'].WHITE)
-        console.log(this.$route)
-        this.addRoutes(PROJECT_ROUTES)
-        if (this.$route.params.id) {
-            if ((PROJECT_ROUTES.find(route => route.path === this.$route.params.id))) {
-                this.$router.go(this.$router.currentRoute)
-            } else {
-                this.$router.replace({ name: this.$route.name })
-            }
-        }
-    },
+    created() {},
     mounted() {},
-    methods: {
-        addRoutes(routes) {
-            const route = this.$route.matched[0]
-            route.children.push(...routes)
-
-            // dedup
-            route.children = [...new Map(route.children.map(r => [r.path, r])).values()]
-
-            this.$router.addRoute(route)
-        }
-    },
+    methods: {},
     computed: {
         routes() {
             return this.$route.matched[0].children.filter(route => route.path != '')
@@ -66,7 +37,6 @@ export default {
     }
 }
 </script>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #small-projects {}
 

@@ -25,9 +25,7 @@ export default {
             photoData: photoData
         }
     },
-    beforeCreate() {
-        this.$store.commit('theme/setTheme', this.$store.getters['theme/themes'].WHITE)
-    },
+    beforeCreate() {},
     beforeDestroy() {},
     destroyed() {},
     watch: {},

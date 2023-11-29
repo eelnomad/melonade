@@ -1,17 +1,35 @@
+import { THEMES } from '@/stores/theme'
+
 export const PROJECT_ROUTES = [{
         path: 'showerthoughts',
-        // component: () => import('@/components/WIP'),
         component: () => import('@/components/smallProjects/showerThoughts/ShowerThoughts.vue'),
-        // name: 'showerthoughts',
-        name: 'A Relaxing Way to Look at /r/showerthoughts',
-        // description: 'A simple screensaver alternative that pulls the top posts from the /r/showerthoughts sub-reddit and displays them in a breath-like manner across the page.'
-        description: 'Currently broken.'
+        name: 'Shower Thoughts',
+        description: 'A Relaxing Way to Look at /r/showerthoughts',
+        meta: {
+            hideable: true,
+        },
     },
     {
         path: 'sudoku',
-        component: () => import('@/components/WIP.vue'),
+        component: () => import('@/components/smallProjects/sudoku/Sudoku.vue'),
         name: 'Sudoku Solver',
+        description: 'Definitely broken',
+        meta: {
+            hideable: true,
+            title: 'Melonade - Sudoku',
+            metaTags: [{
+                name: 'description',
+                content: 'Sudoku Solver.'
+            }],
+            theme: THEMES.WHITE
+        },
+        // description: 'Looking at several methods of solving sudoku.',
+    },
+    {
+        path: 'league',
+        component: () => import('@/components/WIP.vue'),
+        name: 'League Analysis',
         // description: 'A sudoku solver showcasing the power of recursion and Monte Carlo in solving sudoku.'
-        description: 'Currently broken.'
+        description: 'Non-existant and probably never will be'
     },
 ]

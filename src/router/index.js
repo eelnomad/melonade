@@ -1,76 +1,34 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-export const MAJOR_ROUTES = [{
-        name: 'Photos',
-        path: '/photos/:id?',
-        component: () => import('@/components/photoGallery/PhotoGallery.vue'),
-        meta: {
-            title: 'Melonade - Photos',
-            metaTags: [{
-                name: 'description',
-                content: 'A gallery of photos.'
-            }]
-        }
-    },
-]
+import { useNavStore } from '@/stores/nav'
+import { useThemeStore } from '@/stores/theme'
 
-export const MINOR_ROUTES = [{
-        name: 'About',
-        path: '/about',
-        component: () => import('@/components/about/About.vue'),
-        meta: {
-            title: 'Melonade - About',
-            metaTags: [{
-                name: 'description',
-                content: 'A bit about Melonade.'
-            }]
-        }
-    }
-]
-
-const routes = [
-    ...MAJOR_ROUTES,
-    ...MINOR_ROUTES,
-    {
-        name: 'Home',
-        path: '/',
-        redirect: { name: 'Projects'},
-        // component: () => import('@/components/landing/Landing'),
-        // meta: {
-        //     title: 'Melonade',
-        //     metaTags: [{
-        //         name: 'description',
-        //         content: 'Home page.'
-        //     }]
-        // }
-    },
-    {
-        path: '/projects',
-        component: () => import('@/components/smallProjects/SmallProjects.vue'),
-        children: [
-            {
-                name: 'Projects',
-                path: '',
-                component: () => import('@/components/landing/Landing.vue'),
-            }
-        ],
-        meta: {
-            title: 'Melonade - Projects',
-            metaTags: [{
-                name: 'description',
-                content: 'A list of projects.'
-            }]
-        }
-    },
-    {
-        path: '/:pathMatch(.*)',
-        redirect: '/projects',
-    }
-]
+import { routes } from './routes'
 
 const router = createRouter({
     history: createWebHistory(),
-    routes
+    routes,
+    scrollBehavior(to, from, savedPosition) {
+        return { top: 0 }
+    },
+})
+
+router.beforeEach((to, from, next) => {
+    const navStore = useNavStore()
+    const themeStore = useThemeStore()
+    if ('meta' in to) {
+        if ('theme' in to.meta) {
+            themeStore.setTheme(to.meta.theme)
+        } else {
+            themeStore.$reset()
+        }
+        if ('hideable' in to.meta) {
+            navStore.setHideable(to.meta.hideable)
+        } else {
+            navStore.$reset()
+        }
+    }
+    next()
 })
 
 router.afterEach((to, from, next) => {
@@ -89,17 +47,17 @@ router.afterEach((to, from, next) => {
     if (!nearestWithMeta) return next();
 
     nearestWithMeta.meta.metaTags.map(tagDef => {
-            const tag = document.createElement('meta');
+        const tag = document.createElement('meta');
 
-            Object.keys(tagDef).forEach(key => {
-                tag.setAttribute(key, tagDef[key]);
-            });
+        Object.keys(tagDef).forEach(key => {
+            tag.setAttribute(key, tagDef[key]);
+        });
 
-            tag.setAttribute('data-vue-router-controlled', '');
+        tag.setAttribute('data-vue-router-controlled', '');
 
-            return tag;
-        })
-        .forEach(tag => document.head.appendChild(tag));
+        return tag;
+    })
+    .forEach(tag => document.head.appendChild(tag));
 });
 
 export default router

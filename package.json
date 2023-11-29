@@ -11,13 +11,13 @@
   },
   "dependencies": {
     "axios": "^1.2.1",
-    "highcharts": "^9.3.2",
-    "highcharts-vue": "^1.4.0",
+    "chart.js": "^4.4.0",
     "normalize.css": "^8.0.1",
     "oh-vue-icons": "^1.0.0-rc3",
+    "pinia": "^2.0.28",
     "vue": "^3.2.45",
-    "vue-router": "^4.1.6",
-    "vuex": "^4.0.0-0"
+    "vue-chartjs": "^5.2.0",
+    "vue-router": "^4.1.6"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.2.0",
