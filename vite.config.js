@@ -14,6 +14,6 @@ export default defineConfig({
     exclude: ["oh-vue-icons/icons"]
   },
   build: {
-      outDir: '../docs'
+      outDir: './docs'
   }
 })

@@ -101,7 +101,7 @@ export default {
     border-radius: 20px;
     overflow: hidden;
 
-    Transition: all .3s ease;
+    transition: all .3s ease;
     box-shadow: 0 2px 5px 0px rgba(0, 0, 0, 0.3);
     transform: translateZ(0) scale(1.001, 1.001);
 
@@ -119,7 +119,7 @@ export default {
         position: absolute;
         object-fit: cover;
 
-        Transition: all .3s linear;
+        transition: all .3s linear;
         filter: grayscale(80%);
 
         &:hover {
@@ -181,22 +181,22 @@ export default {
         opacity: 1;
         top: 30%;
         left: 130%;
-        Transition-property: left, top, opacity;
-        Transition-duration: 0.7s, 0.7s, 0.15s;
-        Transition-timing-function: ease;
+        transition-property: left, top, opacity;
+        transition-duration: 0.7s, 0.7s, 0.15s;
+        transition-timing-function: ease;
     }
 
     100% {
         opacity: 0;
         top: 30%;
         left: 130%;
-        Transition-property: left, top, opacity;
+        transition-property: left, top, opacity;
     }
 }
 
 .fade-enter-active,
 .fade-leave-active {
-    Transition: opacity 0.25s ease;
+    transition: opacity 0.25s ease;
 }
 
 .fade-enter-from,
