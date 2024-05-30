@@ -7,6 +7,11 @@ export const PROJECT_ROUTES = [{
         description: 'A Relaxing Way to Look at /r/showerthoughts',
         meta: {
             hideable: true,
+            title: 'Melonade - Shower Thoughts',
+            metaTags: [{
+                name: 'description',
+                content: 'r/showerthoughts Visualized.'
+            }],
         },
     },
     {

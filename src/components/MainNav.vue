@@ -1,59 +1,25 @@
 <!-- MainNav.vue
     MainNav for main page-->
 <template>
-    <div 
-        :style="{color: color}"
-        class="f-col f-center"
-        id="nav"
-    >
+    <div :style="{color: color}" class="f-col f-center" id="nav">
         <transition name="fade" mode="out-in">
-            <div
-                v-show="shown"
-                :class="classes"
-                class="g"
-                id="main-nav"
-            >
-                <div
-                    class="f-row m-l"
-                    id="nav-major"
-                >
-                    <router-link
-                        v-for="route in majorRoutes"
-                        :to="{name : route.name}"
-                    >
-                        <h2>{{ route.name }}</h2>
+            <div v-show="shown" :class="classes" class="g" id="main-nav">
+                <div class="f-row m-l" id="nav-major">
+                    <router-link v-for="route in majorRoutes" :to="{name : route.name}">
+                        <h2 class="pH-m">{{ route.name }}</h2>
                     </router-link>
                 </div>
-                <router-link
-                    class="m-l"
-                    id="nav-logo"
-                    :to="{name : 'Landing'}"
-                >
+                <router-link class="m-l" id="nav-logo" :to="{name : 'Landing'}">
                     <h1>Melonade</h1>
                 </router-link>
-                <div
-                    class="f-row f-center m-l"
-                    id="nav-minor"
-                >
+                <div class="f-row f-center m-l" id="nav-minor">
                     <transition name="erase">
-                        <button
-                            v-show="navStore.hideable"
-                            :disabled="scrolled"
-                            @click="hide"
-                            class="pR-m"
-                        >
-                            <v-icon
-                                id="hide-icon"
-                                name="fa-regular-eye-slash"
-                                scale="1.5"
-                            />
+                        <button v-show="navStore.hideable" :disabled="scrolled" @click="hide" class="pR-m">
+                            <v-icon id="hide-icon" name="fa-regular-eye-slash" scale="1.5" />
                         </button>
                     </transition>
-                    <router-link
-                        v-for="route in minorRoutes"
-                        :to="{name : route.name}"
-                    >
-                        <h3>{{ route.name }}</h3>
+                    <router-link v-for="route in minorRoutes" :to="{name : route.name}">
+                        <h3 class="pH-m">{{ route.name }}</h3>
                     </router-link>
                 </div>
             </div>
@@ -184,14 +150,14 @@ export default {
 
 .erase-enter-active,
 .erase-leave-active {
-  transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 
 .erase-enter,
 .erase-leave-to {
     opacity: 0;
-  transform: translate(100%, 0);
-  flex-grow: 0 !important;
+    transform: translate(100%, 0);
+    flex-grow: 0 !important;
 }
 
 h1 {
@@ -203,6 +169,7 @@ button {
     border: none;
     transition: all 0.5s ease;
 }
+
 button:disabled {
     color: lightgray;
 }

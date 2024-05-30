@@ -15,21 +15,24 @@ export const MAJOR_ROUTES = [{
             theme: THEMES.WHITE
         },
     },
+    {
+        name: 'Projects',
+        redirect: { name: 'SmallProjects' },
+    },
 ]
 
 export const MINOR_ROUTES = [{
-        name: 'About',
-        path: '/about',
-        component: () => import('@/components/about/About.vue'),
-        meta: {
-            title: 'Melonade - About',
-            metaTags: [{
-                name: 'description',
-                content: 'A bit about Melonade.'
-            }],
-        },
-    }
-]
+    name: 'About',
+    path: '/about',
+    component: () => import('@/components/about/About.vue'),
+    meta: {
+        title: 'Melonade - About',
+        metaTags: [{
+            name: 'description',
+            content: 'A bit about Melonade.'
+        }],
+    },
+}]
 
 export const routes = [
     ...MAJOR_ROUTES,
@@ -40,27 +43,29 @@ export const routes = [
     //     redirect: { name: 'Projects'}
     // },
     {
-        name: 'Projects',
+        path: '',
+        component: () => import('@/components/landing/Landing.vue'),
+        name: 'Landing',
+    },
+    {
         path: '/projects',
-        component: () => import('@/components/smallProjects/SmallProjects.vue'),
-        children: [
-            {
+        children: [{
+                name: 'SmallProjects',
                 path: '',
-                component: () => import('@/components/landing/Landing.vue'),
-                name: 'Landing',
+                component: () => import('@/components/smallProjects/SmallProjects.vue'),
+                meta: {
+                    title: 'Melonade - Projects',
+                    metaTags: [{
+                        name: 'description',
+                        content: 'A list of projects.'
+                    }]
+                },
             },
             ...PROJECT_ROUTES
         ],
-        meta: {
-            title: 'Melonade - Projects',
-            metaTags: [{
-                name: 'description',
-                content: 'A list of projects.'
-            }]
-        }
     },
     {
         path: '/:pathMatch(.*)',
-        redirect: { name: 'Landing'},
+        redirect: { name: 'Landing' },
     }
 ]
