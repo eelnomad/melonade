@@ -1,148 +1,155 @@
-<!-- SmallProjects.vue
-   A hub for routing to smaller projects.-->
 <template>
     <div id="small-projects">
-        <div id="banner" class="f-center f-col pB-l">
-            <div class="f-col f-center f-grow w-100">
-                <div class="fadeInLeft f-row f-main-start w-100">
-                    <p class="f-cross-start mH-xl t-center">EXPLORING CODE</p>
-                </div>
-                <div class="spacer"></div>
-                <div class="fadeInRight f-row f-main-end w-100">
-                    <p class="f-cross-end mH-xl t-center">EMBRACING FUN</p>
+        <div class="controls pH-xl pT-xl pB-l">
+            <input
+                v-model="search"
+                class="search-input"
+                type="text"
+                placeholder="Search projects..."
+            />
+            <div class="tag-scroll-wrapper">
+                <div class="tag-scroll">
+                    <button
+                        v-for="tag in allTags"
+                        :key="tag"
+                        class="tag-btn"
+                        :class="{ active: activeTags.has(tag) }"
+                        @click="toggleTag(tag)"
+                    >{{ tag }}</button>
                 </div>
             </div>
-            <v-icon class="breathe mB-l" name="fa-chevron-down" scale="5" />
         </div>
-        <div class="content pT-xxl" id="small-projects-list">
-            <small-projects-card v-for="route in routes" :key="route.path" :route="route" class="card"></small-projects-card>
+
+        <div class="projects-grid pH-xl pB-xl">
+            <small-projects-card
+                v-for="route in filteredRoutes"
+                :key="route.path"
+                :route="route"
+            />
         </div>
     </div>
 </template>
-<script>
+
+<script setup>
+import { computed, reactive, ref } from 'vue'
 import SmallProjectsCard from '@/components/smallProjects/SmallProjectsCard.vue'
+import { PROJECT_ROUTES } from '@/router/projects'
 
-export default {
-    name: 'small-projects',
-    data() {
-        return {}
-    },
-    created() {},
-    mounted() {},
-    methods: {},
-    computed: {
-        routes() {
-            return this.$route.matched[0].children.filter(route => route.path != '')
-        }
-    },
-    components: {
-        SmallProjectsCard
-    }
+const visibleRoutes = computed(() =>
+    PROJECT_ROUTES.filter(r => !r.meta?.hidden)
+)
+
+const allTags = computed(() => {
+    const counts = new Map()
+    visibleRoutes.value.forEach(r =>
+        (r.tags ?? []).forEach(t => counts.set(t, (counts.get(t) ?? 0) + 1))
+    )
+    return [...counts.entries()]
+        .sort((a, b) => b[1] - a[1])
+        .map(([tag]) => tag)
+})
+
+const activeTags = reactive(new Set())
+const search = ref('')
+
+function toggleTag(tag) {
+    if (activeTags.has(tag)) activeTags.delete(tag)
+    else activeTags.add(tag)
 }
-</script>
-<style>
-#small-projects {}
 
-#small-projects-list {
-    display: grid;
-    grid-template-columns: 1fr fit-content(600px) 1fr;
-    grid-auto-flow: column;
-    grid-auto-rows: 200px;
+const filteredRoutes = computed(() => {
+    const q = search.value.trim().toLowerCase()
+    return visibleRoutes.value.filter(r => {
+        const matchesSearch = !q || r.name.toLowerCase().includes(q)
+        const matchesTags = activeTags.size === 0 || (r.tags ?? []).some(t => activeTags.has(t))
+        return matchesSearch && matchesTags
+    })
+})
+</script>
+
+<style scoped>
+#small-projects {
+    min-height: 100vh;
     background-color: whitesmoke;
     color: black;
 }
 
-.main {
-    height: 100vh;
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
 }
 
-.card {
-    grid-column: 2;
-
+.search-input {
+    width: 100%;
+    padding: 0.65rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    background: white;
+    color: black;
+    outline: none;
+    box-sizing: border-box;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+    transition: border-color 0.15s, box-shadow 0.15s;
 }
 
-.content {
-    min-height: 100vh;
+.search-input::placeholder {
+    color: #aaa;
 }
 
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 0.25s ease;
+.search-input:focus {
+    border-color: #aaa;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
+.tag-scroll-wrapper {
+    position: relative;
 }
 
-#banner {
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://lh3.googleusercontent.com/Y2wYl6KgubHSz3Zvh0GXN7a8_grOTse9fqbFUlwVliu3tk6HEIZNTGl-b5Z0-GYcRZoq9i_s3nFB6mEiHjxKMoaYjrOUNjBgO1GgNXDfKskM-4XB1zTGOFWRYVMOr4AvKWmxr7yRMWMzkakRrzaZe4xIqipojah7CMnY8EZO8V19yGjbdi7pLFWm7GM5fmgBU_HqS-Fu3X_Cmzf_cB6LmgaJLrYElcCEHEIsquzZKOygnR1l_Tuk475BDR-MYKXv9Tj_QQV12utkH9Klgp-D9ugxw2ur_zGEo94LeE8rw7eT-K0eFv2nEs5lCszioDyO2bgioSLMO116eraXtJK3G5FqeXRs5nb5j6Zx9bUtUBXOjq2_mn6y3REG8XxSYy6qpT31aRxM4P-yrjbTJazPMpDLgXAOkGFUy3NwTq2I9Kioil61rouKUqyvxpQda-eJkwl5j794GQhKcSmJA67Tt4Lf6mf9GPWZPdRH6CpQazB2AIP_5Q9oYzU94kritAi3m5tV_CRewOizz29auJ7A9aWJrWKQqFTh1vK-AMPpw0tt9Tf7uoC1wOQm5gPnEsn3UpPNERKVvwnlB611qJ6oyO_tjI-cr98aQybVIqOPmWH_FgmWuMZ9biQlhVkGu_0miBw6o9JXiMyr4mymuz6-B-vKtQOSTYZl4LEDIXgUxrY8KQ=w1500-h1500-no?.jpg);
-    height: 101vh;
-    overflow-x: hidden;
+.tag-scroll {
+    display: flex;
+    gap: 0.6rem;
+    overflow-x: auto;
+    padding: 0.3rem 2.5rem;
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 2.5rem, black calc(100% - 2.5rem), transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 2.5rem, black calc(100% - 2.5rem), transparent 100%);
 }
 
-.breathe {
-    animation: breathe 4s ease 5s infinite;
-    animation-fill-mode: both;
+.tag-scroll::-webkit-scrollbar {
+    display: none;
 }
 
-.fadeInLeft {
-    animation: fadeInLeft 3s ease-in-out 0.5s;
-    animation-fill-mode: both;
+.tag-btn {
+    flex-shrink: 0;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    border: 1px solid #ccc;
+    background: white;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #555;
+    text-transform: capitalize;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
 
-.fadeInRight {
-    animation: fadeInRight 3s ease-in-out 3s;
-    animation-fill-mode: both;
+.tag-btn:hover {
+    border-color: #888;
+    color: #222;
 }
 
-.spacer {
-    height: 10%;
+.tag-btn.active {
+    background: #333;
+    color: white;
+    border-color: #333;
 }
 
-@keyframes fadeInLeft {
-    0% {
-        opacity: 0;
-        transform: translateX(20px);
-    }
-
-    100% {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes fadeInRight {
-    0% {
-        opacity: 0;
-        transform: translateX(-20px);
-    }
-
-    100% {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes breathe {
-    0% {
-        opacity: 0;
-    }
-
-    70% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
-}
-
-p {
-    font-size: 10vw;
-    color: rgba(255, 255, 255, .8);
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    padding-top: 1.5rem;
 }
 </style>

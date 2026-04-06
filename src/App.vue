@@ -1,5 +1,5 @@
 <template>
-    <div id="melonade" :style="themeStore.theme">
+    <div id="melonade">
         <main-nav />
         <router-view v-slot="{ Component }">
             <keep-alive>
@@ -13,16 +13,10 @@
 <script>
 import '@/assets/css/custom.scss'
 import MainNav from '@/components/MainNav.vue'
-import { useThemeStore } from '@/stores/theme'
 
 export default {
     name: 'melonade',
-    setup() {
-        const themeStore = useThemeStore()
-        return {
-            themeStore
-        }
-    },
+    setup() {},
     data() {
         return {}
     },

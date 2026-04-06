@@ -1,0 +1,1 @@
+const o=[{name:"development",color:"#4f8ef7"},{name:"visualization",color:"#9b59b6"},{name:"relaxing",color:"#2ecc71"},{name:"algorithm",color:"#e67e22"},{name:"puzzle",color:"#e74c3c"}],n=Object.fromEntries(o.map(e=>[e.name,e]));function a(e){return n[e]??null}export{a as g};

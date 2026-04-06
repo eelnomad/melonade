@@ -1,15 +1,15 @@
 <!-- MainNav.vue
     MainNav for main page-->
 <template>
-    <div :style="{color: color}" class="f-col f-center" id="nav">
+    <div class="f-col f-center" id="nav">
         <transition name="fade" mode="out-in">
-            <div v-show="shown" :class="classes" class="g" id="main-nav">
+            <div v-show="shown" :class="classes" :style="{color: color}" class="g" id="main-nav">
                 <div class="f-row m-l" id="nav-major">
                     <router-link v-for="route in majorRoutes" :to="{name : route.name}">
                         <h2 class="pH-m">{{ route.name }}</h2>
                     </router-link>
                 </div>
-                <router-link class="m-l" id="nav-logo" :to="{name : 'Landing'}">
+                <router-link class="m-l" id="nav-logo" :to="{name : 'Blog'}">
                     <h1>Melonade</h1>
                 </router-link>
                 <div class="f-row f-center m-l" id="nav-minor">
@@ -29,16 +29,13 @@
 <script>
 import { MAJOR_ROUTES, MINOR_ROUTES } from '@/router/routes'
 import { useNavStore } from '@/stores/nav'
-import { useThemeStore } from '@/stores/theme'
 
 export default {
     name: 'MainNav',
     setup() {
         const navStore = useNavStore()
-        const themeStore = useThemeStore()
         return {
             navStore,
-            themeStore,
         }
     },
     data() {
@@ -80,7 +77,7 @@ export default {
             }
         },
         color() {
-            return this.scrolled ? 'black' : this.themeStore.color
+            return this.scrolled ? 'black' : this.navStore.navColor
         },
         shown() {
             return this.navStore.hideable ? !this.hidden : true

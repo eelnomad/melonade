@@ -69,6 +69,8 @@ export default {
 >
 #photo-gallery {
     display: grid;
+    background-color: whitesmoke;
+    color: black;
     row-gap: 1.5rem;
     column-gap: 1rem;
     grid-template-columns: repeat(9, 1fr);

@@ -1,5 +1,3 @@
-import { THEMES } from '@/stores/theme'
-
 import { PROJECT_ROUTES } from './projects'
 
 export const MAJOR_ROUTES = [{
@@ -12,12 +10,21 @@ export const MAJOR_ROUTES = [{
                 name: 'description',
                 content: 'A gallery of photos.'
             }],
-            theme: THEMES.WHITE
+            navOnDark: false,
         },
     },
     {
         name: 'Projects',
-        redirect: { name: 'SmallProjects' },
+        path: '/projects',
+        component: () => import('@/components/smallProjects/SmallProjects.vue'),
+        meta: {
+            title: 'Melonade - Projects',
+            metaTags: [{
+                name: 'description',
+                content: 'A list of projects.'
+            }],
+            navOnDark: false,
+        },
     },
 ]
 
@@ -37,35 +44,36 @@ export const MINOR_ROUTES = [{
 export const routes = [
     ...MAJOR_ROUTES,
     ...MINOR_ROUTES,
-    // {
-    //     name: 'Home',
-    //     path: '/',
-    //     redirect: { name: 'Projects'}
-    // },
     {
-        path: '',
-        component: () => import('@/components/landing/Landing.vue'),
-        name: 'Landing',
+        name: 'Home',
+        path: '/',
+        redirect: { name: 'Blog' }
     },
     {
-        path: '/projects',
-        children: [{
-                name: 'SmallProjects',
-                path: '',
-                component: () => import('@/components/smallProjects/SmallProjects.vue'),
-                meta: {
-                    title: 'Melonade - Projects',
-                    metaTags: [{
-                        name: 'description',
-                        content: 'A list of projects.'
-                    }]
-                },
-            },
-            ...PROJECT_ROUTES
-        ],
+        name: 'Blog',
+        path: '/blog',
+        component: () => import('@/components/blog/Blog.vue'),
+        meta: {
+            title: 'Melonade - Blog',
+            metaTags: [{
+                name: 'description',
+                content: 'Blog posts and articles.'
+            }],
+            navOnDark: true,
+        },
     },
+    {
+        name: 'BlogPost',
+        path: '/blog/:slug',
+        component: () => import('@/components/blog/BlogPost.vue'),
+        meta: {
+            title: 'Melonade - Blog',
+            navOnDark: true,
+        },
+    },
+    ...PROJECT_ROUTES.map(r => ({ ...r, path: `/projects/${r.path}` })),
     {
         path: '/:pathMatch(.*)',
-        redirect: { name: 'Landing' },
+        redirect: { name: 'Blog' },
     }
 ]

@@ -1,7 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 import { useNavStore } from '@/stores/nav'
-import { useThemeStore } from '@/stores/theme'
 
 import { routes } from './routes'
 
@@ -15,19 +14,14 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const navStore = useNavStore()
-    const themeStore = useThemeStore()
     if ('meta' in to) {
-        if ('theme' in to.meta) {
-            themeStore.setTheme(to.meta.theme)
-        } else {
-            themeStore.$reset()
-        }
         if ('hideable' in to.meta) {
             navStore.setHideable(to.meta.hideable)
         } else {
             navStore.$reset()
         }
     }
+    navStore.setNavOnDark(to.meta?.navOnDark !== false)
     next()
 })
 

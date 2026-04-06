@@ -1,15 +1,21 @@
 export default {
   data () {
     return {
-      recursiveRunning: false
+      recursiveRunning: false,
+      recursiveTotalSteps: 0,
+      recursiveDepthTracker: [],
     }
   },
   methods: {
     recursiveInit: function () {
       this.recursiveGrid = []
       this.recursiveStack = []
-      // Set up the initial stack of filled items and the possibility grid
+      this.recursiveBacktracks = 0
+      this.recursiveStackDepth = 0
+      this.activeCell = null
       this.initial = 0
+      this.recursiveTotalSteps = 0
+      this.recursiveDepthTracker.splice(0)
       for (var i = 0; i < this.grid.length; i++) {
         this.possible(i)
         if (this.grid[i].value) {
@@ -22,31 +28,40 @@ export default {
       this.recursiveInit()
       this.recursiveStack.push(this.fewestPossible())
       this.recursiveInterval = setInterval(() => {
+        if (this.paused) return
         if (!this.recursiveRunning) {
           this.recursiveRunning = true
           if (this.recursiveStack.length > this.initial && this.recursiveStack[this.recursiveStack.length - 1] !== null) {
+            this.recursiveTotalSteps++
             this.recursiveStep()
+            this.recursiveDepthTracker.push([this.recursiveTotalSteps, this.recursiveStackDepth])
           } else {
+            this.recursiveDepthTracker.push([this.recursiveTotalSteps, 0])
             clearInterval(this.recursiveInterval)
             this.recursiveRunning = false
+            this.activeCell = null
+            this.current = null
           }
-          // this.$forceUpdate()
           this.recursiveRunning = false
         }
       }, 10)
     },
     recursiveStep: function () {
       var newest = this.recursiveStack[this.recursiveStack.length - 1]
+      this.activeCell = newest
       if (this.recursiveGrid[newest].length === 0) {
+        this.recursiveBacktracks++
         this.setRecursiveValue(this.recursiveStack.pop())
       } else {
         var newVal = this.recursiveGrid[newest].splice(Math.floor(Math.random() * this.recursiveGrid[newest].length), 1)[0]
         this.setRecursiveValue(newest, newVal)
         this.recursiveStack.push(this.fewestPossible())
       }
+      this.recursiveStackDepth = this.recursiveStack.length - this.initial
     },
     recursiveStop: function () {
       clearInterval(this.recursiveInterval)
+      this.activeCell = null
     },
     possible: function (index) {
       var values = [1, 2, 3, 4, 5, 6, 7, 8, 9]
