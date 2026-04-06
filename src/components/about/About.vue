@@ -418,12 +418,13 @@ onUnmounted(() => {
 .city-track {
     display: flex;
     flex-direction: row;
-    width: 200vw;
+    height: 100%;
     will-change: transform;
 }
 
 .city-track svg {
-    width: 100vw;
+    height: 100%;
+    width: auto;
     flex-shrink: 0;
 }
 
@@ -669,6 +670,46 @@ onUnmounted(() => {
     font-size: 1.2em;
     line-height: 2em;
     opacity: 0.85;
+}
+
+/* ─── Mobile ─── */
+@media (max-width: 640px) {
+    #moon {
+        left: 65%;
+        top: 8%;
+        width: 22vw;
+        height: 22vw;
+    }
+
+    .hero-content h1 {
+        font-size: 2em;
+    }
+
+    .hero-bio {
+        font-size: 1.05em;
+        line-height: 1.8em;
+    }
+
+    .scroll-hint {
+        margin-top: 2rem;
+    }
+
+    #bio {
+        padding: 4rem 1.5rem;
+    }
+
+    .bio-content {
+        gap: 2.5rem;
+    }
+
+    .bio-block h2 {
+        font-size: 1.3em;
+    }
+
+    .bio-block p {
+        font-size: 1em;
+        line-height: 1.8em;
+    }
 }
 
 /* ─── Reduced motion ─── */
