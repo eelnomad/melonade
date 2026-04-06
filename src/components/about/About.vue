@@ -167,9 +167,15 @@ setStars()
 function generateBuildingsLayer(config) {
     const buildings = []
     const allWindows = []
+    const gap = config.gap ?? 0
     let x = 0
     while (x < config.svgWidth) {
-        const w = config.minW + Math.floor(Math.random() * (config.maxW - config.minW))
+        // Leave a trailing gap equal to config.gap so the tile seam looks like a
+        // normal inter-building gap instead of a hard edge (which caused visible jumps).
+        const maxAvailable = config.svgWidth - gap - x
+        if (maxAvailable < config.minW) break
+        const maxW = Math.min(config.maxW, maxAvailable)
+        const w = config.minW + Math.floor(Math.random() * Math.max(1, maxW - config.minW + 1))
         const h = config.minH + Math.floor(Math.random() * (config.maxH - config.minH))
         const top = config.baseline - h
         const windows = []
@@ -189,12 +195,7 @@ function generateBuildingsLayer(config) {
             chimney = { x: cx, y: top - ch, width: cw, height: ch }
         }
         buildings.push({ x, y: top, width: w, height: config.svgHeight - top, windows, chimney })
-        x += w + (config.gap ?? 0)
-    }
-    // Extend the last building to reach exactly svgWidth so the tiled loop has no gap
-    if (buildings.length > 0) {
-        const last = buildings[buildings.length - 1]
-        last.width = config.svgWidth - last.x
+        x += w + gap
     }
     return { buildings, allWindows }
 }
@@ -231,10 +232,13 @@ const lampsGround = ref([])
 
 function generateLampsGround() {
     const lamps = []
-    let x = 40
-    while (x < 970) {
+    // Fixed spacing so the pattern tiles perfectly at 1000px.
+    // Lamps at 50, 150, …, 950 → wrap gap = (1000-950)+50 = 100 = same spacing.
+    const spacing = 100
+    let x = spacing / 2
+    while (x < 1000) {
         lamps.push({ x, on: Math.random() > 0.2 })
-        x += 80 + Math.floor(Math.random() * 40)
+        x += spacing
     }
     return lamps
 }
@@ -419,6 +423,7 @@ onUnmounted(() => {
     display: flex;
     flex-direction: row;
     height: 100%;
+    width: max-content;
     will-change: transform;
 }
 
@@ -426,6 +431,24 @@ onUnmounted(() => {
     height: 100%;
     width: auto;
     flex-shrink: 0;
+}
+
+/* Explicit widths derived from each layer's viewBox aspect ratio × container height.
+   This prevents sub-pixel rounding from creating a visible seam at the loop point. */
+#city-far .city-track svg {
+    width: calc(30vh * 1000 / 169);
+}
+
+#city-landmarks .city-track svg {
+    width: calc(50vh * 1000 / 281);
+}
+
+#city-near .city-track svg {
+    width: calc(60vh * 1000 / 338);
+}
+
+#city-ground .city-track svg {
+    width: calc(20vh * 1000 / 113);
 }
 
 #city-far {
@@ -481,11 +504,11 @@ onUnmounted(() => {
 
 @keyframes city-scroll {
     from {
-        transform: translateX(0);
+        transform: translate3d(0, 0, 0);
     }
 
     to {
-        transform: translateX(-50%);
+        transform: translate3d(-50%, 0, 0);
     }
 }
 
@@ -493,7 +516,7 @@ onUnmounted(() => {
 /* Ground strip sits at (53/113)*20vh ≈ 9.38vh from the viewport bottom */
 #city-car {
     position: fixed;
-    bottom: calc(20vh * 45 / 113);
+    bottom: calc(20vh * 50 / 113);
     left: 0;
     width: 100vw;
     height: 0;
@@ -506,7 +529,7 @@ onUnmounted(() => {
 #car {
     position: absolute;
     bottom: 0;
-    height: 3.2vh;
+    height: 3.3vh;
     width: auto;
     animation: car-drive 44s linear infinite;
     will-change: transform;
