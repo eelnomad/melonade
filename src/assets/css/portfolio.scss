@@ -1,0 +1,259 @@
+// Portfolio theme: palette tokens and the shared type scale.
+// The global reset lives in base.scss — but the ground it paints there is
+// var(--bg) from here, so apart from the standalone public/404.html stub, this
+// file is the only place a color is written.
+//
+// Five sections, in order:
+//
+//   1. THEMED TOKENS · dark (default)  — every token that flips
+//   2. THEMED TOKENS · light           — the same groups, same order, mirrored
+//   3. INVARIANT TOKENS                — identical in both themes; no mirror
+//   4. RULES                           — the box and the shared type scale
+//   5. MOTION                          — keyframes and the reduced-motion switch
+//
+// The split is the point: a declaration in section 1 has a counterpart in
+// section 2 directly below it, and a declaration in section 3 has none. Adding a
+// themed token means adding it to both palettes; adding it to only one is the
+// mistake this layout exists to make visible. Keep the sub-banners inside 1 and 2
+// in the same order so the two blocks read as a diff.
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 1. THEMED TOKENS · dark (default)
+// ═══════════════════════════════════════════════════════════════════════════
+
+// The ground pair, and only it, sits on :root rather than on .portfolio:
+// base.scss paints <body>, which is outside .portfolio and cannot read anything
+// scoped to it. That does mean the first paint depends on this file riding in
+// the entry chunk — it does today, because every route is a static import under
+// PortfolioLayout and the build emits one stylesheet. Lazy-loading it would put
+// a flash of the wrong ground back.
+//
+// --sans is hoisted to :root for the same reason but lives in section 3, since
+// it is not themed. --serif and --mono stay scoped to .portfolio: nothing
+// outside it sets display or mono text.
+:root {
+    --bg: #0d1117;
+    --fg: #e6edf3;
+}
+
+.portfolio {
+    // ── Ink ramp ──────────────────────────────────────────────────────────
+    --heading: #e9eef4;
+    --body: #b6bec9;
+    --soft: #c3cad4;
+    --muted: #8b949e;
+    --dim: #6e7681;
+
+    // ── Hairlines ─────────────────────────────────────────────────────────
+    --rule: #21262d;
+    --rule-soft: #30363d;
+
+    // ── Accent ────────────────────────────────────────────────────────────
+    --accent: #7aa2f7;
+    --accent-hi: #a8c3ff;
+
+    // Translucent surfaces derive their channels from the token above with
+    // relative color syntax — `from var(--accent) r g b` — so there is no second
+    // copy of the color to keep in step. Same trick wherever --bg needs an alpha.
+    //
+    // The wash behind a hovered Work row. A token because the alpha that reads
+    // as a whisper on the dark ground is invisible on the light one.
+    --hover-wash: rgb(from var(--accent) r g b / 0.03);
+
+    // ── Clock canvas ──────────────────────────────────────────────────────
+    // Read by ClockField through getComputedStyle: a 2D canvas cannot resolve
+    // custom properties itself. Any color notation the canvas can parse works.
+    --clock-face: rgb(139 148 158 / 0.06);
+    --clock-hand: rgb(156 165 175 / 0.26);
+    // Keep this one opaque: the cursor highlight scales it with ctx.globalAlpha,
+    // and an alpha here would multiply into that. Declared once, because
+    // var(--accent) re-resolves per theme — the light block only needs to
+    // override it to make the canvas accent differ from the link accent.
+    --clock-accent: var(--accent);
+
+    // ── Scrim strength ────────────────────────────────────────────────────
+    // Consumed by PageShell: the peak alpha of the base wash and of each
+    // drifting blob. The scrim is built entirely from the ground's own ink, so
+    // it inverts into a lightening wash for free when --bg flips — but the
+    // strength that hides a dark clock field under dark copy is not the strength
+    // that hides a light one, hence the tokens. The falloff shape is not here;
+    // it lives in PageShell's mask.
+    --scrim-peak: 0.52;
+    --scrim-blob: 0.42;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 2. THEMED TOKENS · light
+// ═══════════════════════════════════════════════════════════════════════════
+// Only the tokens are redeclared — every rule in section 4 and every page
+// component reads through them, so nothing else needs a light variant. The
+// inline script in index.html guarantees the attribute is always a concrete
+// light|dark before the first paint.
+//
+// Both blocks win on specificity, never on source order, which is what lets
+// them sit here rather than at the foot of the file: (0,2,0) against the (0,1,0)
+// of their section 1 counterparts. Sections 3 and 4 declare no themed token, so
+// nothing below can shadow these either.
+
+// Mirrors the :root ground pair above.
+:root[data-theme='light'] {
+    --bg: #f1ede9;
+    --fg: #1f2328;
+}
+
+// Written as `:root[data-theme='light'] .portfolio` rather than `:root`: these
+// tokens live on .portfolio (0,1,0), which a bare :root (also 0,1,0) would only
+// beat on source order. Matching the class as well makes this (0,2,0) and the
+// win unambiguous.
+:root[data-theme='light'] .portfolio {
+    // ── Ink ramp ──────────────────────────────────────────────────────────
+    // The ramp inverts: --heading is the darkest ink here, --dim the lightest.
+    --heading: #0d1117;
+    --body: #3d444d;
+    --soft: #32383f;
+    --muted: #57606a;
+    --dim: #6e7681;
+
+    // ── Hairlines ─────────────────────────────────────────────────────────
+    --rule: #d1d9e0;
+    --rule-soft: #b7bfc9;
+
+    // ── Accent ────────────────────────────────────────────────────────────
+    // Wants to be darker than the dark theme's accent: #7aa2f7 lands at ~2.2:1
+    // on a pale ground, where a #2f6feb would be ~4.6:1.
+    --accent: #CC5500;
+    --accent-hi: #1a4fbd;
+
+    --hover-wash: rgb(from var(--accent) r g b / 0.06);
+
+    // ── Clock canvas ──────────────────────────────────────────────────────
+    // Cooler and denser than the dark theme's greys, which all but vanish on a
+    // pale ground. --clock-accent is deliberately absent: it is var(--accent),
+    // which re-resolves per theme, so it tracks the accent above on its own.
+    // Declare it here only to make the canvas differ from the links.
+    --clock-face: rgb(90 100 115 / 0.10);
+    --clock-hand: rgb(70 80 95 / 0.30);
+
+    // ── Scrim strength ────────────────────────────────────────────────────
+    // A pale wash hides less of the clock field than a dark one does, so the
+    // scrim has to work harder to keep the copy off the moving hands.
+    --scrim-peak: 0.70;
+    --scrim-blob: 0.52;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 3. INVARIANT TOKENS
+// ═══════════════════════════════════════════════════════════════════════════
+// Identical in both themes. Nothing here has — or wants — a light mirror.
+
+// Hoisted to :root for the same reason as the ground pair: base.scss sets the
+// body font, and <body> is outside .portfolio.
+:root {
+    --sans: 'IBM Plex Sans', system-ui, sans-serif;
+}
+
+.portfolio {
+    // ── Type families ─────────────────────────────────────────────────────
+    --serif: 'Instrument Serif', Georgia, serif;
+    --mono: 'Geist Mono', ui-monospace, monospace;
+
+    // ── Safe areas ────────────────────────────────────────────────────────
+    // index.html sets viewport-fit=cover, so the layout viewport spans the full
+    // screen and the pinned bars reach the true edges. These pay the safe areas
+    // back: every piece of chrome that hugs an edge adds the matching inset, and
+    // they fall back to 0px everywhere without a notch.
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+
+    // ── Chrome metrics ────────────────────────────────────────────────────
+    // The bar heights are the boxes the veils have to hold full blur across;
+    // --veil-tail is the distance each veil then fades out over. Both veil
+    // heights derive from them, so a bar can change height without anything
+    // else needing to be recomputed by hand.
+    --nav-h: 52px;
+    // Footer box: the 40px social target plus its 10/10 padding. PortfolioFooter
+    // asserts this as its min-height; PageShell pads by it so page content
+    // clears the pinned bar instead of ending up underneath it.
+    --footer-h: 60px;
+    --veil-tail: 36px;
+
+    --nav-veil-h: calc(var(--nav-h) + var(--safe-top) + var(--veil-tail));
+    --footer-veil-h: calc(var(--footer-h) + var(--safe-bottom) + var(--veil-tail));
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 4. RULES
+// ═══════════════════════════════════════════════════════════════════════════
+// Every color below reads through a token, so this section is theme-agnostic.
+
+.portfolio {
+    position: relative;
+    // dvh so the pinned footer lands on the true visible edge on mobile, where
+    // 100vh counts the retracted URL bar.
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--sans);
+
+    a {
+        color: var(--accent);
+        text-decoration: none;
+
+        &:hover {
+            color: var(--accent-hi);
+        }
+    }
+
+    ::selection {
+        background: rgb(from var(--accent) r g b / 0.28);
+    }
+
+    // Shared type scale, lifted from the design's inline styles.
+    .eyebrow {
+        font-family: var(--mono);
+        font-size: 12px;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 14px;
+    }
+
+    .section-title {
+        font-family: var(--serif);
+        font-weight: 400;
+        font-size: clamp(38px, 7vw, 64px);
+        line-height: 1;
+        letter-spacing: -0.01em;
+        margin: 0;
+    }
+
+    .rule-label {
+        font-family: var(--mono);
+        font-size: 12px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--dim);
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--rule);
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 5. MOTION
+// ═══════════════════════════════════════════════════════════════════════════
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .portfolio,
+    .portfolio * {
+        animation: none !important;
+    }
+}

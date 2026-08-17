@@ -1,31 +1,16 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 
-import { useNavStore } from '@/stores/nav'
-
 import { routes } from './routes'
 
 const router = createRouter({
     history: createWebHashHistory(),
     routes,
-    scrollBehavior(to, from, savedPosition) {
+    scrollBehavior() {
         return { top: 0 }
     },
 })
 
-router.beforeEach((to, from, next) => {
-    const navStore = useNavStore()
-    if ('meta' in to) {
-        if ('hideable' in to.meta) {
-            navStore.setHideable(to.meta.hideable)
-        } else {
-            navStore.$reset()
-        }
-    }
-    navStore.setNavOnDark(to.meta?.navOnDark !== false)
-    next()
-})
-
-router.afterEach((to, from, next) => {
+router.afterEach((to, from) => {
     const nearestWithTitle = to.matched.slice().reverse().find(r => r.meta && r.meta.title);
     const nearestWithMeta = to.matched.slice().reverse().find(r => r.meta && r.meta.metaTags);
     const previousNearestWithMeta = from.matched.slice().reverse().find(r => r.meta && r.meta.metaTags);
@@ -38,7 +23,7 @@ router.afterEach((to, from, next) => {
 
     Array.from(document.querySelectorAll('[data-vue-router-controlled]')).map(el => el.parentNode.removeChild(el));
 
-    if (!nearestWithMeta) return next();
+    if (!nearestWithMeta) return;
 
     nearestWithMeta.meta.metaTags.map(tagDef => {
         const tag = document.createElement('meta');

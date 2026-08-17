@@ -10,9 +10,6 @@ export default defineConfig({
       '@' : path.resolve(__dirname, './src')
     },
   },
-  optimizeDeps: {
-    exclude: ["oh-vue-icons/icons"]
-  },
   build: {
       outDir: './docs'
   }

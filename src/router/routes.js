@@ -1,79 +1,71 @@
-import { PROJECT_ROUTES } from './projects'
+// Static imports, not lazy chunks. Vue Router awaits an async component factory
+// before it confirms navigation, so a dynamic import stalls the first click to
+// each route on a network round-trip. Four small pages over one shared layout —
+// there is nothing here worth splitting.
+import PortfolioLayout from '@/components/portfolio/PortfolioLayout.vue'
+import PortfolioLanding from '@/components/portfolio/content/PortfolioLanding.vue'
+import PortfolioWork from '@/components/portfolio/content/PortfolioWork.vue'
+import PortfolioAbout from '@/components/portfolio/content/PortfolioAbout.vue'
+import PortfolioContact from '@/components/portfolio/content/PortfolioContact.vue'
 
-export const MAJOR_ROUTES = [{
-        name: 'Photos',
-        path: '/photos/:id?',
-        component: () => import('@/components/photoGallery/PhotoGallery.vue'),
+const PORTFOLIO_ROUTES = [{
+        name: 'Landing',
+        path: '',
+        component: PortfolioLanding,
         meta: {
-            title: 'Melonade - Photos',
+            title: 'Damon Lee',
             metaTags: [{
                 name: 'description',
-                content: 'A gallery of photos.'
+                content: 'Damon Lee - Senior Engineer, Data & Full-Stack. Building reliable data platforms and the products that sit on top of them.'
             }],
-            navOnDark: false,
         },
     },
     {
-        name: 'Projects',
-        path: '/projects',
-        component: () => import('@/components/smallProjects/SmallProjects.vue'),
+        name: 'Work',
+        path: 'work',
+        component: PortfolioWork,
         meta: {
-            title: 'Melonade - Projects',
+            title: 'Damon Lee - Work',
             metaTags: [{
                 name: 'description',
-                content: 'A list of projects.'
+                content: 'Professional experience and side projects.'
             }],
-            navOnDark: false,
+        },
+    },
+    {
+        name: 'About',
+        path: 'about',
+        component: PortfolioAbout,
+        meta: {
+            title: 'Damon Lee - About',
+            metaTags: [{
+                name: 'description',
+                content: 'A bit of background.'
+            }],
+        },
+    },
+    {
+        name: 'Contact',
+        path: 'contact',
+        component: PortfolioContact,
+        meta: {
+            title: 'Damon Lee - Contact',
+            metaTags: [{
+                name: 'description',
+                content: 'Get in touch.'
+            }],
         },
     },
 ]
 
-export const MINOR_ROUTES = [{
-    name: 'About',
-    path: '/about',
-    component: () => import('@/components/about/About.vue'),
-    meta: {
-        title: 'Melonade - About',
-        metaTags: [{
-            name: 'description',
-            content: 'A bit about Melonade.'
-        }],
-    },
-}]
-
 export const routes = [
-    ...MAJOR_ROUTES,
-    ...MINOR_ROUTES,
     {
-        name: 'Home',
         path: '/',
-        redirect: { name: 'Blog' }
+        component: PortfolioLayout,
+        children: PORTFOLIO_ROUTES,
     },
-    {
-        name: 'Blog',
-        path: '/blog',
-        component: () => import('@/components/blog/Blog.vue'),
-        meta: {
-            title: 'Melonade - Blog',
-            metaTags: [{
-                name: 'description',
-                content: 'Blog posts and articles.'
-            }],
-            navOnDark: true,
-        },
-    },
-    {
-        name: 'BlogPost',
-        path: '/blog/:slug',
-        component: () => import('@/components/blog/BlogPost.vue'),
-        meta: {
-            title: 'Melonade - Blog',
-            navOnDark: true,
-        },
-    },
-    ...PROJECT_ROUTES.map(r => ({ ...r, path: `/projects/${r.path}` })),
     {
         path: '/:pathMatch(.*)',
-        redirect: { name: 'Blog' },
+        redirect: '/',
     }
 ]

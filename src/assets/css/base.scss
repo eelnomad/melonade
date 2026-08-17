@@ -1,0 +1,55 @@
+// Global reset and the ground <body> paints before the app mounts.
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+// Renders scrollbars and UA form controls in the right register. The inline
+// script in index.html guarantees data-theme is set before this file applies.
+:root {
+    color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+    color-scheme: light;
+}
+
+// This file paints the ground; it does not define it. --bg / --fg / --sans come
+// from portfolio.scss, which declares those three on :root precisely so <body> —
+// the one surface outside .portfolio — can read them. There is no light variant
+// to keep in step here: the tokens flip, and this rule follows. Nor is there a
+// second copy of the font stack: it was spelled out here once, drifting free of
+// --sans with nothing to keep the two in step.
+body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+// Added to <html> by useTheme for the length of a theme swap only, so the
+// palette cross-fades without leaving a transition on every element for the
+// rest of the session. This is `transition`, not `animation`, so the blanket
+// reduced-motion kill switch in portfolio.scss does not reach it — useTheme
+// skips the class entirely when reduced motion is asked for.
+// The pseudo-element selectors are not decoration: PageShell's base scrim is a
+// ::before, and `*` alone would leave it snapping while the page around it fades.
+.theme-transition,
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+    transition: background-color 0.2s ease,
+                border-color 0.2s ease,
+                color 0.2s ease,
+                fill 0.2s ease,
+                stroke 0.2s ease !important;
+}

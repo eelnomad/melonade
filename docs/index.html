@@ -4,15 +4,56 @@
     <meta charset="UTF-8" />
     <link rel="icon" href="favicon.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Resolves the theme before the first paint, so a light-mode visitor never
+         sees the dark ground flash. It always stamps a concrete light|dark,
+         which is why the stylesheets carry no prefers-color-scheme blocks of
+         their own — they only ever match on [data-theme='light']. -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('melonade-theme');
+          if (t !== 'light' && t !== 'dark') {
+            t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          }
+          document.documentElement.dataset.theme = t;
+        } catch (e) {
+          document.documentElement.dataset.theme = 'dark';
+        }
+      })();
+    </script>
+
+    <!-- Tints browser chrome to the page ground. Honoured by Chrome on Android
+         and by the standalone/home-screen case; iOS 26 Safari ignores it — a
+         red theme-color left its status bar and address bar unchanged, because
+         that Safari samples the page behind them instead of filling.
+         The value here is the dark default; useTheme.js rewrites it on boot and
+         on every toggle. -->
+    <meta name="theme-color" content="#0d1117" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
     <title>Melonade</title>
-    <script type="module" crossorigin src="/assets/index-CCzyZOhu.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-BvZirqH3.css">
+    <meta name="description" content="Senior Engineer, Data &amp; Full-Stack. Building reliable data platforms and the products that sit on top of them." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Damon Lee — Senior Engineer, Data & Full-Stack" />
+    <meta property="og:description" content="Senior Engineer, Data &amp; Full-Stack. Building reliable data platforms and the products that sit on top of them." />
+    <meta property="og:url" content="https://melonade.me/" />
+
+    <meta name="twitter:card" content="summary" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Only 300 and 400 are used anywhere in src/, so IBM Plex Sans is requested
+         at those two weights alone. It is a static family on Google Fonts, not a
+         variable one — every weight listed here is another file. -->
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@300;400&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script type="module" crossorigin src="/assets/index-Bd6qkbxm.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DhD7hwfO.css">
   </head>
   <body>
     <noscript>
       <strong>We're sorry but melonade doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <div id="app"></div>
+    <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>
 </html>
