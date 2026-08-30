@@ -37,6 +37,7 @@ export const workSections = [
                 name: 'Calliope',
                 role: 'Rhythm trainer',
                 description: 'Dancers often need to know how to count music. This practice tool trains timing and rhythmic accuracy through progressive, adaptive exercises.',
+                href: 'https://calliope.melonade.me'
             },
             {
                 id: 'gut-instinct',

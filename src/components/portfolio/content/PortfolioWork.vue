@@ -84,7 +84,7 @@ const linkLabel = (entry) => entry.linkText ?? (entry.to ? 'Read more' : 'Visit'
     // 30px serif line box; that offset pushed the whole body past the row's top
     // edge and left the role floating mid-row. Starting both columns at the
     // same edge is what makes the role read as the heading of the block below.
-    align-items: flex-start;
+    align-items: center;
 
     &::before {
         content: '';
